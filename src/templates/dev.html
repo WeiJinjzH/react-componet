@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" >
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="format-detection" content="telephone=no"/>
+	<link rel="icon" href="/static/build/logo-mini.png" type="image/x-icon">
+    <title>Demo</title>
+    <style>
+            #modify-proxy {
+                position: fixed;
+                width: 150px;
+                right: -149px;
+                bottom: 12px;
+            }
+            #current-env {
+                position: fixed;
+                right: 10px;
+                bottom: 13px;
+                opacity: 0.2;
+                pointer-events: none;
+            }   
+            #modify-proxy:hover,
+            #modify-proxy:focus {
+                right: 0;
+            }
+        </style>
+</head>
+<body>
+    <div id="app"></div>
+    <span id="current-env"></span>
+    <input id="modify-proxy" placeholder="修改代理" onchange="changeProxy(this)"/>
+    <script>
+        document.getElementById('modify-proxy').value = window.localStorage.getItem('proxy').slice(1)
+        document.getElementById('current-env').innerHTML = 'API 环境: ' + (window.localStorage.getItem('proxy').slice(1) || '默认')
+        function changeProxy(el) {
+            window.localStorage.setItem('proxy', '/' + el.value || '')
+            document.getElementById('current-env').innerHTML = 'API 环境: ' + (el.value || '默认')
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+{
+    "presets": [
+        "@babel/preset-react",
+        [
+            "@babel/preset-env",
+            {
+                "targets": {
+                    "browsers": [
+                        "> 0.25%", // https://browserl.ist
+                        "ie >= 9"
+                    ]
+                },
+                "corejs": 3,
+                "useBuiltIns": "usage"
+            }
+        ]
+    ],
+    "plugins": [
+        [
+            "react-hot-loader/babel"
+        ],
+        [
+            "react-css-modules",
+            {
+                "filetypes": {
+                    ".less": {
+                        "syntax": "postcss-less"
+                    }
+                },
+                "webpackHotModuleReloading": true,
+                "generateScopedName": "[local]__[hash:base64:7]"
+            }
+        ],
+        [
+            "import",
+            {
+                "libraryName": "antd"
+            }
+        ],
+        [
+            "@babel/plugin-proposal-class-properties"
+        ],
+        [
+            "@babel/plugin-proposal-object-rest-spread"
+        ],
+        [
+            "@babel/plugin-transform-modules-commonjs"
+        ],
+        [
+            "@babel/plugin-syntax-dynamic-import"
+        ],
+        [
+            "@babel/plugin-proposal-optional-chaining"
+        ],
+        [
+            "@babel/plugin-proposal-optional-catch-binding"
+        ]
+    ]
+}

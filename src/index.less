@@ -1,0 +1,100 @@
+:global {
+    /* Antd Table */
+    .ant-table-tbody>tr>td,
+    .ant-table-thead>tr>th {
+        border-bottom: none;
+    }
+    
+    .ant-table .ant-table-content {
+        background: #fff;
+        box-shadow: 0 0 20px 4px #f0f0f0;
+    }
+
+    .ant-table-row:hover,
+    .ant-table-row-hover {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .ant-table-tbody>tr:hover>td {
+        background: #fff;
+    }
+
+    .ant-table-tbody > tr.ant-table-row-selected td {
+        background: rgba(86, 114, 235, 0.15);
+    }
+    .ant-table-tbody > tr:hover.ant-table-row-selected td {
+        background: rgba(86, 114, 235, 0.15);
+    }
+
+    .ant-table-tbody > .ant-table-row:nth-of-type(odd):hover>td {
+        background: #fbfbfb;
+    }
+    
+    .ant-table-row:nth-of-type(odd)>td {
+        background: rgba(0, 0, 0, 0.025);
+    }
+    
+    .ant-table-thead>tr>th {
+        background: white;
+    }
+
+    .ant-table-small .ant-table-content .ant-table-body table {
+        padding: 0;
+    }
+
+    /* fix: 表单提示导致表单项显示位置错位 */
+    .render-form {
+        .ant-row {
+            display: inline-block;
+            width: 100%;
+            vertical-align: top;
+        }
+        .ant-form-text {
+            line-height: 19px;
+            padding-top: 10px;
+            padding-right: 17px;
+            word-break: break-all;
+        }
+        .ant-typography-edit-content {
+            line-height: 19px;
+            padding-top: 10px;
+            word-break: break-all;
+            left: -5px;
+            margin-top: -7px;
+            margin-bottom: 6px;
+            .ant-input {
+                margin-bottom: 0;
+                padding: 6px 11px 4px 4px;
+                min-height: 31px;
+            }
+        }
+    }
+    .render-form--readonly {
+        .ant-form-item {
+            margin-bottom: 0;
+        }
+        .ant-form-explain-holder {
+            display: none;
+        }
+    }
+    .ant-form-item--readonly {
+        margin-bottom: 0;
+    }
+
+    /* 表格操作列, text-button左对齐 */
+    .ant-table-row td .text-button {
+        padding: 0;
+        margin-right: 7px;
+    }
+    .ant-table-row td .text-button:last-child {
+        margin-right: 0;
+    }
+
+    /* 编号关联 */
+    .number-associated {
+        color: #1890ff;
+    }
+    .number-unassociated {
+        color: #3c9012;
+    }
+}

@@ -1,0 +1,39 @@
+.text-button {
+    background: none;
+    border: none;
+    color: #1890ff;
+    cursor: pointer;
+    outline: none;
+    white-space: nowrap;
+
+    &:hover {
+        color: #4ba7fd;
+    }
+    &:active {
+        color: #1890ff;
+        text-decoration: none;
+    }
+    &:disabled {
+        color: #ccc;
+        cursor: not-allowed;
+    }
+}
+
+.text-button--link {
+    &:focus {
+        text-decoration: none;
+    }
+    &:hover {
+        color: #4ba7fd;
+        text-decoration: none;
+    }
+    &:active {
+        color: #1890ff;
+        text-decoration: none;
+    }
+}
+
+.text-button--disabled {
+    color: #ccc !important;
+    cursor: not-allowed;
+}
