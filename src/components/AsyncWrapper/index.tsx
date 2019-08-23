@@ -27,7 +27,7 @@ class AsyncWrapper extends React.Component<AsyncWrapperProps, AsyncWrapperState>
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const { routeItem } = this.props
         if (routeItem.getComponent) {
             setTimeout(() => {

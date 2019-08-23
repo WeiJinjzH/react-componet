@@ -4,27 +4,17 @@ import {
 import moment from 'moment'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import FormBlock from 'src/components/FormBlock'
 import { http } from 'src/utils/http'
-import renderForm from 'src/utils/render-form'
-import { validPassword } from 'src/utils/validate'
+import mockMenuData from './data/menu'
 import './layout.less'
 import MainLayoutContext from './MainLayoutContext'
-import mockMenuData from './data/menu'
-
-const {
-    Header, Sider, Content, Footer,
-} = Layout
 
 const logo = require('src/assets/images/logo.png')
 const miniLogo = require('src/assets/images/logo-mini.png')
 
-const handleConfirmPassword = (value, confirmValue, callback) => {
-    if (value && value !== confirmValue) {
-        callback('两次输入不一致！')
-    }
-    callback()
-}
+const {
+    Header, Sider, Content, Footer,
+} = Layout
 
 const getPermissionMap = (data, parentMap = {}) => {
     data.forEach((node) => {
@@ -101,17 +91,12 @@ interface MainLayoutState {
 }
 
 class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
-    handleConfirmPassword: (password1: string, password2: string, callback: () => void) => void;
-
-    validPassword: () => void;
 
     hrefMap: any;
 
     navMap: any;
 
     nodeMap: {};
-
-    validateModifyPasswordForm: any;
 
     constructor(props) {
         super(props)
@@ -120,23 +105,19 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
             menuLeft: [],
             openKeys: [],
             navList: [],
-            showHeader: window.location.hash !== '#/',
+            showHeader: true || window.location.hash !== '#/', // TODO:
         }
         this.getMenuData = this.getMenuData.bind(this)
         this.doLogout = this.doLogout.bind(this)
-        this.toggle = this.toggle.bind(this)
+        this.toggleMenu = this.toggleMenu.bind(this)
         this.renderMenuItem = this.renderMenuItem.bind(this)
         this.onLeftMenuClick = this.onLeftMenuClick.bind(this)
-        this.checkUserRoleCount = this.checkUserRoleCount.bind(this)
-        this.handleConfirmPassword = utils.debounce(handleConfirmPassword.bind(this), 500)
-        this.validPassword = utils.debounce(validPassword.bind(this), 500)
-        this.submitModifyPassword = this.submitModifyPassword.bind(this)
         this.onClickNavItem = this.onClickNavItem.bind(this)
         this.onClickNavTitle = this.onClickNavTitle.bind(this)
         this.onHashChangeListener = this.onHashChangeListener.bind(this)
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const { history } = this.props
         this.getMenuData()
         window.addEventListener('hashchange', this.onHashChangeListener)
@@ -226,7 +207,6 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
             if (res.code === 0) {
                 window.sessionStorage.setItem('menuData', JSON.stringify(res.data))
                 this.handleMenuData(res.data)
-                this.checkUserRoleCount() // 获取菜单后调用, 避免与申请认证弹窗冲突
             }
         }).finally(() => {
             this.setState({ loadingMenus: false })
@@ -257,40 +237,6 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
         })
     }
 
-    /** 检测是否存在多个角色及用户, 单一角色或者用户, 则给予提示 */
-    checkUserRoleCount() {
-        const { history } = this.props
-        const user = JSON.parse(window.localStorage.getItem('user'))
-        if (user.showPermissionTips) {
-            user.showPermissionTips = false
-            window.sessionStorage.setItem('user', JSON.stringify(user))
-            Modal.confirm({
-                title: '提示',
-                content: '为了让您和您的企业更好的使用平台进行业务操作，您可以为企业创建更多的角色及用户来分配不同岗位的人员的操作权限。',
-                onOk: () => {
-                    history.push('/role-management')
-                },
-                cancelText: '知道了',
-                okText: '现在去创建',
-            })
-        }
-    }
-
-    submitModifyPassword() {
-        this.validateModifyPasswordForm((err, values) => {
-            if (!err) {
-                http.post('/web-user/update', values).then((res) => {
-                    if (res.code === 0) {
-                        message.success('修改成功')
-                        this.setState({ showModifyPasswordModal: false })
-                    } else {
-                        message.info(res.msg)
-                    }
-                })
-            }
-        })
-    }
-
     doLogout() {
         const { history } = this.props
         Modal.confirm({
@@ -314,7 +260,7 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
     }
 
     /** 收缩/展开 侧边菜单栏 */
-    toggle() {
+    toggleMenu() {
         const { collapsed } = this.state
         const { history } = this.props
         let openKeys = []
@@ -337,10 +283,12 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
                     <Menu.SubMenu
                         key={item.href || item.id}
                         title={(
-                            <React.Fragment>
+                            <>
                                 {item.iconCss && <Icon type={item.iconCss} />}
-                                <span>{item.text}</span>
-                            </React.Fragment>
+                                <span>
+                                    {item.text}
+                                </span>
+                            </>
                         )}
                     >
                         { this.renderMenuItem(item.nodes) }
@@ -366,10 +314,12 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
                         onTitleClick={this.onClickNavTitle}
                         key={item.href || item.id}
                         title={(
-                            <React.Fragment>
+                            <>
                                 {item.iconCss && <Icon type={item.iconCss} />}
-                                <span>{item.text}</span>
-                            </React.Fragment>
+                                <span>
+                                    {item.text}
+                                </span>
+                            </>
                         )}
                     >
                         { this.renderNavItem(item.nodes) }
@@ -379,7 +329,9 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
             return (
                 <Menu.Item key={item.href || item.id}>
                     {item.iconCss && <Icon type={item.iconCss} />}
-                    <span>{item.text}</span>
+                    <span>
+                        {item.text}
+                    </span>
                 </Menu.Item>
             )
         })
@@ -393,7 +345,6 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
             menuLeft,
             navList,
             loadingMenus,
-            showModifyPasswordModal,
         } = this.state
         const { history, children } = this.props
         return (
@@ -453,7 +404,7 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
                                         style={{ fontSize: 16, cursor: 'pointer' }}
                                         type={collapsed ? 'menu-unfold' : 'menu-fold'}
                                         theme="outlined"
-                                        onClick={this.toggle}
+                                        onClick={this.toggleMenu}
                                     />
                                 </div>
                             )
@@ -467,7 +418,7 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
                                         style={{ marginLeft: 20, fontSize: 16, cursor: 'pointer' }}
                                         type={collapsed ? 'menu-unfold' : 'menu-fold'}
                                         theme="outlined"
-                                        onClick={this.toggle}
+                                        onClick={this.toggleMenu}
                                     />
                                     <div
                                         style={{ display: 'inline-block', flex: 1 }}
@@ -484,17 +435,9 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
                                     <Dropdown
                                         overlay={(
                                             <Menu>
-                                                <Menu.Item
-                                                    onClick={() => {
-                                                        this.setState({ showModifyPasswordModal: true })
-                                                    }}
-                                                >
-                                                    <Icon type="edit" />
-                                                    修改密码
-                                                </Menu.Item>
                                                 <Menu.Item onClick={this.doLogout}>
                                                     <Icon type="logout" />
-                                                    退出
+                                                    <span>退出</span>
                                                 </Menu.Item>
                                             </Menu>
                                         )}
@@ -507,7 +450,7 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
                                             }}
                                         >
                                             <Icon type="user" />
-                                            {JSON.parse(localStorage.getItem('user')).loginName}
+                                            {/* {JSON.parse(localStorage.getItem('user')).loginName} */}
                                             <Icon type="down" />
                                         </span>
                                     </Dropdown>
@@ -522,85 +465,12 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
                         {
                             showHeader && (
                                 <Footer>
-                                    <div className="text-center">
-                                    © 泰乾壹链
-                                    </div>
+                                    <div style={{ textAlign: 'center' }}>© Demo</div>
                                 </Footer>
                             )
                         }
                     </Layout>
                 </Layout>
-                <Modal
-                    title="修改密码"
-                    width={400}
-                    destroyOnClose
-                    okText="提交修改"
-                    visible={showModifyPasswordModal}
-                    onCancel={() => { this.setState({ showModifyPasswordModal: false }) }}
-                    onOk={this.submitModifyPassword}
-                >
-                    <FormBlock validateFields={(func) => { this.validateModifyPasswordForm = func }}>
-                        {
-                            form => renderForm(form, [
-                                {
-                                    label: '旧密码',
-                                    key: 'password',
-                                    type: 'Input',
-                                    option: {
-                                        rules: [{
-                                            required: true,
-                                            message: '必填',
-                                        }],
-                                    },
-                                    otherProps: {
-                                        allowClear: true,
-                                        type: 'password',
-                                    },
-                                },
-                                {
-                                    label: '新密码',
-                                    key: 'newPassword',
-                                    type: 'Input',
-                                    option: {
-                                        rules: [
-                                            { required: true, message: '必填' },
-                                            { validator: this.validPassword },
-                                        ],
-                                    },
-                                    otherProps: {
-                                        allowClear: true,
-                                        type: 'password',
-                                    },
-                                },
-                                {
-                                    label: '确认密码',
-                                    key: 'repeatPassword',
-                                    type: 'Input',
-                                    option: {
-                                        rules: [{
-                                            required: true,
-                                            message: '请再次输入密码',
-                                        }, {
-                                            validator: (rule, value, callback) => {
-                                                this.handleConfirmPassword(value, form.getFieldValue('newPassword'), callback)
-                                            },
-                                        }],
-                                    },
-                                    otherProps: {
-                                        allowClear: true,
-                                        type: 'password',
-                                    },
-                                },
-                            ], {
-                                colSpan: 24,
-                                layout: {
-                                    labelCol: { span: 6 },
-                                    wrapperCol: { span: 14 },
-                                },
-                            })
-                        }
-                    </FormBlock>
-                </Modal>
             </MainLayoutContext.Provider>
         )
     }

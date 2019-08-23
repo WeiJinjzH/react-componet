@@ -23,18 +23,30 @@ const enums = {
     },
 }
 
-enums.getRender = name => (v) => {
+/**
+ * @param {string} name
+ * @param {string | number} value
+ */
+enums.getOptionValue = (name, value) => {
     const obj = enums[name] || {}
-    return obj[v] || v
+    return obj[value] || value
 }
 
-enums.getOptions = (name, withAll) => {
+/**
+ * @param {string} name
+ * @param {{ label: string, value: string|number, [arg: string]: string | number }} extraOption
+ * @param {'before'|'after'|number} position
+ */
+enums.getOptions = (name, extraOption, position = 'before') => {
     const out = []
-    if (withAll) {
-        out.push({
-            label: '全部',
-            value: '',
-        })
+    if (extraOption) {
+        if (position === 'before') {
+            out.unshift(extraOption)
+        } else if (position === 'after') {
+            out.push(extraOption)
+        } else {
+            out.splice(position, 0, extraOption)
+        }
     }
     const obj = enums[name]
     Object.keys(obj).forEach((k) => {

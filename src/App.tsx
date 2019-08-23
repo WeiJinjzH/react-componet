@@ -1,5 +1,5 @@
 import { hot } from 'react-hot-loader/root'
-import { LocaleProvider, Spin } from 'antd'
+import { ConfigProvider, Spin } from 'antd'
 import zhCN from 'antd/lib/locale-provider/zh_CN'
 import React from 'react'
 import {
@@ -14,14 +14,10 @@ import routes from './routes'
 class App extends React.Component {
     render() {
         return (
-            <LocaleProvider locale={zhCN}>
+            <ConfigProvider locale={zhCN}>
                 <HashRouter>
                     <Switch>
                         <Route path="/login" component={Login} />
-                        <Route
-                            path="/forget-password"
-                            render={props => <Login {...props} showForgetPasswordModal />}
-                        />
                         <Route
                             path="/"
                             render={(props) => {
@@ -34,7 +30,7 @@ class App extends React.Component {
                                             (nodeMap, loadingMenus) => (
                                                 <Switch>
                                                     {
-                                                        routes.map(route => (
+                                                        routes.map((route) => (
                                                             <Route
                                                                 key={route.path}
                                                                 path={route.path}
@@ -86,7 +82,7 @@ class App extends React.Component {
                         />
                     </Switch>
                 </HashRouter>
-            </LocaleProvider>
+            </ConfigProvider>
         )
     }
 }

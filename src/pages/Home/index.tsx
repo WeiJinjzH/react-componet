@@ -1,40 +1,19 @@
 import React, { Component } from 'react'
-import FormBlock from 'src/components/FormBlock'
-import renderForm from 'src/utils/render-form'
-import classNames from 'classnames'
 import TextButton from 'src/components/TextButton'
-import styles from './index.less'
 
-class Home extends Component {
+class Home extends Component<any, any> {
+    constructor(props) {
+        super(props)
+        this.state = {
+            href: 'https://volibearcat.top/static/background.jpg',
+        }
+    }
+
     render() {
         return (
-            <div>
-                <FormBlock>
-                    {
-                        form => renderForm(form, [
-                            {
-                                label: '测试标题1',
-                                key: 'key1',
-                                type: 'Text',
-                            },
-                            {
-                                label: '测试标题2',
-                                key: 'key2',
-                                type: 'Input',
-                            },
-                            {
-                                label: '测试标题3',
-                                key: 'key3',
-                                type: 'Text',
-                            },
-                        ])
-                    }
-                </FormBlock>
-                <TextButton
-                    href="/image.pdf"
-                >
-                    TextButton Test
-                </TextButton>
+            <div style={{ padding: 20 }}>
+                <TextButton canPreview href={this.state.href}>image...</TextButton>
+                <button onClick={() => { this.setState({ href: 'static/assets/logo.png' }) }}>change href</button>
             </div>
         )
     }

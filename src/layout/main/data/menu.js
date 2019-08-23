@@ -3,7 +3,17 @@ const menu = [
         text: 'Home',
         href: '/',
         id: 'home',
-        iconCss: 'calendar',
+        iconCss: '',
+        buttonContainer: true,
+        nodes: [],
+    },
+    {
+        text: 'Nothing',
+        href: '',
+        id: 'nothing',
+        iconCss: '',
+        buttonContainer: true,
+        nodes: [],
     },
 ]
 

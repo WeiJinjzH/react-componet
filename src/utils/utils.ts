@@ -1,6 +1,10 @@
 /* eslint-disable */
 import moment from 'moment'
 import { Modal } from 'antd'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import PreviewImageModal from 'src/common/PreviewImageModal'
+import PreviewPDFModal from 'src/common/PreviewPDFModal'
 
 const jwtDecode = require('jwt-decode')
 
@@ -8,6 +12,37 @@ const baseUrl = process.env.BASE_URL || ''
 const isProduction = process.env.mode && process.env.mode.trim() === 'production'
 
 const common = {
+    showPreviewModal(params: { href: string; }) {
+        const { href = '' } = params
+        const reg = href.match(/\.((jpg)|(png)|(jpeg)|(gif)|(bmp)|(pdf))$/)
+        if (!reg || !reg[1]) {
+            return false
+        }
+        if (reg[1] === 'pdf') {
+            this.showPreviewPDFModal(params)
+        } else {
+            this.showPreviewImageModal(params)
+        }
+        return true
+    },
+    showPreviewImageModal(params) {
+        const div = document.createElement('div')
+        ReactDOM.render(React.createElement(PreviewImageModal, {
+            params,
+            onDestroy: () => {
+                ReactDOM.unmountComponentAtNode(div)
+            },
+        }), div)
+    },
+    showPreviewPDFModal(params) {
+        const div = document.createElement('div')
+        ReactDOM.render(React.createElement(PreviewPDFModal, {
+            params,
+            onDestroy: () => {
+                ReactDOM.unmountComponentAtNode(div)
+            },
+        }), div)
+    },
     getBaseURL() {
         if (isProduction) {
             return baseUrl

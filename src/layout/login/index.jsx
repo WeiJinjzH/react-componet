@@ -20,7 +20,7 @@ class Login extends React.Component {
         this.refreshValidCode = this.refreshValidCode.bind(this)
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.refreshValidCode()
         window.particlesJS.load('particles-js', '/static/build/config/particles.json')
     }
