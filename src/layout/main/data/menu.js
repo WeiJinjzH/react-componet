@@ -1,15 +1,41 @@
 const menu = [
     {
         text: 'Home',
-        href: '/',
+        href: '',
         id: 'home',
         iconCss: '',
-        buttonContainer: true,
-        nodes: [],
+        buttonContainer: false,
+        nodes: [
+            {
+                text: 'Nothing1',
+                href: '',
+                id: 'nothing1',
+                iconCss: '',
+                buttonContainer: false,
+                nodes: [
+                    {
+                        text: 'Nothing3',
+                        href: '/',
+                        id: 'nothing3',
+                        iconCss: '',
+                        buttonContainer: true,
+                        nodes: [],
+                    },
+                ],
+            },
+            {
+                text: 'Nothing2',
+                href: '/404',
+                id: 'nothing2',
+                iconCss: '',
+                buttonContainer: true,
+                nodes: [],
+            },
+        ],
     },
     {
         text: 'Nothing',
-        href: '',
+        href: '/403',
         id: 'nothing',
         iconCss: '',
         buttonContainer: true,

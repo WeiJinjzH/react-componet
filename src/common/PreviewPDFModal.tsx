@@ -2,9 +2,7 @@ import { Modal } from 'antd'
 import React, { Component } from 'react'
 
 interface PreviewPDFModalProps {
-    params: {
-        href: string;
-    };
+    params: { href: string; };
     onDestroy: () => void;
 }
 
@@ -13,7 +11,7 @@ interface PreviewPDFModalState {
 }
 
 class PreviewPDFModal extends Component<PreviewPDFModalProps, PreviewPDFModalState> {
-    constructor(props) {
+    constructor(props: PreviewPDFModalProps) {
         super(props)
         this.state = {
             visible: true,
@@ -26,15 +24,18 @@ class PreviewPDFModal extends Component<PreviewPDFModalProps, PreviewPDFModalSta
             <Modal
                 visible={this.state.visible}
                 destroyOnClose
+                centered
+                closable={false}
+                width={1000}
                 bodyStyle={{ width: '100%', height: '80vh' }}
                 onCancel={() => { this.setState({ visible: false }) }}
                 afterClose={this.props.onDestroy}
                 footer={null}
             >
                 <iframe
+                    src={href}
                     title="previewer"
                     style={{ width: '100%', height: '100%' }}
-                    src={href}
                 />
             </Modal>
         )

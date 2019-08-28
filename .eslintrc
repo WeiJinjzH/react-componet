@@ -108,6 +108,9 @@
     },
     "globals": {
         "React": false,
-        "utils": false
+        "utils": false,
+        "describe": false,
+        "it": false,
+        "expect": false
     }
 }

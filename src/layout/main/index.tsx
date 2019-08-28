@@ -54,6 +54,9 @@ const formatNavMenuData = (data) => {
         if (nav.href) {
             nodeMap[nav.href] = nav
         }
+        nav.nodes.forEach((navNode) => {
+            navNode.iconCss = navNode.iconCss || 'table'
+        })
         formatMenuData(
             nav.nodes,
             nav,
@@ -91,8 +94,6 @@ interface MainLayoutState {
 }
 
 class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
-
-    hrefMap: any;
 
     navMap: any;
 
@@ -148,10 +149,10 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
     onHashChangeListener() {
         const { history } = this.props
         const { openKeys: stateOpenKeys } = this.state
-        if (this.hrefMap) {
+        if (this.nodeMap) {
             const openKeys = getOpenKey(this.nodeMap, history.location.pathname)
             this.setState({
-                openKeys: [...Array<any>(new Set([...stateOpenKeys, ...openKeys]))],
+                openKeys: [...new Set([...stateOpenKeys, ...openKeys])],
             })
         }
         this.setState({

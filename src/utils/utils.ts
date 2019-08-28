@@ -3,8 +3,8 @@ import moment from 'moment'
 import { Modal } from 'antd'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import PreviewImageModal from 'src/common/PreviewImageModal'
-import PreviewPDFModal from 'src/common/PreviewPDFModal'
+import PreviewImageModal from '../../src/common/PreviewImageModal'
+import PreviewPDFModal from '../../src/common/PreviewPDFModal'
 
 const jwtDecode = require('jwt-decode')
 

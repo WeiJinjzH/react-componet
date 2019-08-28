@@ -5,7 +5,7 @@ class Home extends Component<any, any> {
     constructor(props) {
         super(props)
         this.state = {
-            href: 'https://volibearcat.top/static/background.jpg',
+            href: 'https://volibearcat.top/static/background.jpg', // http://images.mofcom.gov.cn/sczxs/201806/20180622090409090.pdf
         }
     }
 

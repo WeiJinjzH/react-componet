@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import './index.less'
+import utils from '../../utils'
 
 interface TextButtonProps {
     /** 是否可小窗口预览, 默认值 true */

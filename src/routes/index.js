@@ -45,6 +45,7 @@ const pageRoutes = [
     {
         name: '页面不存在',
         path: '/404',
+        exact: false,
         component: asyncDecorator((nextState, cb) => {
             import(/* webpackChunkName: "404" */ '../pages/Error/404')
                 .then(({ default: Component }) => {
