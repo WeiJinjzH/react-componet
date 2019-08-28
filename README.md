@@ -1,6 +1,4 @@
-# 水产项目运营端 - FrontEnd
-
-<img src="src/assets/images/logo-mini.png" width = "100px" />
+# DEMO - FrontEnd
 
 ## 安装
 
@@ -30,8 +28,8 @@ npm run build
 
 ## 核心依赖
 
-- 界面构建: [React 16.8.5](https://reactjs.org/versions)
-- UI组件库: [Antd 3.16.2](https://ant.design/index-cn)
+- 界面构建: [React 16.9.0](https://reactjs.org/versions)
+- UI组件库: [Antd 3.22.2](https://ant.design/index-cn)
 - 图表组件库: [BizCharts 3.5.2](https://bizcharts.net/index)
 - 代码打包: [Webpack 4.25.1](https://webpack.js.org/)
 - 项目构建优化: [happypack 5.0.0](https://www.npmjs.com/package/happypack)

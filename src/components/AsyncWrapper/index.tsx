@@ -1,7 +1,7 @@
 
 import React from 'react'
 import { Spin } from 'antd'
-import ErrorBoundary from 'src/components/error-boundary'
+import ErrorBoundary from 'src/components/ErrorBoundary'
 
 type getComponentCallback = (param: any, Comp: React.ComponentClass) => void
 

@@ -9,8 +9,7 @@ import mockMenuData from './data/menu'
 import './layout.less'
 import MainLayoutContext from './MainLayoutContext'
 
-const logo = require('src/assets/images/logo.png')
-const miniLogo = require('src/assets/images/logo-mini.png')
+const logo = require('src/assets/images/logo.svg')
 
 const {
     Header, Sider, Content, Footer,
@@ -372,7 +371,7 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
                             }}
                         >
                             <Link to="/">
-                                <img src={collapsed ? miniLogo : logo} alt="" />
+                                <img src={logo} alt="" />
                             </Link>
                         </div>
                         <Menu

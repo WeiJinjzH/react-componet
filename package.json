@@ -8,7 +8,7 @@
         "dev": "cross-env --mode=development --port=8235 node config/webpack/dev-server.js",
         "build": "cross-env --mode=production webpack -p --progress",
         "eslint": "eslint --ext .jsx,.ts,tsx ./src/ --format codeframe --fix",
-        "test": "jest --config=./config/test/jest.config.js"
+        "test": "jest --config=./config/test/jest.config.js --silent"
     },
     "author": "",
     "license": "ISC",
