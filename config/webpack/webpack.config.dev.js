@@ -6,6 +6,7 @@ const MockWebpackPlugin = require('mock-webpack-plugin')
 const HtmlPlugin = require('html-webpack-plugin')
 
 const devPort = process.env.port
+const rootDir = path.join(__dirname, '..', '..')
 
 module.exports = {
     entry: {
@@ -13,11 +14,11 @@ module.exports = {
             'react-hot-loader/patch',
             `webpack-dev-server/client?http://0.0.0.0:${devPort}`,
             'webpack/hot/only-dev-server',
-            path.join(__dirname, 'src', 'index'),
+            path.join(rootDir, 'src', 'index'),
         ],
     },
     output: {
-        path: path.join(__dirname, './'),
+        path: path.join(rootDir, './'),
         filename: 'js/[name].[hash:8].js',
         publicPath: '/',
         chunkFilename: 'js/chunk/[name].[chunkhash:8].js',
@@ -25,19 +26,19 @@ module.exports = {
     plugins: [
         new CopyWebpackPlugin([
             {
-                from: path.join(__dirname, 'public'),
-                to: path.join(__dirname, 'static', 'build'),
+                from: path.join(rootDir, 'public'),
+                to: path.join(rootDir, 'static', 'build'),
                 force: true,
             },
         ]),
         new MockWebpackPlugin({
-            dir: path.join(__dirname, './mock'),
+            dir: path.join(rootDir, './mock'),
             port: 8200,
         }),
         new HtmlPlugin({
             title: 'Demo',
             filename: 'index.html',
-            template: path.join(__dirname, 'src', 'templates/dev.html'),
+            template: path.join(rootDir, 'src', 'templates/dev.html'),
             chunks: ['index', 'manifest'],
             hash: false,
         }),

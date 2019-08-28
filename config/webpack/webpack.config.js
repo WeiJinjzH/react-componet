@@ -9,6 +9,8 @@ const devConfig = require('./webpack.config.dev.js')
 
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length })
 const isProduction = process.env.mode && process.env.mode.trim() === 'production'
+const rootDir = path.join(__dirname, '..', '..')
+
 const config = {
     mode: process.env.mode || 'production',
     optimization: {
@@ -33,7 +35,7 @@ const config = {
     resolve: {
         extensions: ['.js', '.json', '.jsx', '.ts', '.tsx'],
         alias: {
-            src: path.join(__dirname, 'src'),
+            src: path.join(rootDir, 'src'),
             'react-dom': '@hot-loader/react-dom',
         },
     },
@@ -52,9 +54,9 @@ const config = {
             {
                 test: /\.css$/,
                 include: [
-                    path.join(__dirname, 'node_modules'),
-                    path.join(__dirname, 'src/assets'),
-                    path.join(__dirname, 'src/components'),
+                    path.join(rootDir, 'node_modules'),
+                    path.join(rootDir, 'src/assets'),
+                    path.join(rootDir, 'src/components'),
                 ],
                 use: [
                     {
@@ -69,9 +71,9 @@ const config = {
             {
                 test: /\.css$/,
                 exclude: [
-                    path.join(__dirname, 'node_modules'),
-                    path.join(__dirname, 'src/assets'),
-                    path.join(__dirname, 'src/components'),
+                    path.join(rootDir, 'node_modules'),
+                    path.join(rootDir, 'src/assets'),
+                    path.join(rootDir, 'src/components'),
                 ],
                 use: [
                     {
@@ -86,9 +88,9 @@ const config = {
             {
                 test: /\.less$/,
                 include: [
-                    path.join(__dirname, 'node_modules'),
-                    path.join(__dirname, 'src/assets'),
-                    path.join(__dirname, 'src/components'),
+                    path.join(rootDir, 'node_modules'),
+                    path.join(rootDir, 'src/assets'),
+                    path.join(rootDir, 'src/components'),
                 ], // 排除 CSS模块化
                 use: [
                     {
@@ -117,9 +119,9 @@ const config = {
             {
                 test: /\.less$/,
                 exclude: [
-                    path.join(__dirname, 'node_modules'),
-                    path.join(__dirname, 'src/assets'),
-                    path.join(__dirname, 'src/components'),
+                    path.join(rootDir, 'node_modules'),
+                    path.join(rootDir, 'src/assets'),
+                    path.join(rootDir, 'src/components'),
                 ],
                 use: [
                     {
