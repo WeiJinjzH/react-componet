@@ -1,16 +1,41 @@
+import { render, shallow, mount } from 'enzyme'
 import React from 'react'
-import { shallow, mount, configure } from 'enzyme'
 import TextButton from 'src/components/TextButton'
-import { act } from 'react-dom/test-utils';
 
 describe('Component: TextButton', () => {
-    it('浅渲染 TextButton', () => {
+    it('正确的渲染', () => {
         const wrapper = shallow(<TextButton />)
-        expect(wrapper.find('.text-button').length).toEqual(1)
+        expect(wrapper.find('.text-button')).toHaveLength(1)
+
+        const wrapper2 = shallow(<TextButton>Text</TextButton>)
+        expect(wrapper2.find('.text-button')).toHaveLength(1)
     })
-    it('case: expect Test render a div with className: text-button', () => {
-        const wrapper = mount(<TextButton canPreview disabled href="https://volibearcat.top/static/background.jpg">image...</TextButton>)
-        wrapper.simulate('click')
-        expect(wrapper.find('.text-button').length).toEqual(1)
+    it('check: canPreview', () => {
+        const wrapper = shallow(<TextButton canPreview={false} />)
+        const wrapper2 = shallow(<TextButton canPreview={false}>Test</TextButton>)
+        expect(wrapper.find('.text-button')).toHaveLength(1)
+        expect(wrapper2.find('.text-button')).toHaveLength(1)
+    })
+    it('check: href', () => {
+        const wrapper = render((
+            <div>
+                <TextButton href="/" />
+            </div>
+        ))
+        expect(wrapper.html()).toContain('<a')
+        const wrapper2 = render((
+            <div>
+                <TextButton />
+            </div>
+        ))
+        expect(wrapper2.html()).toContain('<button')
+    })
+    it('check: disabled', () => {
+        const onClick = jest.fn()
+        const wrapper = mount((
+            <TextButton href="/" onClick={onClick} />
+        ))
+        wrapper.find('.text-button').simulate('click')
+        expect(onClick).toBeCalledTimes(0)
     })
 })

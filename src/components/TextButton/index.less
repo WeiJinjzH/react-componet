@@ -1,39 +1,43 @@
+@default-text-color: #1890ff;
+
 .text-button {
     background: none;
     border: none;
-    color: #1890ff;
+    padding: 0;
+    margin: 0;
+    color: @default-text-color;
     cursor: pointer;
     outline: none;
     white-space: nowrap;
 
     &:hover {
-        color: #4ba7fd;
+        filter: brightness(1.2) opacity(0.8);
     }
     &:active {
-        color: #1890ff;
+        filter: none;
         text-decoration: none;
     }
     &:disabled {
-        color: #ccc;
+        filter: grayscale(0.9) opacity(0.3);
         cursor: not-allowed;
     }
 }
 
-.text-button--link {
+.text-button-link {
     &:focus {
         text-decoration: none;
     }
     &:hover {
-        color: #4ba7fd;
+        filter: brightness(1.2) opacity(0.8);
         text-decoration: none;
     }
     &:active {
-        color: #1890ff;
+        filter: none;
         text-decoration: none;
     }
 }
 
-.text-button--disabled {
-    color: #ccc !important;
+.text-button-link--disabled {
+    filter: grayscale(0.9) opacity(0.3);
     cursor: not-allowed;
 }

@@ -12,6 +12,7 @@ class Home extends Component<any, any> {
     render() {
         return (
             <div style={{ padding: 20 }}>
+                <TextButton onClick={() => {}} style={{ color: 'black' }} disabled>测试文本</TextButton>
                 <TextButton canPreview href={this.state.href}>image...</TextButton>
                 <button onClick={() => { this.setState({ href: 'static/assets/logo.png' }) }}>change href</button>
             </div>

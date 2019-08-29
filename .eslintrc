@@ -111,6 +111,7 @@
         "utils": false,
         "describe": false,
         "it": false,
+        "jest": false,
         "expect": false
     }
 }
