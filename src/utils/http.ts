@@ -43,7 +43,10 @@ class Http {
     }
 
     async request(_url: string, options = {}) {
-        const url = utils.getBaseURL() + _url
+        let url = _url
+        if (_url.slice(0, 1) === '/') {
+            url = utils.getBaseURL() + _url
+        }
         let fetchOptions = {}
         // const regResult = document.cookie.match(/TOKEN_MANAGE=(.+?)(;|$)/)
         fetchOptions = Object.assign(fetchOptions, this.defaultOptions, options)

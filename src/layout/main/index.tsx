@@ -5,7 +5,6 @@ import moment from 'moment'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { http } from 'src/utils/http'
-import mockMenuData from './data/menu'
 import './layout.less'
 import MainLayoutContext from './MainLayoutContext'
 
@@ -93,7 +92,6 @@ interface MainLayoutState {
 }
 
 class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
-
     navMap: any;
 
     nodeMap: {};
@@ -105,7 +103,7 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
             menuLeft: [],
             openKeys: [],
             navList: [],
-            showHeader: true || window.location.hash !== '#/', // TODO:
+            showHeader: window.location.hash !== '#/',
         }
         this.getMenuData = this.getMenuData.bind(this)
         this.doLogout = this.doLogout.bind(this)
@@ -192,10 +190,6 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
 
     /** 获取菜单数据 */
     getMenuData(forced?: boolean) {
-        if (mockMenuData) {
-            this.handleMenuData(mockMenuData)
-            return
-        }
         const cacheMenu = window.sessionStorage.getItem('menuData')
         if (!forced && cacheMenu) {
             const menuData = JSON.parse(cacheMenu) || []

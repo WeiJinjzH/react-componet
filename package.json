@@ -1,13 +1,14 @@
 {
-    "name": "aquatic",
+    "name": "demo",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
+    "repository": "git@github.com:VoliBearCat/react-framework-demo.git",
     "scripts": {
         "clean": "rm -rf ./build/*",
-        "dev": "cross-env --mode=development --port=8235 node config/webpack/dev-server.js",
+        "dev": "cross-env --mode=development --port=8081 node config/webpack/dev-server.js",
+        "dev-mock": "cross-env --mock=true --mockport=8082 npm run dev",
         "build": "cross-env --mode=production webpack -p --progress",
-        "eslint": "eslint --ext .jsx,.ts,tsx ./src/ --format codeframe --fix",
         "test": "jest --config=./config/test/jest.config.js --silent"
     },
     "author": "",
@@ -98,6 +99,7 @@
         "less-loader": "^5.0.0",
         "mini-css-extract-plugin": "^0.7.0",
         "mock-webpack-plugin": "2.0.0",
+        "mocker-api": "^1.8.2",
         "open-browser-webpack-plugin": "0.0.5",
         "postcss-less": "^3.0.2",
         "postcss-loader": "^3.0.0",

@@ -35,8 +35,9 @@
         document.getElementById('modify-proxy').value = window.localStorage.getItem('proxy').slice(1)
         document.getElementById('current-env').innerHTML = 'API 环境: ' + (window.localStorage.getItem('proxy').slice(1) || '默认')
         function changeProxy(el) {
-            window.localStorage.setItem('proxy', '/' + el.value || '')
-            document.getElementById('current-env').innerHTML = 'API 环境: ' + (el.value || '默认')
+            var value = el.value.trim()
+            window.localStorage.setItem('proxy', value ? ('/' + value) : '')
+            document.getElementById('current-env').innerHTML = 'API 环境: ' + (value || '默认')
         }
     </script>
 </body>

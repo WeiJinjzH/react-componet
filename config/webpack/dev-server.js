@@ -3,8 +3,22 @@ const WebpackDevServer = require('webpack-dev-server')
 const webpack = require('webpack')
 const config = require('./webpack.config.js')
 const proxies = require('./proxy-config')
+const mockerServer = require('./mocker-server')
 
-const devPort = process.env.port
+const devPort = process.env.port || 8090
+const mockPort = process.env.mockport || devPort + 1
+const enableMock = process.env.mock
+
+if (enableMock) {
+    proxies['/mock'] = {
+        target: `http://localhost:${mockPort}`,
+        pathRewrite: { '/mock': '' },
+        changeOrigin: true,
+        toProxy: false,
+        prependPath: false,
+        secure: false,
+    }
+}
 
 const options = {
     hot: true,
@@ -30,4 +44,8 @@ const server = new WebpackDevServer(compiler, options)
 
 server.listen(devPort, '0.0.0.0', () => {
     global.console.log(`dev server listening on port ${devPort}`)
+})
+
+enableMock && mockerServer.listen(mockPort, '0.0.0.0', () => {
+    global.console.log(`mocker server listening on port ${mockPort}`)
 })

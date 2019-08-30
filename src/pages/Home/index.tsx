@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import TextButton from 'src/components/TextButton'
+import { http } from 'src/utils'
 
 class Home extends Component<any, any> {
     constructor(props) {
@@ -12,7 +13,7 @@ class Home extends Component<any, any> {
     render() {
         return (
             <div style={{ padding: 20 }}>
-                <TextButton onClick={() => {}} style={{ color: 'black' }} disabled>测试文本</TextButton>
+                <TextButton onClick={() => { http.get('http://localhost:8082/api/user') }} style={{ color: 'black' }}>测试文本</TextButton>
                 <TextButton canPreview href={this.state.href}>image...</TextButton>
                 <button onClick={() => { this.setState({ href: 'static/assets/logo.png' }) }}>change href</button>
             </div>
