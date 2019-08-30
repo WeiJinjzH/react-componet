@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component: TextButton check: disabled 1`] = `
+<TextButton
+  canPreview={true}
+  disabled={true}
+  href="/"
+  onClick={[MockFunction]}
+  type="button"
+>
+  <a
+    className="text-button text-button-link text-button-link--disabled"
+    href="/"
+    onClick={[Function]}
+    rel="noopener noreferrer"
+    target="_blank"
+  />
+</TextButton>
+`;
+
+exports[`Component: TextButton check: disabled 2`] = `
+<TextButton
+  canPreview={true}
+  disabled={false}
+  onClick={[MockFunction]}
+  type="button"
+>
+  <button
+    className="text-button"
+    disabled={false}
+    onClick={[MockFunction]}
+    type="button"
+  />
+</TextButton>
+`;
+
+exports[`Component: TextButton render test 1`] = `
+<button
+  className="text-button"
+  type="button"
+/>
+`;
+
+exports[`Component: TextButton render test 2`] = `
+<button
+  className="text-button"
+  type="button"
+>
+  Text
+</button>
+`;
+
+exports[`Component: TextButton render test 3`] = `
+<button
+  className="text-button"
+  disabled={true}
+  type="button"
+>
+  Text
+</button>
+`;
+
+exports[`Component: TextButton render test 4`] = `
+<button
+  className="text-button"
+  type="button"
+/>
+`;

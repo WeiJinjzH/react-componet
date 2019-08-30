@@ -14,6 +14,7 @@ module.exports = {
         '/node_modules/',
         '<rootDir>/src/utils',
     ],
+    snapshotSerializers: ['enzyme-to-json/serializer'],
     moduleFileExtensions: [
         'js',
         'jsx',
