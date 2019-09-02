@@ -4,4 +4,4 @@ export const loginForm: string;
 export const loginFormHeader: string;
 export const baas: string;
 export const loginBtn: string;
-export const cod: string;
+export const captcha: string;

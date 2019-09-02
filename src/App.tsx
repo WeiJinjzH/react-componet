@@ -21,9 +21,9 @@ class App extends React.Component {
                         <Route
                             path="/"
                             render={(props) => {
-                                // if (!localStorage.user) {
-                                //     return <Redirect to="/login" />
-                                // }
+                                if (!localStorage.user) {
+                                    return <Redirect to="/login" />
+                                }
                                 return (
                                     <MainLayout {...props}>
                                         {
@@ -53,9 +53,7 @@ class App extends React.Component {
                                                                     }
                                                                     if (!nodeMap) {
                                                                         return (
-                                                                            <div
-                                                                                style={{ textAlign: 'center', padding: 100 }}
-                                                                            >
+                                                                            <div style={{ textAlign: 'center', padding: 100 }}>
                                                                                 菜单数据获取异常
                                                                             </div>
                                                                         )

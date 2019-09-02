@@ -70,7 +70,11 @@ class Login extends React.Component {
     refreshValidCode() {
         http.get(`/manage/identify/generator?time=${new Date().getTime()}`).then((res) => {
             if (res.code === 0) {
-                this.setState({ codeSrc: res.data.dataCode, identifyKey: res.data.identifyKey })
+                let { dataCode: codeSrc } = res.data
+                if (!codeSrc.includes('.png')) {
+                    codeSrc = `data:image/png;base64,${codeSrc}`
+                }
+                this.setState({ codeSrc, identifyKey: res.data.identifyKey })
             } else {
                 Modal.warning({
                     title: '获取验证码失败',
@@ -149,10 +153,10 @@ class Login extends React.Component {
                                     {
                                         codeSrc && (
                                             <img
-                                                styleName="cod"
+                                                styleName="captcha"
                                                 onClick={this.refreshValidCode}
                                                 onKeyDown={this.refreshValidCode}
-                                                src={`data:image/png;base64,${codeSrc}`}
+                                                src={codeSrc}
                                                 alt="验证码"
                                             />
                                         )

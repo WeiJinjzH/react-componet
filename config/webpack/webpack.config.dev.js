@@ -2,7 +2,6 @@ const path = require('path')
 const webpack = require('webpack')
 const OpenBrowserPlugin = require('open-browser-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const MockWebpackPlugin = require('mock-webpack-plugin')
 const HtmlPlugin = require('html-webpack-plugin')
 
 const devPort = process.env.port
@@ -31,10 +30,6 @@ module.exports = {
                 force: true,
             },
         ]),
-        new MockWebpackPlugin({
-            dir: path.join(rootDir, './mock'),
-            port: 8200,
-        }),
         new HtmlPlugin({
             title: 'Demo',
             filename: 'index.html',

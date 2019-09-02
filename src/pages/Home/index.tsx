@@ -13,7 +13,7 @@ class Home extends Component<any, any> {
     render() {
         return (
             <div style={{ padding: 20 }}>
-                <TextButton onClick={() => { http.get('http://localhost:8082/api/user') }} style={{ color: 'black' }}>测试文本</TextButton>
+                <TextButton onClick={() => { http.get('/table') }} style={{ color: 'black' }}>测试文本</TextButton>
                 <TextButton canPreview href={this.state.href}>image...</TextButton>
                 <button onClick={() => { this.setState({ href: 'static/assets/logo.png' }) }}>change href</button>
             </div>

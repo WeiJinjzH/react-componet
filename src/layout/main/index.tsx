@@ -148,7 +148,10 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
         const { openKeys: stateOpenKeys } = this.state
         if (this.nodeMap) {
             const openKeys = getOpenKey(this.nodeMap, history.location.pathname)
+            const node = this.nodeMap[history.location.pathname]
+            const menuLeft = (this.navMap[node.navId] && this.navMap[node.navId].nodes) || []
             this.setState({
+                menuLeft,
                 openKeys: [...new Set([...stateOpenKeys, ...openKeys])],
             })
         }
