@@ -337,12 +337,13 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
     render() {
         const {
             collapsed,
-            showHeader,
+            // showHeader
             openKeys,
             menuLeft,
             navList,
             loadingMenus,
         } = this.state
+        const showHeader = true // TODO:
         const { history, children } = this.props
         return (
             <MainLayoutContext.Provider

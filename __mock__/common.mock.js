@@ -25,7 +25,7 @@ const menu = {
         res.json(Mock.mock({
             code: 0,
             data: {
-                dataCode: Mock.Random.image('78x33', '#F0F0F0', '#000', 'png', '@string(number, 4)'),
+                dataCode: Mock.Random.image('156x66', '#F0F0F0', '#000', 'png', '@string(number, 4)'),
                 identifyKey: '@guid',
             },
             errorUrl: '',
