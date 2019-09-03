@@ -91,10 +91,13 @@ class PreviewImageModal extends Component<PreviewImageModalProps, PreviewImageMo
                         alt=""
                         onLoad={() => { this.setState({ loading: false }) }}
                         onError={() => {
-                            Modal.info({
-                                title: '图片加载失败',
-                                onOk: this.props.onCancel || this.props.onDestroy,
-                            })
+                            setTimeout(() => {
+                                Modal.info({
+                                    title: '图片加载失败',
+                                    centered: true,
+                                    onOk: this.props.onCancel || this.props.onDestroy,
+                                })
+                            }, 400)
                         }}
                     />
                     { this.state.loading && <div style={{ height: 108, width: 192 }} />}
