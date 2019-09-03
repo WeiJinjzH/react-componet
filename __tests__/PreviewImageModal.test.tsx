@@ -29,6 +29,14 @@ describe('Component: PreviewImageModal', () => {
         wrapper.find('img').getDOMNode().dispatchEvent(new Event('error'))
         wrapper.children().at(0).props().afterClose()
         expect(onDestroy).toBeCalledTimes(1)
+
+        /* 缺少 'onCancel' 属性时, 将直接触发 'onDestroy'事件 */
+        const onDestroy2 = jest.fn()
+        const wrapper2 = mount(<PreviewImageModal visible href=".x" onDestroy={onDestroy2} />)
+        expect(wrapper2).toMatchSnapshot()
+        wrapper2.find('img').getDOMNode().dispatchEvent(new Event('error'))
+        wrapper2.children().at(0).props().afterClose()
+        expect(onDestroy2).toBeCalledTimes(1)
     })
     it('interaction test: img onLoad event', () => {
         const wrapper = mount(<PreviewImageModal visible href=".x" />)

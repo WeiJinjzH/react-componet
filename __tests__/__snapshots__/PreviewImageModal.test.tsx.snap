@@ -106,7 +106,7 @@ exports[`Component: PreviewImageModal interaction test: Modal onCancel event 1`]
                     class="ant-modal-mask fade-appear"
                   />
                   <div
-                    aria-labelledby="rcDialogTitle6"
+                    aria-labelledby="rcDialogTitle8"
                     class="ant-modal-wrap ant-modal-centered"
                     role="dialog"
                     tabindex="-1"
@@ -129,7 +129,7 @@ exports[`Component: PreviewImageModal interaction test: Modal onCancel event 1`]
                         >
                           <div
                             class="ant-modal-title"
-                            id="rcDialogTitle6"
+                            id="rcDialogTitle8"
                           >
                             <div
                               style="margin: -5px 0px;"
@@ -292,7 +292,7 @@ exports[`Component: PreviewImageModal interaction test: Modal onCancel event 1`]
                   </AnimateChild>
                 </Animate>
                 <div
-                  aria-labelledby="rcDialogTitle6"
+                  aria-labelledby="rcDialogTitle8"
                   className="ant-modal-wrap ant-modal-centered"
                   onClick={[Function]}
                   onKeyDown={[Function]}
@@ -371,7 +371,7 @@ exports[`Component: PreviewImageModal interaction test: Modal onCancel event 1`]
                             >
                               <div
                                 className="ant-modal-title"
-                                id="rcDialogTitle6"
+                                id="rcDialogTitle8"
                               >
                                 <div
                                   style={
@@ -716,7 +716,7 @@ exports[`Component: PreviewImageModal interaction test: change background-color 
                     class="ant-modal-mask fade-appear"
                   />
                   <div
-                    aria-labelledby="rcDialogTitle7"
+                    aria-labelledby="rcDialogTitle9"
                     class="ant-modal-wrap ant-modal-centered"
                     role="dialog"
                     tabindex="-1"
@@ -739,7 +739,7 @@ exports[`Component: PreviewImageModal interaction test: change background-color 
                         >
                           <div
                             class="ant-modal-title"
-                            id="rcDialogTitle7"
+                            id="rcDialogTitle9"
                           >
                             <div
                               style="margin: -5px 0px;"
@@ -987,7 +987,7 @@ exports[`Component: PreviewImageModal interaction test: change background-color 
                   </AnimateChild>
                 </Animate>
                 <div
-                  aria-labelledby="rcDialogTitle7"
+                  aria-labelledby="rcDialogTitle9"
                   className="ant-modal-wrap ant-modal-centered"
                   onClick={[Function]}
                   onKeyDown={[Function]}
@@ -1066,7 +1066,7 @@ exports[`Component: PreviewImageModal interaction test: change background-color 
                             >
                               <div
                                 className="ant-modal-title"
-                                id="rcDialogTitle7"
+                                id="rcDialogTitle9"
                               >
                                 <div
                                   style={
@@ -1741,12 +1741,14 @@ exports[`Component: PreviewImageModal interaction test: img onError event 1`] = 
 </PreviewImageModal>
 `;
 
-exports[`Component: PreviewImageModal interaction test: img onLoad event 1`] = `
+exports[`Component: PreviewImageModal interaction test: img onError event 2`] = `
 <PreviewImageModal
   href=".x"
+  onDestroy={[MockFunction]}
   visible={true}
 >
   <Modal
+    afterClose={[MockFunction]}
     bodyStyle={
       Object {
         "backgroundColor": "#eee",
@@ -1784,6 +1786,7 @@ exports[`Component: PreviewImageModal interaction test: img onLoad event 1`] = `
     width="auto"
   >
     <Component
+      afterClose={[MockFunction]}
       bodyStyle={
         Object {
           "backgroundColor": "#eee",
@@ -1939,6 +1942,7 @@ exports[`Component: PreviewImageModal interaction test: img onLoad event 1`] = `
             }
           >
             <Dialog
+              afterClose={[MockFunction]}
               bodyStyle={
                 Object {
                   "backgroundColor": "#eee",
@@ -2112,6 +2116,492 @@ exports[`Component: PreviewImageModal interaction test: img onLoad event 1`] = `
                               <div
                                 className="ant-modal-title"
                                 id="rcDialogTitle5"
+                              >
+                                <div
+                                  style={
+                                    Object {
+                                      "margin": "-5px 0",
+                                    }
+                                  }
+                                >
+                                  图片预览
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              className="ant-modal-body"
+                              style={
+                                Object {
+                                  "backgroundColor": "#eee",
+                                  "maxHeight": "80vh",
+                                  "overflow": "auto",
+                                  "padding": 0,
+                                }
+                              }
+                            >
+                              <Spin
+                                size="large"
+                                spinning={true}
+                                tip="图片加载中……"
+                                wrapperClassName=""
+                              >
+                                <div
+                                  className="ant-spin-nested-loading"
+                                >
+                                  <div
+                                    key="loading"
+                                  >
+                                    <div
+                                      className="ant-spin ant-spin-lg ant-spin-spinning ant-spin-show-text"
+                                    >
+                                      <span
+                                        className="ant-spin-dot ant-spin-dot-spin"
+                                      >
+                                        <i
+                                          className="ant-spin-dot-item"
+                                        />
+                                        <i
+                                          className="ant-spin-dot-item"
+                                        />
+                                        <i
+                                          className="ant-spin-dot-item"
+                                        />
+                                        <i
+                                          className="ant-spin-dot-item"
+                                        />
+                                      </span>
+                                      <div
+                                        className="ant-spin-text"
+                                      >
+                                        图片加载中……
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div
+                                    className="ant-spin-container ant-spin-blur"
+                                    key="container"
+                                  >
+                                    <img
+                                      alt=""
+                                      onError={[Function]}
+                                      onLoad={[Function]}
+                                      src=".x"
+                                      style={
+                                        Object {
+                                          "width": "100%",
+                                        }
+                                      }
+                                    />
+                                    <div
+                                      style={
+                                        Object {
+                                          "height": 108,
+                                          "width": 192,
+                                        }
+                                      }
+                                    />
+                                  </div>
+                                </div>
+                              </Spin>
+                            </div>
+                          </div>
+                          <div
+                            aria-hidden="true"
+                            style={
+                              Object {
+                                "height": 0,
+                                "overflow": "hidden",
+                                "width": 0,
+                              }
+                            }
+                            tabIndex={0}
+                          />
+                        </div>
+                      </LazyRenderBox>
+                    </AnimateChild>
+                  </Animate>
+                </div>
+              </div>
+            </Dialog>
+          </Portal>
+        </Portal>
+      </PortalWrapper>
+    </Component>
+  </Modal>
+</PreviewImageModal>
+`;
+
+exports[`Component: PreviewImageModal interaction test: img onLoad event 1`] = `
+<PreviewImageModal
+  href=".x"
+  visible={true}
+>
+  <Modal
+    bodyStyle={
+      Object {
+        "backgroundColor": "#eee",
+        "maxHeight": "80vh",
+        "overflow": "auto",
+        "padding": 0,
+      }
+    }
+    centered={true}
+    closable={false}
+    confirmLoading={false}
+    destroyOnClose={true}
+    footer={null}
+    maskTransitionName="fade"
+    okType="primary"
+    onCancel={[Function]}
+    style={
+      Object {
+        "maxWidth": "80vw",
+      }
+    }
+    title={
+      <div
+        style={
+          Object {
+            "margin": "-5px 0",
+          }
+        }
+      >
+        图片预览
+      </div>
+    }
+    transitionName="zoom"
+    visible={true}
+    width="auto"
+  >
+    <Component
+      bodyStyle={
+        Object {
+          "backgroundColor": "#eee",
+          "maxHeight": "80vh",
+          "overflow": "auto",
+          "padding": 0,
+        }
+      }
+      closable={false}
+      closeIcon={
+        <span
+          className="ant-modal-close-x"
+        >
+          <Icon
+            className="ant-modal-close-icon"
+            type="close"
+          />
+        </span>
+      }
+      confirmLoading={false}
+      destroyOnClose={true}
+      footer={null}
+      maskTransitionName="fade"
+      okType="primary"
+      onCancel={[Function]}
+      onClose={[Function]}
+      prefixCls="ant-modal"
+      style={
+        Object {
+          "maxWidth": "80vw",
+        }
+      }
+      title={
+        <div
+          style={
+            Object {
+              "margin": "-5px 0",
+            }
+          }
+        >
+          图片预览
+        </div>
+      }
+      transitionName="zoom"
+      visible={true}
+      width="auto"
+      wrapClassName="ant-modal-centered"
+    >
+      <PortalWrapper
+        visible={true}
+      >
+        <Portal
+          getContainer={[Function]}
+        >
+          <Portal
+            containerInfo={
+              <div>
+                <div>
+                  <div
+                    class="ant-modal-mask fade-appear"
+                  />
+                  <div
+                    aria-labelledby="rcDialogTitle7"
+                    class="ant-modal-wrap ant-modal-centered"
+                    role="dialog"
+                    tabindex="-1"
+                  >
+                    <div
+                      class="ant-modal zoom-appear"
+                      role="document"
+                      style="max-width: 80vw; width: auto;"
+                    >
+                      <div
+                        aria-hidden="true"
+                        style="width: 0px; height: 0px; overflow: hidden;"
+                        tabindex="0"
+                      />
+                      <div
+                        class="ant-modal-content"
+                      >
+                        <div
+                          class="ant-modal-header"
+                        >
+                          <div
+                            class="ant-modal-title"
+                            id="rcDialogTitle7"
+                          >
+                            <div
+                              style="margin: -5px 0px;"
+                            >
+                              图片预览
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="ant-modal-body"
+                          style="padding: 0px; max-height: 80vh; overflow: auto; background-color: rgb(238, 238, 238);"
+                        >
+                          <div
+                            class="ant-spin-nested-loading"
+                          >
+                            <div>
+                              <div
+                                class="ant-spin ant-spin-lg ant-spin-spinning ant-spin-show-text"
+                              >
+                                <span
+                                  class="ant-spin-dot ant-spin-dot-spin"
+                                >
+                                  <i
+                                    class="ant-spin-dot-item"
+                                  />
+                                  <i
+                                    class="ant-spin-dot-item"
+                                  />
+                                  <i
+                                    class="ant-spin-dot-item"
+                                  />
+                                  <i
+                                    class="ant-spin-dot-item"
+                                  />
+                                </span>
+                                <div
+                                  class="ant-spin-text"
+                                >
+                                  图片加载中……
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="ant-spin-container ant-spin-blur"
+                            >
+                              <img
+                                alt=""
+                                src=".x"
+                                style="width: 100%;"
+                              />
+                              <div
+                                style="height: 108px; width: 192px;"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        aria-hidden="true"
+                        style="width: 0px; height: 0px; overflow: hidden;"
+                        tabindex="0"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          >
+            <Dialog
+              bodyStyle={
+                Object {
+                  "backgroundColor": "#eee",
+                  "maxHeight": "80vh",
+                  "overflow": "auto",
+                  "padding": 0,
+                }
+              }
+              className=""
+              closable={false}
+              closeIcon={
+                <span
+                  className="ant-modal-close-x"
+                >
+                  <Icon
+                    className="ant-modal-close-icon"
+                    type="close"
+                  />
+                </span>
+              }
+              confirmLoading={false}
+              destroyOnClose={true}
+              footer={null}
+              getContainer={[Function]}
+              getOpenCount={[Function]}
+              keyboard={true}
+              mask={true}
+              maskClosable={true}
+              maskTransitionName="fade"
+              okType="primary"
+              onCancel={[Function]}
+              onClose={[Function]}
+              prefixCls="ant-modal"
+              style={
+                Object {
+                  "maxWidth": "80vw",
+                }
+              }
+              title={
+                <div
+                  style={
+                    Object {
+                      "margin": "-5px 0",
+                    }
+                  }
+                >
+                  图片预览
+                </div>
+              }
+              transitionName="zoom"
+              visible={true}
+              width="auto"
+              wrapClassName="ant-modal-centered"
+            >
+              <div>
+                <Animate
+                  animation={Object {}}
+                  component=""
+                  componentProps={Object {}}
+                  key="mask"
+                  onAppear={[Function]}
+                  onEnd={[Function]}
+                  onEnter={[Function]}
+                  onLeave={[Function]}
+                  showProp="visible"
+                  transitionAppear={true}
+                  transitionEnter={true}
+                  transitionLeave={true}
+                  transitionName="fade"
+                >
+                  <AnimateChild
+                    animation={Object {}}
+                    key="mask"
+                    transitionAppear={true}
+                    transitionEnter={true}
+                    transitionLeave={true}
+                    transitionName="fade"
+                  >
+                    <LazyRenderBox
+                      className="ant-modal-mask"
+                      hiddenClassName="ant-modal-mask-hidden"
+                      key="mask"
+                      style={Object {}}
+                      visible={true}
+                    >
+                      <div
+                        className="ant-modal-mask"
+                        style={Object {}}
+                      />
+                    </LazyRenderBox>
+                  </AnimateChild>
+                </Animate>
+                <div
+                  aria-labelledby="rcDialogTitle7"
+                  className="ant-modal-wrap ant-modal-centered"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  onMouseUp={[Function]}
+                  role="dialog"
+                  style={
+                    Object {
+                      "display": null,
+                    }
+                  }
+                  tabIndex={-1}
+                >
+                  <Animate
+                    animation={Object {}}
+                    component=""
+                    componentProps={Object {}}
+                    key="dialog"
+                    onAppear={[Function]}
+                    onEnd={[Function]}
+                    onEnter={[Function]}
+                    onLeave={[Function]}
+                    showProp="visible"
+                    transitionAppear={true}
+                    transitionEnter={true}
+                    transitionLeave={true}
+                    transitionName="zoom"
+                  >
+                    <AnimateChild
+                      animation={Object {}}
+                      key="dialog-element"
+                      transitionAppear={true}
+                      transitionEnter={true}
+                      transitionLeave={true}
+                      transitionName="zoom"
+                    >
+                      <LazyRenderBox
+                        className="ant-modal "
+                        key="dialog-element"
+                        onMouseDown={[Function]}
+                        role="document"
+                        style={
+                          Object {
+                            "maxWidth": "80vw",
+                            "width": "auto",
+                          }
+                        }
+                        visible={true}
+                      >
+                        <div
+                          className="ant-modal "
+                          onMouseDown={[Function]}
+                          role="document"
+                          style={
+                            Object {
+                              "maxWidth": "80vw",
+                              "width": "auto",
+                            }
+                          }
+                        >
+                          <div
+                            aria-hidden="true"
+                            style={
+                              Object {
+                                "height": 0,
+                                "overflow": "hidden",
+                                "width": 0,
+                              }
+                            }
+                            tabIndex={0}
+                          />
+                          <div
+                            className="ant-modal-content"
+                          >
+                            <div
+                              className="ant-modal-header"
+                            >
+                              <div
+                                className="ant-modal-title"
+                                id="rcDialogTitle7"
                               >
                                 <div
                                   style={

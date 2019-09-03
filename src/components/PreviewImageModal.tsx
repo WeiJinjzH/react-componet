@@ -33,7 +33,9 @@ class PreviewImageModal extends Component<PreviewImageModalProps, PreviewImageMo
     render() {
         const { href, onCancel } = this.props
         let { visible } = this.state
+        /** 当图片为png格式时, 启用背景色切换功能 */
         const showFooter = href.slice(-4) === '.png'
+        /* 存在visible属性时, 组件为可控组件 */
         if ('visible' in this.props) {
             visible = this.props.visible
         }
@@ -89,8 +91,10 @@ class PreviewImageModal extends Component<PreviewImageModalProps, PreviewImageMo
                         alt=""
                         onLoad={() => { this.setState({ loading: false }) }}
                         onError={() => {
-                            Modal.info({ title: '图片加载失败' })
-                            this.props.onCancel && this.props.onCancel()
+                            Modal.info({
+                                title: '图片加载失败',
+                                onOk: this.props.onCancel || this.props.onDestroy,
+                            })
                         }}
                     />
                     { this.state.loading && <div style={{ height: 108, width: 192 }} />}

@@ -411,7 +411,14 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
                     <Layout>
                         {
                             showHeader && (
-                                <Header style={{ display: 'flex', alignItems: 'center', borderBottom: '1px solid #eee' }}>
+                                <Header
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        backgroundColor: '#fff',
+                                        borderBottom: '1px solid #eee',
+                                    }}
+                                >
                                     <Icon
                                         style={{ marginLeft: 20, fontSize: 16, cursor: 'pointer' }}
                                         type={collapsed ? 'menu-unfold' : 'menu-fold'}
@@ -422,7 +429,7 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
                                         style={{ display: 'inline-block', flex: 1 }}
                                     >
                                         <Menu
-                                            style={{ display: 'inline-block', background: 'none' }}
+                                            style={{ display: 'inline-block', background: 'none', borderBottom: 'none' }}
                                             onClick={this.onClickNavItem}
                                             selectedKeys={[history.location.pathname]}
                                             mode="horizontal"
