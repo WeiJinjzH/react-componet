@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import TextButton from 'src/components/TextButton'
 import { http } from 'src/utils'
+import PreviewImageModal from 'src/components/PreviewImageModal'
 
 class Home extends Component<any, any> {
     constructor(props) {
@@ -16,6 +17,8 @@ class Home extends Component<any, any> {
                 <TextButton onClick={() => { http.get('/table') }} style={{ color: 'black' }}>测试文本</TextButton>
                 <TextButton canPreview href={this.state.href}>image...</TextButton>
                 <button onClick={() => { this.setState({ href: 'static/assets/logo.png' }) }}>change href</button>
+                <button onClick={() => { this.setState({ visible: true }) }}>change modal</button>
+                <PreviewImageModal visible={this.state.visible} href="https://volibearcat.top/static/background.png" onCancel={() => { this.setState({ visible: false }) }} />
             </div>
         )
     }

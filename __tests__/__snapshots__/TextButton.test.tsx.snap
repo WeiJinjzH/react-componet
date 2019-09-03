@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Component: TextButton check: disabled 1`] = `
+exports[`Component: TextButton interaction test 1`] = `
 <TextButton
   canPreview={true}
   disabled={true}
@@ -18,7 +18,7 @@ exports[`Component: TextButton check: disabled 1`] = `
 </TextButton>
 `;
 
-exports[`Component: TextButton check: disabled 2`] = `
+exports[`Component: TextButton interaction test 2`] = `
 <TextButton
   canPreview={true}
   disabled={false}

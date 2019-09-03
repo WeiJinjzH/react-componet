@@ -28,7 +28,7 @@ const common = {
     showPreviewImageModal(params) {
         const div = document.createElement('div')
         ReactDOM.render(React.createElement(PreviewImageModal, {
-            params,
+            ...params,
             onDestroy: () => {
                 ReactDOM.unmountComponentAtNode(div)
             },
@@ -37,7 +37,7 @@ const common = {
     showPreviewPDFModal(params) {
         const div = document.createElement('div')
         ReactDOM.render(React.createElement(PreviewPDFModal, {
-            params,
+            ...params,
             onDestroy: () => {
                 ReactDOM.unmountComponentAtNode(div)
             },

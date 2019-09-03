@@ -2,8 +2,10 @@ import { Modal } from 'antd'
 import React, { Component } from 'react'
 
 interface PreviewPDFModalProps {
-    params: { href: string; };
-    onDestroy: () => void;
+    href: string;
+    visible?: boolean;
+    onCancel?: () => void;
+    onDestroy?: () => void;
 }
 
 interface PreviewPDFModalState {
@@ -19,16 +21,23 @@ class PreviewPDFModal extends Component<PreviewPDFModalProps, PreviewPDFModalSta
     }
 
     render() {
-        const { href } = this.props.params
+        const { href, onCancel } = this.props
+        let { visible } = this.state
+        if ('visible' in this.props) {
+            visible = this.props.visible
+        }
         return (
             <Modal
-                visible={this.state.visible}
+                visible={visible}
                 destroyOnClose
                 centered
                 closable={false}
                 width={1000}
                 bodyStyle={{ width: '100%', height: '80vh' }}
-                onCancel={() => { this.setState({ visible: false }) }}
+                onCancel={() => {
+                    onCancel && onCancel()
+                    this.setState({ visible: false })
+                }}
                 afterClose={this.props.onDestroy}
                 footer={null}
             >

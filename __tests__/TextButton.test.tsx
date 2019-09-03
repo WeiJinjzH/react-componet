@@ -1,4 +1,4 @@
-import { render, shallow, mount } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import React from 'react'
 import TextButton from 'src/components/TextButton'
 

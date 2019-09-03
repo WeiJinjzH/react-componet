@@ -2,8 +2,10 @@ import { Modal, Spin } from 'antd'
 import React, { Component } from 'react'
 
 interface PreviewImageModalProps {
-    params: { href: string; };
-    onDestroy: () => void;
+    href: string;
+    visible?: boolean;
+    onCancel?: () => void;
+    onDestroy?: () => void;
 }
 
 interface PreviewImageModalState {
@@ -29,12 +31,16 @@ class PreviewImageModal extends Component<PreviewImageModalProps, PreviewImageMo
     }
 
     render() {
-        const { href } = this.props.params
+        const { href, onCancel } = this.props
+        let { visible } = this.state
         const showFooter = href.slice(-4) === '.png'
+        if ('visible' in this.props) {
+            visible = this.props.visible
+        }
         return (
             <Modal
                 title={(<div style={{ margin: '-5px 0' }}>图片预览</div>)}
-                visible={this.state.visible}
+                visible={visible}
                 destroyOnClose
                 centered
                 closable={false}
@@ -46,7 +52,10 @@ class PreviewImageModal extends Component<PreviewImageModalProps, PreviewImageMo
                     overflow: 'auto',
                     backgroundColor: this.state.backgroundColor,
                 }}
-                onCancel={() => { this.setState({ visible: false }) }}
+                onCancel={() => {
+                    onCancel && onCancel()
+                    this.setState({ visible: false })
+                }}
                 afterClose={this.props.onDestroy}
                 footer={showFooter ? (
                     <div style={{ display: 'flex', justifyContent: 'left', alignItems: 'center' }}>
@@ -81,7 +90,7 @@ class PreviewImageModal extends Component<PreviewImageModalProps, PreviewImageMo
                         onLoad={() => { this.setState({ loading: false }) }}
                         onError={() => {
                             Modal.info({ title: '图片加载失败' })
-                            this.props.onDestroy()
+                            this.props.onCancel && this.props.onCancel()
                         }}
                     />
                     { this.state.loading && <div style={{ height: 108, width: 192 }} />}

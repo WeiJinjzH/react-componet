@@ -1,13 +1,16 @@
 const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlPlugin = require('html-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+
+const rootDir = path.join(__dirname, '..', '..')
 
 module.exports = {
     entry: {
-        index: path.join(__dirname, 'src', 'index'),
+        index: path.join(rootDir, 'src', 'index'),
     },
     output: {
-        path: path.join(__dirname, 'build'),
+        path: path.join(rootDir, 'build'),
         filename: 'static/js/[name].[hash:8].js',
         publicPath: '/',
         chunkFilename: 'static/js/chunk/[name].[chunkHash:8].js',
@@ -18,8 +21,8 @@ module.exports = {
     plugins: [
         new CopyWebpackPlugin([
             {
-                from: path.join(__dirname, 'public'),
-                to: path.join(__dirname, 'build', 'static', 'build'),
+                from: path.join(rootDir, 'public'),
+                to: path.join(rootDir, 'build', 'static', 'build'),
                 publicPath: '/',
                 force: true,
             },
@@ -27,9 +30,12 @@ module.exports = {
         new HtmlPlugin({
             title: 'Demo',
             filename: 'index.html',
-            template: path.join(__dirname, 'src', 'templates/default.html'),
+            template: path.join(rootDir, 'src', 'templates/default.html'),
             chunks: ['index', 'manifest'],
             hash: false,
+        }),
+        new CleanWebpackPlugin({
+            cleanOnceBeforeBuildPatterns: [path.join(rootDir, 'build')],
         }),
     ],
 }
