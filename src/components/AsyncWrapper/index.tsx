@@ -17,26 +17,23 @@ interface AsyncWrapperState {
 }
 
 class AsyncWrapper extends React.Component<AsyncWrapperProps, AsyncWrapperState> {
-    destroyed: boolean;
+    destroyed = false
 
     constructor(props: AsyncWrapperProps) {
         super(props)
         this.state = {
             Comp: null,
-            loading: false,
+            loading: true,
         }
     }
 
     componentDidMount() {
         const { routeItem } = this.props
         if (routeItem.getComponent) {
-            setTimeout(() => {
-                if (!this.destroyed) {
-                    this.setState({ loading: true })
-                }
-            }, 100)
             routeItem.getComponent({}, (param, Comp) => {
-                this.setState({ Comp })
+                if (!this.destroyed) {
+                    this.setState({ Comp })
+                }
             })
         }
     }
