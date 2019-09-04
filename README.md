@@ -12,14 +12,15 @@ npm install
 ```
 npm run dev
 ```
-##### HTTP代理
+or
+```
+npm run dev-mock
+```
+(dev-mock 将会启用 mock server, 将代理目标修改为'mock'后生效)
 
-修改 ```dev-server.js```默认配置文件, 重启项目
+##### HTTP API代理
 
-``` 或 ```
-
-修改 ```proxy-config.js``` 配置文件
-重启项目后, 将鼠标指针移动至界面右下角修改代理
+修改 ```proxy-config.js``` 配置文件, 重启项目后, 将鼠标指针移动至界面右下角修改代理目标
 
 #### 生产环境
 ```
