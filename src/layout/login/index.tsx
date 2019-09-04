@@ -8,7 +8,13 @@ import './login.less'
 
 const FormItem = Form.Item
 
-class Login extends React.Component {
+interface LoginState {
+    isLoading: boolean;
+    identifyKey: string;
+    codeSrc: string;
+}
+
+class Login extends React.Component<any, LoginState> {
     constructor(props) {
         super(props)
         this.state = {
