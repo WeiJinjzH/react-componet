@@ -4,4 +4,4 @@ build
 .idea*
 .vscode/
 lint_output.xml
-/coverage
+__tests__/coverage

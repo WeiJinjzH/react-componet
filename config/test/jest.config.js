@@ -9,7 +9,8 @@ module.exports = {
     testURL: 'http://localhost/',
     // 是否收集测试覆盖率，以及覆盖率文件路径
     collectCoverage: true,
-    coverageDirectory: './coverage',
+    coverageDirectory: './__tests__/coverage',
+    coverageReporters: ['html', 'text'],
     coveragePathIgnorePatterns: [
         '/node_modules/',
         '<rootDir>/src/utils',
