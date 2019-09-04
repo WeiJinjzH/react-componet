@@ -30,7 +30,7 @@
 <body>
     <div id="app"></div>
     <span id="current-env"></span>
-    <input id="modify-proxy" placeholder="修改代理" onchange="changeProxy(this)"/>
+    <input id="modify-proxy" placeholder="修改代理" onchange="changeProxy(this)" onkeydown="onKeyDown(this, event)" />
     <script>
         document.getElementById('modify-proxy').value = window.localStorage.getItem('proxy').slice(1)
         document.getElementById('current-env').innerHTML = 'API 环境: ' + (window.localStorage.getItem('proxy').slice(1) || '默认')
@@ -38,6 +38,16 @@
             var value = el.value.trim()
             window.localStorage.setItem('proxy', value ? ('/' + value) : '')
             document.getElementById('current-env').innerHTML = 'API 环境: ' + (value || '默认')
+            window.console.info('%c---- API环境已切换为: ' + value, 'color: green')
+        }
+        function onKeyDown(el, e) {
+            if (e.keyCode === 13) {
+                el.blur()
+                el.style.right = '-149px'
+                setTimeout(() => {
+                    el.style.right = ""
+                }, 100);
+            }
         }
     </script>
 </body>
