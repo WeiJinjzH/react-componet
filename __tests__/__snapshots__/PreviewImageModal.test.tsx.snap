@@ -1849,7 +1849,7 @@ exports[`Component: PreviewImageModal interaction test: img onError event 2`] = 
                     class="ant-modal-mask fade-appear"
                   />
                   <div
-                    aria-labelledby="rcDialogTitle5"
+                    aria-labelledby="rcDialogTitle4"
                     class="ant-modal-wrap ant-modal-centered"
                     role="dialog"
                     tabindex="-1"
@@ -1872,7 +1872,7 @@ exports[`Component: PreviewImageModal interaction test: img onError event 2`] = 
                         >
                           <div
                             class="ant-modal-title"
-                            id="rcDialogTitle5"
+                            id="rcDialogTitle4"
                           >
                             <div
                               style="margin: -5px 0px;"
@@ -2036,7 +2036,7 @@ exports[`Component: PreviewImageModal interaction test: img onError event 2`] = 
                   </AnimateChild>
                 </Animate>
                 <div
-                  aria-labelledby="rcDialogTitle5"
+                  aria-labelledby="rcDialogTitle4"
                   className="ant-modal-wrap ant-modal-centered"
                   onClick={[Function]}
                   onKeyDown={[Function]}
@@ -2115,7 +2115,7 @@ exports[`Component: PreviewImageModal interaction test: img onError event 2`] = 
                             >
                               <div
                                 className="ant-modal-title"
-                                id="rcDialogTitle5"
+                                id="rcDialogTitle4"
                               >
                                 <div
                                   style={

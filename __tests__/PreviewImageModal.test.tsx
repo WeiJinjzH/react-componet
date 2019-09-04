@@ -21,7 +21,7 @@ describe('Component: PreviewImageModal', () => {
         const wrapper2 = mount(<PreviewImageModal visible href=".jpg" />)
         expect(wrapper2).toMatchSnapshot()
     })
-    it('interaction test: img onError event', () => {
+    it('interaction test: img onError event', (done) => {
         const onCancel = jest.fn()
         const onDestroy = jest.fn()
         const wrapper = mount(<PreviewImageModal visible href=".x" onCancel={onCancel} onDestroy={onDestroy} />)
@@ -36,7 +36,10 @@ describe('Component: PreviewImageModal', () => {
         expect(wrapper2).toMatchSnapshot()
         wrapper2.find('img').getDOMNode().dispatchEvent(new Event('error'))
         wrapper2.children().at(0).props().afterClose()
-        expect(onDestroy2).toBeCalledTimes(1)
+        setTimeout(() => {
+            expect(onDestroy2).toBeCalledTimes(1)
+            done()
+        }, 400)
     })
     it('interaction test: img onLoad event', () => {
         const wrapper = mount(<PreviewImageModal visible href=".x" />)
