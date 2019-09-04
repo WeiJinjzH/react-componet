@@ -1,7 +1,5 @@
 node_modules
 build
-.happypack
-.idea*
-.vscode/
-lint_output.xml
+.vscode/**
+!.vscode/settings.json
 __tests__/coverage
