@@ -66,6 +66,14 @@ const config = {
                         },
                     },
                     'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            config: {
+                                path: './config/postcss.config.js',
+                            },
+                        },
+                    },
                 ],
             },
             {
@@ -83,6 +91,14 @@ const config = {
                         },
                     },
                     'css-loader?modules&importLoaders=1&localIdentName=[local]__[hash:base64:7]',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            config: {
+                                path: './config/postcss.config.js',
+                            },
+                        },
+                    },
                 ],
             },
             {
@@ -112,6 +128,14 @@ const config = {
                         options: {
                             sourceMap: true,
                             javascriptEnabled: true,
+                        },
+                    },
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            config: {
+                                path: './config/postcss.config.js',
+                            },
                         },
                     },
                 ],
@@ -146,6 +170,14 @@ const config = {
                         options: {
                             sourceMap: true,
                             javascriptEnabled: true,
+                        },
+                    },
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            config: {
+                                path: './config/postcss.config.js',
+                            },
                         },
                     },
                 ],

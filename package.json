@@ -110,5 +110,9 @@
         "webpack-cli": "^3.3.7",
         "webpack-dev-server": "^3.8.0",
         "webpack-module-hot-accept": "^1.0.5"
-    }
+    },
+    "browserslist": [
+        "defaults",
+        "last 2 versions"
+    ]
 }
