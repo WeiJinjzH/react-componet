@@ -36,3 +36,4 @@ npm run build
 - 时间格式化: [moment 2.24.0](http://momentjs.cn)
 - 热模块替换: [react-hot-loader 4.12.12](https://www.npmjs.com/package/react-hot-loader)
 - CSS模块化: [babel-plugin-react-css-modules 5.2.6](https://github.com/gajus/babel-plugin-react-css-modules)
+- BUG跟踪: [fundebug-javascript 2.0.0](https://www.fundebug.com/)
