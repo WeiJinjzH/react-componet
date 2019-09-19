@@ -27,6 +27,8 @@
         "core-js": "^3.2.1",
         "create-react-class": "^15.6.3",
         "css3transform": "^1.2.3",
+        "fundebug-javascript": "^2.0.0",
+        "fundebug-revideo": "^0.6.0",
         "jwt-decode": "^2.2.0",
         "moment": "^2.24.0",
         "normalize.css": "^8.0.1",
