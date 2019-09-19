@@ -14,7 +14,7 @@ const isProduction = process.env.mode && process.env.mode.trim() === 'production
 const common = {
     showPreviewModal(params: { href: string; }) {
         const { href = '' } = params
-        const reg = href.match(/\.((jpg)|(png)|(jpeg)|(gif)|(bmp)|(pdf))$/)
+        const reg = href.toLowerCase().match(/\.((jpg)|(png)|(jpeg)|(gif)|(bmp)|(pdf))$/)
         if (!reg || !reg[1]) {
             return false
         }

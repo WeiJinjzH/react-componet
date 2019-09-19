@@ -34,7 +34,7 @@ class PreviewImageModal extends Component<PreviewImageModalProps, PreviewImageMo
         const { href, onCancel } = this.props
         let { visible } = this.state
         /** 当图片为png格式时, 启用背景色切换功能 */
-        const showFooter = href.slice(-4) === '.png'
+        const showFooter = href.slice(-4).toLowerCase() === '.png'
         /* 存在visible属性时, 组件为可控组件 */
         if ('visible' in this.props) {
             visible = this.props.visible
