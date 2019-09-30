@@ -15,6 +15,9 @@
         "airbnb",
         "plugin:react/recommended"
     ],
+    "plugins": [
+        "react-hooks"
+    ],
     "settings": {
         "import/parser": "babel-eslint",
         "import/resolver": {
@@ -104,7 +107,9 @@
             "components": [ "Link" ],
             "specialLink": [ "to", "hrefLeft", "hrefRight" ],
             "aspects": [ "noHref", "invalidHref", "preferButton" ]
-        }]
+        }],
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn"
     },
     "globals": {
         "React": false,
