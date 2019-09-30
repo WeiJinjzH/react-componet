@@ -25,15 +25,15 @@ npm run build
 
 ## 核心依赖
 
-- 界面构建: [react 16.9.0](https://reactjs.org/versions)
+- 界面构建: [react 16.10.1](https://reactjs.org/versions)
 - UI组件库: [antd 3.23.4](https://ant.design/index-cn)
 - 图表组件库: [bizcharts 3.5.5](https://bizcharts.net/index)
-- 代码打包: [webpack 4.40.2](https://webpack.js.org/)
+- 代码打包: [webpack 4.41.0](https://webpack.js.org/)
 - 项目构建优化: [happypack 5.0.1](https://www.npmjs.com/package/happypack)
-- JS代码转换: [@babel/core 7.6.0](https://babeljs.io)
-- 代码风格约束: [eslint 6.4.0](https://eslint.org)
+- JS代码转换: [@babel/core 7.6.2](https://babeljs.io)
+- 代码风格约束: [eslint 6.5.0](https://eslint.org)
 - HTTP请求框架: [whatwg-fetch 2.0.3](https://www.npmjs.com/package/whatwg-fetch)
 - 时间格式化: [moment 2.24.0](http://momentjs.cn)
-- 热模块替换: [react-hot-loader 4.12.13](https://www.npmjs.com/package/react-hot-loader)
+- 热模块替换: [react-hot-loader 4.12.14](https://www.npmjs.com/package/react-hot-loader)
 - CSS模块化: [babel-plugin-react-css-modules 5.2.6](https://github.com/gajus/babel-plugin-react-css-modules)
 - BUG跟踪: [fundebug-javascript 2.0.0](https://www.fundebug.com/)

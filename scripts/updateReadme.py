@@ -25,4 +25,4 @@ with open('README.md') as fr, open('README_temp', 'w') as fw, open('package-lock
 
 os.remove('README.md')
 os.rename('README_temp', 'README.md')
-print('README.md updated')
+print('\033[1;32mREADME.md updated successfully!\033[0m')
