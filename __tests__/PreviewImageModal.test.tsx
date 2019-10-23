@@ -60,4 +60,10 @@ describe('Component: PreviewImageModal', () => {
         expect(wrapper).toMatchSnapshot()
         expect(wrapper.state('backgroundColor')).toBe('white')
     })
+    it('interaction test: change showMesh event', () => {
+        const wrapper = mount(<PreviewImageModal visible href=".png" />)
+        wrapper.find('div[title="网格"]').simulate('click')
+        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.state('showMesh')).toBe(false)
+    })
 })

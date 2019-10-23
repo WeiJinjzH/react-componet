@@ -10,6 +10,7 @@
         "dev-mock": "cross-env --mock=true --mockport=8082 npm run dev",
         "build": "cross-env --mode=production webpack -p --progress --config=config/webpack/webpack.config.js",
         "test": "jest --config=./config/test/jest.config.js --silent",
+        "test-update-snapshots": "npm run test -- -u",
         "update-readme": "python scripts/updateReadme.py"
     },
     "author": "",

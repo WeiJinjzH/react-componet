@@ -20,7 +20,7 @@ class Home extends Component<any, any> {
                 <div style={{ backgroundColor: '#fff', padding: 24 }}>
                     <TextButton className={style.abDdd} onClick={() => { http.get('/table') }} style={{ color: 'black' }}>测试文本</TextButton>
                     <TextButton canPreview href={this.state.href}>image...</TextButton>
-                    <button onClick={() => { this.setState({ href: 'static/assets/logo.png' }) }}>change href</button>
+                    <button onClick={() => { this.setState({ href: 'http://localhost:7099/static/assets/logo.png' }) }}>change href</button>
                     <button onClick={() => { this.setState({ visible: true }) }}>change modal</button>
                     <PreviewImageModal visible={this.state.visible} href="https://volibearcat.top/static/background.jpg" onCancel={() => { this.setState({ visible: false }) }} />
                 </div>

@@ -10,6 +10,7 @@ interface PreviewImageModalProps {
 
 interface PreviewImageModalState {
     visible: boolean;
+    showMesh: boolean;
     loading: boolean;
     backgroundColor: string;
 }
@@ -25,14 +26,16 @@ class PreviewImageModal extends Component<PreviewImageModalProps, PreviewImageMo
         super(props)
         this.state = {
             visible: true,
+            showMesh: true,
             loading: true,
-            backgroundColor: '#eee',
+            backgroundColor: '#eeeeee',
         }
     }
 
     render() {
         const { href, onCancel } = this.props
         let { visible } = this.state
+        const { showMesh } = this.state
         /** 当图片为png格式时, 启用背景色切换功能 */
         const showFooter = href.slice(-4).toLowerCase() === '.png'
         /* 存在visible属性时, 组件为可控组件 */
@@ -53,6 +56,9 @@ class PreviewImageModal extends Component<PreviewImageModalProps, PreviewImageMo
                     maxHeight: '80vh',
                     overflow: 'auto',
                     backgroundColor: this.state.backgroundColor,
+                    backgroundImage: showMesh ? `linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
+                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)` : '',
+                    backgroundSize: '10px 10px',
                 }}
                 onCancel={() => {
                     onCancel && onCancel()
@@ -68,7 +74,7 @@ class PreviewImageModal extends Component<PreviewImageModalProps, PreviewImageMo
                                     key={color.value}
                                     title={color.title}
                                     style={{
-                                        border: '1px solid grey',
+                                        border: color.value === this.state.backgroundColor ? '1px solid #00000050' : '1px solid #00000010',
                                         display: 'inline-block',
                                         backgroundColor: color.value,
                                         width: 16,
@@ -81,6 +87,24 @@ class PreviewImageModal extends Component<PreviewImageModalProps, PreviewImageMo
                                 />
                             ))
                         }
+                        <span style={{ marginLeft: 16 }}>网格</span>
+                        <div
+                            title="网格"
+                            style={{
+                                border: showMesh ? '1px solid #00000050' : '1px solid #00000080',
+                                opacity: showMesh ? 1 : 0.5,
+                                display: 'inline-block',
+                                backgroundImage: showMesh ? `linear-gradient(90deg, #00000010 50%, rgba(0, 0, 0, 0) 50%),
+                                        linear-gradient(#00000010 50%, rgba(0, 0, 0, 0) 50%)` : '',
+                                backgroundSize: '4px 4px',
+                                width: 16,
+                                height: 16,
+                                margin: 4,
+                                borderRadius: 2,
+                                cursor: 'pointer',
+                            }}
+                            onClick={() => { this.setState({ showMesh: !showMesh }) }}
+                        />
                     </div>
                 ) : null}
             >

@@ -40,9 +40,8 @@ exports[`Component: PreviewPDFModal interaction test: Modal onCancel event 1`] =
         <span
           className="ant-modal-close-x"
         >
-          <Icon
+          <Close
             className="ant-modal-close-icon"
-            type="close"
           />
         </span>
       }
@@ -126,9 +125,8 @@ exports[`Component: PreviewPDFModal interaction test: Modal onCancel event 1`] =
                 <span
                   className="ant-modal-close-x"
                 >
-                  <Icon
+                  <Close
                     className="ant-modal-close-icon"
-                    type="close"
                   />
                 </span>
               }
@@ -344,9 +342,8 @@ exports[`Component: PreviewPDFModal render test 1`] = `
         <span
           className="ant-modal-close-x"
         >
-          <Icon
+          <Close
             className="ant-modal-close-icon"
-            type="close"
           />
         </span>
       }
@@ -429,9 +426,8 @@ exports[`Component: PreviewPDFModal render test 1`] = `
                 <span
                   className="ant-modal-close-x"
                 >
-                  <Icon
+                  <Close
                     className="ant-modal-close-icon"
-                    type="close"
                   />
                 </span>
               }
@@ -646,9 +642,8 @@ exports[`Component: PreviewPDFModal render test 2`] = `
         <span
           className="ant-modal-close-x"
         >
-          <Icon
+          <Close
             className="ant-modal-close-icon"
-            type="close"
           />
         </span>
       }
@@ -731,9 +726,8 @@ exports[`Component: PreviewPDFModal render test 2`] = `
                 <span
                   className="ant-modal-close-x"
                 >
-                  <Icon
+                  <Close
                     className="ant-modal-close-icon"
-                    type="close"
                   />
                 </span>
               }
@@ -949,9 +943,8 @@ exports[`utils function: PreviewPDFModal PreviewPDFModal render test 1`] = `
         <span
           className="ant-modal-close-x"
         >
-          <Icon
+          <Close
             className="ant-modal-close-icon"
-            type="close"
           />
         </span>
       }
@@ -1034,9 +1027,8 @@ exports[`utils function: PreviewPDFModal PreviewPDFModal render test 1`] = `
                 <span
                   className="ant-modal-close-x"
                 >
-                  <Icon
+                  <Close
                     className="ant-modal-close-icon"
-                    type="close"
                   />
                 </span>
               }
