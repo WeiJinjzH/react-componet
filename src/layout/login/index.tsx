@@ -1,12 +1,10 @@
 import {
-    Button, Col, Form, Icon, Input, Modal, Row,
+    Button, Col, Form, Input, Modal, Row,
 } from 'antd'
 import 'particles.js'
 import React from 'react'
 import { http } from 'src/utils'
-import './login.less'
-
-const FormItem = Form.Item
+import style from './login.less'
 
 interface LoginState {
     isLoading: boolean;
@@ -31,45 +29,39 @@ class Login extends React.Component<any, LoginState> {
         window.particlesJS.load('particles-js', '/static/build/config/particles.json')
     }
 
-    handleSubmit(e) {
+    handleSubmit(values) {
         const { isLoading, identifyKey } = this.state
         const { history, form } = this.props
-        e.preventDefault()
         if (isLoading) {
             return
         }
-        form.validateFields((errors, values) => {
-            if (errors) {
-                return
+        this.setState({ isLoading: true })
+        values.identifyKey = identifyKey
+        http.put('/manage/user/login', values).then((res) => {
+            this.setState({ isLoading: false })
+            if (res.code === 0) {
+                const { data } = res
+                localStorage.user = JSON.stringify(data) || ''
+                sessionStorage.removeItem('menuData')
+                history.push(res.data.showUrl || '/')
+            } else if (res.code === -6) {
+                this.setState({ isLoading: false })
+                form.setFieldsValue({ inputCode: '' })
+                Modal.warning({
+                    title: '您还没有申请认证，请先认证',
+                    content: res.msg,
+                })
+            } else {
+                this.refreshValidCode()
+                this.setState({ isLoading: false })
+                form.setFieldsValue({ inputCode: '' })
+                Modal.warning({
+                    title: '登陆失败',
+                    content: res.msg,
+                })
             }
-            this.setState({ isLoading: true })
-            values.identifyKey = identifyKey
-            http.put('/manage/user/login', values).then((res) => {
-                this.setState({ isLoading: false })
-                if (res.code === 0) {
-                    const { data } = res
-                    localStorage.user = JSON.stringify(data) || ''
-                    sessionStorage.removeItem('menuData')
-                    history.push(res.data.showUrl || '/')
-                } else if (res.code === -6) {
-                    this.setState({ isLoading: false })
-                    form.setFieldsValue({ inputCode: '' })
-                    Modal.warning({
-                        title: '您还没有申请认证，请先认证',
-                        content: res.msg,
-                    })
-                } else {
-                    this.refreshValidCode()
-                    this.setState({ isLoading: false })
-                    form.setFieldsValue({ inputCode: '' })
-                    Modal.warning({
-                        title: '登陆失败',
-                        content: res.msg,
-                    })
-                }
-            }).catch(() => {
-                this.setState({ isLoading: false })
-            })
+        }).catch(() => {
+            this.setState({ isLoading: false })
         })
     }
 
@@ -92,74 +84,68 @@ class Login extends React.Component<any, LoginState> {
 
     render() {
         const { codeSrc, isLoading } = this.state
-        const { form } = this.props
-        const { getFieldDecorator } = form
+        // const { form } = this.props
+        // const { getFieldDecorator } = form
         return (
-            <div id="particles-js" styleName="login-container">
-                <div styleName="login-text">
-                    <span styleName="baas">Demo</span>
+            <div id="particles-js" className={style.loginContainer}>
+                <div className={style.loginText}>
+                    <span className={style.baas}>Demo</span>
                 </div>
-                <div styleName="login-form">
-                    <h3 styleName="login-form-header">登录</h3>
-                    <Form onSubmit={this.handleSubmit}>
-                        <FormItem>
-                            {
-                                getFieldDecorator('loginName', {
-                                    rules: [{
-                                        required: true,
-                                        message: '请输入账户名',
-                                    }],
-                                })(<Input
-                                    prefix={<Icon type="user" />}
-                                    allowClear
-                                    type="text"
-                                    placeholder="账户名"
-                                />)
-                            }
-
-                        </FormItem>
-                        <FormItem>
-                            {
-                                getFieldDecorator('password', {
-                                    rules: [{
-                                        required: true,
-                                        whitespace: false,
-                                        message: '请输入密码',
-                                    }],
-                                })(<Input
-                                    prefix={<Icon type="lock" />}
-                                    allowClear
-                                    type="password"
-                                    autoComplete="new-password"
-                                    placeholder="密码"
-                                />)
-                            }
-                        </FormItem>
+                <div className={style.loginForm}>
+                    <h3 className={style.loginFormHeader}>登录</h3>
+                    <Form onFinish={this.handleSubmit}>
+                        <Form.Item
+                            name="loginName"
+                            rules={[{
+                                required: true,
+                                message: '请输入账户名',
+                            }]}
+                        >
+                            <Input
+                                // prefix={<Icon type="user" />}
+                                allowClear
+                                type="text"
+                                placeholder="账户名"
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name="password"
+                            rules={[{
+                                required: true,
+                                whitespace: false,
+                                message: '请输入密码',
+                            }]}
+                        >
+                            <Input
+                                // prefix={<Icon type="lock" />}
+                                allowClear
+                                type="password"
+                                autoComplete="new-password"
+                                placeholder="密码"
+                            />
+                        </Form.Item>
                         <Row gutter={8}>
                             <Col span={16}>
-                                <FormItem>
-                                    {
-                                        getFieldDecorator('inputCode', {
-                                            rules: [
-                                                {
-                                                    required: true,
-                                                    message: '请输入验证码',
-                                                },
-                                            ],
-                                        })(<Input
-                                            prefix={<Icon type="lock" />}
-                                            autoComplete="off"
-                                            placeholder="验证码"
-                                        />)
-                                    }
-                                </FormItem>
+                                <Form.Item
+                                    name="inputCode"
+                                    rules={[{
+                                        required: true,
+                                        message: '请输入验证码',
+                                    }]}
+                                >
+                                    <Input
+                                        // prefix={<Icon type="lock" />}
+                                        autoComplete="off"
+                                        placeholder="验证码"
+                                    />
+                                </Form.Item>
                             </Col>
                             <Col span={8}>
                                 <div>
                                     {
                                         codeSrc && (
                                             <img
-                                                styleName="captcha"
+                                                className={style.captcha}
                                                 onClick={this.refreshValidCode}
                                                 onKeyDown={this.refreshValidCode}
                                                 src={codeSrc}
@@ -171,7 +157,7 @@ class Login extends React.Component<any, LoginState> {
                             </Col>
                         </Row>
                         <Button
-                            styleName="login-btn"
+                            className={style.loginBtn}
                             type="primary"
                             size="large"
                             htmlType="submit"
@@ -185,4 +171,4 @@ class Login extends React.Component<any, LoginState> {
     }
 }
 
-export default Form.create()(Login)
+export default Login

@@ -1,5 +1,5 @@
 import {
-    ConfigProvider, Dropdown, Icon, Layout, Menu, message, Modal,
+    ConfigProvider, Dropdown, Layout, Menu, message, Modal,
 } from 'antd'
 import moment from 'moment'
 import React from 'react'
@@ -281,7 +281,7 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
                         key={item.href || item.id}
                         title={(
                             <>
-                                {item.iconCss && <Icon type={item.iconCss} />}
+                                {/* {item.iconCss && <Icon type={item.iconCss} />} */}
                                 <span>
                                     {item.text}
                                 </span>
@@ -294,7 +294,7 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
             }
             return (
                 <Menu.Item key={item.href || item.id}>
-                    {item.iconCss && <Icon type={item.iconCss} />}
+                    {/* {item.iconCss && <Icon type={item.iconCss} />} */}
                     <span>
                         {item.text || item.path}
                     </span>
@@ -312,7 +312,7 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
                         key={item.href || item.id}
                         title={(
                             <>
-                                {item.iconCss && <Icon type={item.iconCss} />}
+                                {/* {item.iconCss && <Icon type={item.iconCss} />} */}
                                 <span>
                                     {item.text}
                                 </span>
@@ -325,7 +325,7 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
             }
             return (
                 <Menu.Item key={item.href || item.id}>
-                    {item.iconCss && <Icon type={item.iconCss} />}
+                    {/* {item.iconCss && <Icon type={item.iconCss} />} */}
                     <span>
                         {item.text}
                     </span>
@@ -398,12 +398,12 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
                                         background: '#222d54',
                                     }}
                                 >
-                                    <Icon
+                                    {/* <Icon
                                         style={{ fontSize: 16, cursor: 'pointer' }}
                                         type={collapsed ? 'menu-unfold' : 'menu-fold'}
                                         theme="outlined"
                                         onClick={this.toggleMenu}
-                                    />
+                                    /> */}
                                 </div>
                             )
                         }
@@ -419,12 +419,12 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
                                         borderBottom: '1px solid #eee',
                                     }}
                                 >
-                                    <Icon
+                                    {/* <Icon
                                         style={{ marginLeft: 20, fontSize: 16, cursor: 'pointer' }}
                                         type={collapsed ? 'menu-unfold' : 'menu-fold'}
                                         theme="outlined"
                                         onClick={this.toggleMenu}
-                                    />
+                                    /> */}
                                     <div
                                         style={{ display: 'inline-block', flex: 1 }}
                                     >
@@ -441,7 +441,7 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
                                         overlay={(
                                             <Menu>
                                                 <Menu.Item onClick={this.doLogout}>
-                                                    <Icon type="logout" />
+                                                    {/* <Icon type="logout" /> */}
                                                     <span>退出</span>
                                                 </Menu.Item>
                                             </Menu>
@@ -454,9 +454,9 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
                                                 color: '#999',
                                             }}
                                         >
-                                            <Icon type="user" />
+                                            {/* <Icon type="user" /> */}
                                             {/* {JSON.parse(localStorage.getItem('user')).loginName} */}
-                                            <Icon type="down" />
+                                            {/* <Icon type="down" /> */}
                                         </span>
                                     </Dropdown>
                                 </Header>

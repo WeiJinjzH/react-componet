@@ -1,12 +1,12 @@
 import React from 'react'
 
-const fundebug = require('fundebug-javascript')
-require('fundebug-revideo')
+// const fundebug = require('fundebug-javascript')
+// require('fundebug-revideo')
 
-fundebug.init({
-    apikey: 'e133bf0841efbbfa0f26585bdfda36c8f4bd0af27b4db771ace81d10e0bbf015',
-    silentHttp: true,
-})
+// fundebug.init({
+//     apikey: 'e133bf0841efbbfa0f26585bdfda36c8f4bd0af27b4db771ace81d10e0bbf015',
+//     silentHttp: true,
+// })
 
 interface ErrorBoundaryProps {
     children: React.ReactChild;
@@ -26,11 +26,11 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
 
     componentDidCatch(error, info) {
         this.setState({ hasError: true })
-        fundebug.notifyError(error, {
-            metaData: {
-                info,
-            },
-        })
+        // fundebug.notifyError(error, {
+        //     metaData: {
+        //         info,
+        //     },
+        // })
     }
 
     render() {

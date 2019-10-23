@@ -1,3 +1,4 @@
+import { Form, Input } from 'antd'
 import React, { Component } from 'react'
 import PreviewImageModal from 'src/components/PreviewImageModal'
 import TextButton from 'src/components/TextButton'
@@ -22,6 +23,25 @@ class Home extends Component<any, any> {
                     <button onClick={() => { this.setState({ href: 'static/assets/logo.png' }) }}>change href</button>
                     <button onClick={() => { this.setState({ visible: true }) }}>change modal</button>
                     <PreviewImageModal visible={this.state.visible} href="https://volibearcat.top/static/background.jpg" onCancel={() => { this.setState({ visible: false }) }} />
+                </div>
+                <div>
+                    <p>Form Test</p>
+                    <Form>
+                        <Form.Item
+                            name="loginName"
+                            rules={[{
+                                required: true,
+                                message: '请输入账户名',
+                            }]}
+                        >
+                            <Input
+                                // prefix={<Icon type="user" />}
+                                allowClear
+                                type="text"
+                                placeholder="账户名"
+                            />
+                        </Form.Item>
+                    </Form>
                 </div>
             </div>
         )

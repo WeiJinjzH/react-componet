@@ -13,6 +13,7 @@
         "lib": [
             "dom",
             "dom.iterable",
+            "es2018",
             "esnext"
         ],
         "jsx": "react",
@@ -22,5 +23,8 @@
             "src": ["./src"],
             "utils": ["./src/utils"]
         }
-    }
+    },
+    "exclude": [
+        "node_modules"
+    ]
 }
