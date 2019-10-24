@@ -56,9 +56,12 @@ class PreviewImageModal extends Component<PreviewImageModalProps, PreviewImageMo
                     maxHeight: '80vh',
                     overflow: 'auto',
                     backgroundColor: this.state.backgroundColor,
-                    backgroundImage: showMesh ? `linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)` : '',
-                    backgroundSize: '10px 10px',
+                    backgroundImage: showMesh ? `
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ` : '',
+                    backgroundSize: '16px 16px',
+                    backgroundPosition: '0 0, 8px 8px',
                 }}
                 onCancel={() => {
                     onCancel && onCancel()

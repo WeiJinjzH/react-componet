@@ -10,9 +10,12 @@ exports[`Component: PreviewImageModal interaction test: Modal onCancel event 1`]
     bodyStyle={
       Object {
         "backgroundColor": "#eeeeee",
-        "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-        "backgroundSize": "10px 10px",
+        "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+        "backgroundPosition": "0 0, 8px 8px",
+        "backgroundSize": "16px 16px",
         "maxHeight": "80vh",
         "overflow": "auto",
         "padding": 0,
@@ -50,9 +53,12 @@ exports[`Component: PreviewImageModal interaction test: Modal onCancel event 1`]
       bodyStyle={
         Object {
           "backgroundColor": "#eeeeee",
-          "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-          "backgroundSize": "10px 10px",
+          "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+          "backgroundPosition": "0 0, 8px 8px",
+          "backgroundSize": "16px 16px",
           "maxHeight": "80vh",
           "overflow": "auto",
           "padding": 0,
@@ -145,7 +151,7 @@ exports[`Component: PreviewImageModal interaction test: Modal onCancel event 1`]
                         </div>
                         <div
                           class="ant-modal-body"
-                          style="padding: 0px; max-height: 80vh; overflow: auto; background-color: rgb(238, 238, 238); background-size: 10px 10px;"
+                          style="padding: 0px; max-height: 80vh; overflow: auto; background-color: rgb(238, 238, 238); background-size: 16px 16px;"
                         >
                           <div
                             class="ant-spin-nested-loading"
@@ -207,9 +213,12 @@ exports[`Component: PreviewImageModal interaction test: Modal onCancel event 1`]
               bodyStyle={
                 Object {
                   "backgroundColor": "#eeeeee",
-                  "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-                  "backgroundSize": "10px 10px",
+                  "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+                  "backgroundPosition": "0 0, 8px 8px",
+                  "backgroundSize": "16px 16px",
                   "maxHeight": "80vh",
                   "overflow": "auto",
                   "padding": 0,
@@ -396,9 +405,12 @@ exports[`Component: PreviewImageModal interaction test: Modal onCancel event 1`]
                               style={
                                 Object {
                                   "backgroundColor": "#eeeeee",
-                                  "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-                                  "backgroundSize": "10px 10px",
+                                  "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+                                  "backgroundPosition": "0 0, 8px 8px",
+                                  "backgroundSize": "16px 16px",
                                   "maxHeight": "80vh",
                                   "overflow": "auto",
                                   "padding": 0,
@@ -506,9 +518,12 @@ exports[`Component: PreviewImageModal interaction test: change background-color 
     bodyStyle={
       Object {
         "backgroundColor": "white",
-        "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-        "backgroundSize": "10px 10px",
+        "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+        "backgroundPosition": "0 0, 8px 8px",
+        "backgroundSize": "16px 16px",
         "maxHeight": "80vh",
         "overflow": "auto",
         "padding": 0,
@@ -636,9 +651,12 @@ exports[`Component: PreviewImageModal interaction test: change background-color 
       bodyStyle={
         Object {
           "backgroundColor": "white",
-          "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-          "backgroundSize": "10px 10px",
+          "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+          "backgroundPosition": "0 0, 8px 8px",
+          "backgroundSize": "16px 16px",
           "maxHeight": "80vh",
           "overflow": "auto",
           "padding": 0,
@@ -821,7 +839,7 @@ exports[`Component: PreviewImageModal interaction test: change background-color 
                         </div>
                         <div
                           class="ant-modal-body"
-                          style="padding: 0px; max-height: 80vh; overflow: auto; background-color: white; background-size: 10px 10px;"
+                          style="padding: 0px; max-height: 80vh; overflow: auto; background-color: white; background-size: 16px 16px;"
                         >
                           <div
                             class="ant-spin-nested-loading"
@@ -915,9 +933,12 @@ exports[`Component: PreviewImageModal interaction test: change background-color 
               bodyStyle={
                 Object {
                   "backgroundColor": "white",
-                  "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-                  "backgroundSize": "10px 10px",
+                  "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+                  "backgroundPosition": "0 0, 8px 8px",
+                  "backgroundSize": "16px 16px",
                   "maxHeight": "80vh",
                   "overflow": "auto",
                   "padding": 0,
@@ -1194,9 +1215,12 @@ exports[`Component: PreviewImageModal interaction test: change background-color 
                               style={
                                 Object {
                                   "backgroundColor": "white",
-                                  "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-                                  "backgroundSize": "10px 10px",
+                                  "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+                                  "backgroundPosition": "0 0, 8px 8px",
+                                  "backgroundSize": "16px 16px",
                                   "maxHeight": "80vh",
                                   "overflow": "auto",
                                   "padding": 0,
@@ -1401,7 +1425,8 @@ exports[`Component: PreviewImageModal interaction test: change showMesh event 1`
       Object {
         "backgroundColor": "#eeeeee",
         "backgroundImage": "",
-        "backgroundSize": "10px 10px",
+        "backgroundPosition": "0 0, 8px 8px",
+        "backgroundSize": "16px 16px",
         "maxHeight": "80vh",
         "overflow": "auto",
         "padding": 0,
@@ -1529,7 +1554,8 @@ exports[`Component: PreviewImageModal interaction test: change showMesh event 1`
         Object {
           "backgroundColor": "#eeeeee",
           "backgroundImage": "",
-          "backgroundSize": "10px 10px",
+          "backgroundPosition": "0 0, 8px 8px",
+          "backgroundSize": "16px 16px",
           "maxHeight": "80vh",
           "overflow": "auto",
           "padding": 0,
@@ -1711,7 +1737,7 @@ exports[`Component: PreviewImageModal interaction test: change showMesh event 1`
                         </div>
                         <div
                           class="ant-modal-body"
-                          style="padding: 0px; max-height: 80vh; overflow: auto; background-color: rgb(238, 238, 238); background-size: 10px 10px;"
+                          style="padding: 0px; max-height: 80vh; overflow: auto; background-color: rgb(238, 238, 238); background-size: 16px 16px;"
                         >
                           <div
                             class="ant-spin-nested-loading"
@@ -1806,7 +1832,8 @@ exports[`Component: PreviewImageModal interaction test: change showMesh event 1`
                 Object {
                   "backgroundColor": "#eeeeee",
                   "backgroundImage": "",
-                  "backgroundSize": "10px 10px",
+                  "backgroundPosition": "0 0, 8px 8px",
+                  "backgroundSize": "16px 16px",
                   "maxHeight": "80vh",
                   "overflow": "auto",
                   "padding": 0,
@@ -2083,7 +2110,8 @@ exports[`Component: PreviewImageModal interaction test: change showMesh event 1`
                                 Object {
                                   "backgroundColor": "#eeeeee",
                                   "backgroundImage": "",
-                                  "backgroundSize": "10px 10px",
+                                  "backgroundPosition": "0 0, 8px 8px",
+                                  "backgroundSize": "16px 16px",
                                   "maxHeight": "80vh",
                                   "overflow": "auto",
                                   "padding": 0,
@@ -2289,9 +2317,12 @@ exports[`Component: PreviewImageModal interaction test: img onError event 1`] = 
     bodyStyle={
       Object {
         "backgroundColor": "#eeeeee",
-        "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-        "backgroundSize": "10px 10px",
+        "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+        "backgroundPosition": "0 0, 8px 8px",
+        "backgroundSize": "16px 16px",
         "maxHeight": "80vh",
         "overflow": "auto",
         "padding": 0,
@@ -2330,9 +2361,12 @@ exports[`Component: PreviewImageModal interaction test: img onError event 1`] = 
       bodyStyle={
         Object {
           "backgroundColor": "#eeeeee",
-          "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-          "backgroundSize": "10px 10px",
+          "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+          "backgroundPosition": "0 0, 8px 8px",
+          "backgroundSize": "16px 16px",
           "maxHeight": "80vh",
           "overflow": "auto",
           "padding": 0,
@@ -2425,7 +2459,7 @@ exports[`Component: PreviewImageModal interaction test: img onError event 1`] = 
                         </div>
                         <div
                           class="ant-modal-body"
-                          style="padding: 0px; max-height: 80vh; overflow: auto; background-color: rgb(238, 238, 238); background-size: 10px 10px;"
+                          style="padding: 0px; max-height: 80vh; overflow: auto; background-color: rgb(238, 238, 238); background-size: 16px 16px;"
                         >
                           <div
                             class="ant-spin-nested-loading"
@@ -2488,9 +2522,12 @@ exports[`Component: PreviewImageModal interaction test: img onError event 1`] = 
               bodyStyle={
                 Object {
                   "backgroundColor": "#eeeeee",
-                  "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-                  "backgroundSize": "10px 10px",
+                  "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+                  "backgroundPosition": "0 0, 8px 8px",
+                  "backgroundSize": "16px 16px",
                   "maxHeight": "80vh",
                   "overflow": "auto",
                   "padding": 0,
@@ -2677,9 +2714,12 @@ exports[`Component: PreviewImageModal interaction test: img onError event 1`] = 
                               style={
                                 Object {
                                   "backgroundColor": "#eeeeee",
-                                  "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-                                  "backgroundSize": "10px 10px",
+                                  "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+                                  "backgroundPosition": "0 0, 8px 8px",
+                                  "backgroundSize": "16px 16px",
                                   "maxHeight": "80vh",
                                   "overflow": "auto",
                                   "padding": 0,
@@ -2789,9 +2829,12 @@ exports[`Component: PreviewImageModal interaction test: img onError event 2`] = 
     bodyStyle={
       Object {
         "backgroundColor": "#eeeeee",
-        "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-        "backgroundSize": "10px 10px",
+        "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+        "backgroundPosition": "0 0, 8px 8px",
+        "backgroundSize": "16px 16px",
         "maxHeight": "80vh",
         "overflow": "auto",
         "padding": 0,
@@ -2830,9 +2873,12 @@ exports[`Component: PreviewImageModal interaction test: img onError event 2`] = 
       bodyStyle={
         Object {
           "backgroundColor": "#eeeeee",
-          "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-          "backgroundSize": "10px 10px",
+          "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+          "backgroundPosition": "0 0, 8px 8px",
+          "backgroundSize": "16px 16px",
           "maxHeight": "80vh",
           "overflow": "auto",
           "padding": 0,
@@ -2925,7 +2971,7 @@ exports[`Component: PreviewImageModal interaction test: img onError event 2`] = 
                         </div>
                         <div
                           class="ant-modal-body"
-                          style="padding: 0px; max-height: 80vh; overflow: auto; background-color: rgb(238, 238, 238); background-size: 10px 10px;"
+                          style="padding: 0px; max-height: 80vh; overflow: auto; background-color: rgb(238, 238, 238); background-size: 16px 16px;"
                         >
                           <div
                             class="ant-spin-nested-loading"
@@ -2988,9 +3034,12 @@ exports[`Component: PreviewImageModal interaction test: img onError event 2`] = 
               bodyStyle={
                 Object {
                   "backgroundColor": "#eeeeee",
-                  "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-                  "backgroundSize": "10px 10px",
+                  "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+                  "backgroundPosition": "0 0, 8px 8px",
+                  "backgroundSize": "16px 16px",
                   "maxHeight": "80vh",
                   "overflow": "auto",
                   "padding": 0,
@@ -3177,9 +3226,12 @@ exports[`Component: PreviewImageModal interaction test: img onError event 2`] = 
                               style={
                                 Object {
                                   "backgroundColor": "#eeeeee",
-                                  "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-                                  "backgroundSize": "10px 10px",
+                                  "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+                                  "backgroundPosition": "0 0, 8px 8px",
+                                  "backgroundSize": "16px 16px",
                                   "maxHeight": "80vh",
                                   "overflow": "auto",
                                   "padding": 0,
@@ -3287,9 +3339,12 @@ exports[`Component: PreviewImageModal interaction test: img onLoad event 1`] = `
     bodyStyle={
       Object {
         "backgroundColor": "#eeeeee",
-        "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-        "backgroundSize": "10px 10px",
+        "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+        "backgroundPosition": "0 0, 8px 8px",
+        "backgroundSize": "16px 16px",
         "maxHeight": "80vh",
         "overflow": "auto",
         "padding": 0,
@@ -3327,9 +3382,12 @@ exports[`Component: PreviewImageModal interaction test: img onLoad event 1`] = `
       bodyStyle={
         Object {
           "backgroundColor": "#eeeeee",
-          "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-          "backgroundSize": "10px 10px",
+          "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+          "backgroundPosition": "0 0, 8px 8px",
+          "backgroundSize": "16px 16px",
           "maxHeight": "80vh",
           "overflow": "auto",
           "padding": 0,
@@ -3422,7 +3480,7 @@ exports[`Component: PreviewImageModal interaction test: img onLoad event 1`] = `
                         </div>
                         <div
                           class="ant-modal-body"
-                          style="padding: 0px; max-height: 80vh; overflow: auto; background-color: rgb(238, 238, 238); background-size: 10px 10px;"
+                          style="padding: 0px; max-height: 80vh; overflow: auto; background-color: rgb(238, 238, 238); background-size: 16px 16px;"
                         >
                           <div
                             class="ant-spin-nested-loading"
@@ -3484,9 +3542,12 @@ exports[`Component: PreviewImageModal interaction test: img onLoad event 1`] = `
               bodyStyle={
                 Object {
                   "backgroundColor": "#eeeeee",
-                  "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-                  "backgroundSize": "10px 10px",
+                  "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+                  "backgroundPosition": "0 0, 8px 8px",
+                  "backgroundSize": "16px 16px",
                   "maxHeight": "80vh",
                   "overflow": "auto",
                   "padding": 0,
@@ -3673,9 +3734,12 @@ exports[`Component: PreviewImageModal interaction test: img onLoad event 1`] = `
                               style={
                                 Object {
                                   "backgroundColor": "#eeeeee",
-                                  "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-                                  "backgroundSize": "10px 10px",
+                                  "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+                                  "backgroundPosition": "0 0, 8px 8px",
+                                  "backgroundSize": "16px 16px",
                                   "maxHeight": "80vh",
                                   "overflow": "auto",
                                   "padding": 0,
@@ -3783,9 +3847,12 @@ exports[`Component: PreviewImageModal render test 1`] = `
     bodyStyle={
       Object {
         "backgroundColor": "#eeeeee",
-        "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-        "backgroundSize": "10px 10px",
+        "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+        "backgroundPosition": "0 0, 8px 8px",
+        "backgroundSize": "16px 16px",
         "maxHeight": "80vh",
         "overflow": "auto",
         "padding": 0,
@@ -3913,9 +3980,12 @@ exports[`Component: PreviewImageModal render test 1`] = `
       bodyStyle={
         Object {
           "backgroundColor": "#eeeeee",
-          "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-          "backgroundSize": "10px 10px",
+          "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+          "backgroundPosition": "0 0, 8px 8px",
+          "backgroundSize": "16px 16px",
           "maxHeight": "80vh",
           "overflow": "auto",
           "padding": 0,
@@ -4098,7 +4168,7 @@ exports[`Component: PreviewImageModal render test 1`] = `
                         </div>
                         <div
                           class="ant-modal-body"
-                          style="padding: 0px; max-height: 80vh; overflow: auto; background-color: rgb(238, 238, 238); background-size: 10px 10px;"
+                          style="padding: 0px; max-height: 80vh; overflow: auto; background-color: rgb(238, 238, 238); background-size: 16px 16px;"
                         >
                           <div
                             class="ant-spin-nested-loading"
@@ -4192,9 +4262,12 @@ exports[`Component: PreviewImageModal render test 1`] = `
               bodyStyle={
                 Object {
                   "backgroundColor": "#eeeeee",
-                  "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-                  "backgroundSize": "10px 10px",
+                  "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+                  "backgroundPosition": "0 0, 8px 8px",
+                  "backgroundSize": "16px 16px",
                   "maxHeight": "80vh",
                   "overflow": "auto",
                   "padding": 0,
@@ -4471,9 +4544,12 @@ exports[`Component: PreviewImageModal render test 1`] = `
                               style={
                                 Object {
                                   "backgroundColor": "#eeeeee",
-                                  "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-                                  "backgroundSize": "10px 10px",
+                                  "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+                                  "backgroundPosition": "0 0, 8px 8px",
+                                  "backgroundSize": "16px 16px",
                                   "maxHeight": "80vh",
                                   "overflow": "auto",
                                   "padding": 0,
@@ -4677,9 +4753,12 @@ exports[`Component: PreviewImageModal render test 2`] = `
     bodyStyle={
       Object {
         "backgroundColor": "#eeeeee",
-        "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-        "backgroundSize": "10px 10px",
+        "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+        "backgroundPosition": "0 0, 8px 8px",
+        "backgroundSize": "16px 16px",
         "maxHeight": "80vh",
         "overflow": "auto",
         "padding": 0,
@@ -4717,9 +4796,12 @@ exports[`Component: PreviewImageModal render test 2`] = `
       bodyStyle={
         Object {
           "backgroundColor": "#eeeeee",
-          "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-          "backgroundSize": "10px 10px",
+          "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+          "backgroundPosition": "0 0, 8px 8px",
+          "backgroundSize": "16px 16px",
           "maxHeight": "80vh",
           "overflow": "auto",
           "padding": 0,
@@ -4812,7 +4894,7 @@ exports[`Component: PreviewImageModal render test 2`] = `
                         </div>
                         <div
                           class="ant-modal-body"
-                          style="padding: 0px; max-height: 80vh; overflow: auto; background-color: rgb(238, 238, 238); background-size: 10px 10px;"
+                          style="padding: 0px; max-height: 80vh; overflow: auto; background-color: rgb(238, 238, 238); background-size: 16px 16px;"
                         >
                           <div
                             class="ant-spin-nested-loading"
@@ -4874,9 +4956,12 @@ exports[`Component: PreviewImageModal render test 2`] = `
               bodyStyle={
                 Object {
                   "backgroundColor": "#eeeeee",
-                  "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-                  "backgroundSize": "10px 10px",
+                  "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+                  "backgroundPosition": "0 0, 8px 8px",
+                  "backgroundSize": "16px 16px",
                   "maxHeight": "80vh",
                   "overflow": "auto",
                   "padding": 0,
@@ -5063,9 +5148,12 @@ exports[`Component: PreviewImageModal render test 2`] = `
                               style={
                                 Object {
                                   "backgroundColor": "#eeeeee",
-                                  "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-                                  "backgroundSize": "10px 10px",
+                                  "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+                                  "backgroundPosition": "0 0, 8px 8px",
+                                  "backgroundSize": "16px 16px",
                                   "maxHeight": "80vh",
                                   "overflow": "auto",
                                   "padding": 0,
@@ -5173,9 +5261,12 @@ exports[`utils function: PreviewImageModal PreviewImageModal render test 1`] = `
     bodyStyle={
       Object {
         "backgroundColor": "#eeeeee",
-        "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-        "backgroundSize": "10px 10px",
+        "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+        "backgroundPosition": "0 0, 8px 8px",
+        "backgroundSize": "16px 16px",
         "maxHeight": "80vh",
         "overflow": "auto",
         "padding": 0,
@@ -5303,9 +5394,12 @@ exports[`utils function: PreviewImageModal PreviewImageModal render test 1`] = `
       bodyStyle={
         Object {
           "backgroundColor": "#eeeeee",
-          "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-          "backgroundSize": "10px 10px",
+          "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+          "backgroundPosition": "0 0, 8px 8px",
+          "backgroundSize": "16px 16px",
           "maxHeight": "80vh",
           "overflow": "auto",
           "padding": 0,
@@ -5488,7 +5582,7 @@ exports[`utils function: PreviewImageModal PreviewImageModal render test 1`] = `
                         </div>
                         <div
                           class="ant-modal-body"
-                          style="padding: 0px; max-height: 80vh; overflow: auto; background-color: rgb(238, 238, 238); background-size: 10px 10px;"
+                          style="padding: 0px; max-height: 80vh; overflow: auto; background-color: rgb(238, 238, 238); background-size: 16px 16px;"
                         >
                           <div
                             class="ant-spin-nested-loading"
@@ -5582,9 +5676,12 @@ exports[`utils function: PreviewImageModal PreviewImageModal render test 1`] = `
               bodyStyle={
                 Object {
                   "backgroundColor": "#eeeeee",
-                  "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-                  "backgroundSize": "10px 10px",
+                  "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+                  "backgroundPosition": "0 0, 8px 8px",
+                  "backgroundSize": "16px 16px",
                   "maxHeight": "80vh",
                   "overflow": "auto",
                   "padding": 0,
@@ -5861,9 +5958,12 @@ exports[`utils function: PreviewImageModal PreviewImageModal render test 1`] = `
                               style={
                                 Object {
                                   "backgroundColor": "#eeeeee",
-                                  "backgroundImage": "linear-gradient(90deg, #00000010 10%, rgba(0, 0, 0, 0) 10%),
-                    linear-gradient(#00000010 10%, rgba(0, 0, 0, 0) 10%)",
-                                  "backgroundSize": "10px 10px",
+                                  "backgroundImage": "
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%),
+                        linear-gradient(45deg, rgba(80, 80, 80, 0.25) 25%, transparent 25%, transparent 75%, rgba(80, 80, 80, 0.25) 75%)
+                        ",
+                                  "backgroundPosition": "0 0, 8px 8px",
+                                  "backgroundSize": "16px 16px",
                                   "maxHeight": "80vh",
                                   "overflow": "auto",
                                   "padding": 0,
