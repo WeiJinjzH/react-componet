@@ -5,6 +5,7 @@ import moment from 'moment'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { http } from 'src/utils/http'
+import { MenuFold, MenuUnfold } from '@ant-design/icons'
 import './layout.less'
 import MainLayoutContext from './MainLayoutContext'
 
@@ -352,26 +353,17 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
                     collapsed,
                 }}
             >
-                <Layout>
-                    <Sider trigger={null} collapsible collapsed={collapsed}>
-                        <div
-                            className="logo"
-                            style={{
-                                position: 'absolute',
-                                top: 0,
-                                width: '100%',
-                                height: 60,
-                                lineHeight: '60px',
-                                textAlign: 'center',
-                                color: 'white',
-                                zIndex: 1,
-                                padding: 6,
-                            }}
-                        >
-                            <Link to="/">
-                                <img src={logo} alt="" />
-                            </Link>
-                        </div>
+                <Layout id="mian-layout" style={{ paddingLeft: collapsed ? 80 : 220 }}>
+                    <Sider
+                        trigger={null}
+                        collapsedWidth={80}
+                        width={220}
+                        collapsible
+                        collapsed={collapsed}
+                    >
+                        <Link className="logo" to="/">
+                            <img src={logo} alt="" />
+                        </Link>
                         <Menu
                             style={{ paddingBottom: showHeader ? 0 : 50 }}
                             className="menu-list"
@@ -386,24 +378,20 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
                         </Menu>
                         {
                             !showHeader && (
-                                <div
-                                    style={{
-                                        position: 'absolute',
-                                        bottom: 0,
-                                        left: 0,
-                                        right: 0,
-                                        color: '#fff',
-                                        lineHeight: '50px',
-                                        textAlign: 'center',
-                                        background: '#222d54',
-                                    }}
-                                >
-                                    {/* <Icon
-                                        style={{ fontSize: 16, cursor: 'pointer' }}
-                                        type={collapsed ? 'menu-unfold' : 'menu-fold'}
-                                        theme="outlined"
-                                        onClick={this.toggleMenu}
-                                    /> */}
+                                <div className="menu-footer">
+                                    {
+                                        collapsed ? (
+                                            <MenuUnfold
+                                                style={{ fontSize: 20 }}
+                                                onClick={this.toggleMenu}
+                                            />
+                                        ) : (
+                                            <MenuFold
+                                                style={{ fontSize: 20 }}
+                                                onClick={this.toggleMenu}
+                                            />
+                                        )
+                                    }
                                 </div>
                             )
                         }
@@ -411,20 +399,20 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
                     <Layout>
                         {
                             showHeader && (
-                                <Header
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        backgroundColor: '#fff',
-                                        borderBottom: '1px solid #eee',
-                                    }}
-                                >
-                                    {/* <Icon
-                                        style={{ marginLeft: 20, fontSize: 16, cursor: 'pointer' }}
-                                        type={collapsed ? 'menu-unfold' : 'menu-fold'}
-                                        theme="outlined"
-                                        onClick={this.toggleMenu}
-                                    /> */}
+                                <Header id="main-header" style={{ width: `calc(100% - ${collapsed ? 80 : 220}px)` }}>
+                                    {
+                                        collapsed ? (
+                                            <MenuUnfold
+                                                style={{ color: '#000000a6', margin: '0 10px', fontSize: 20 }}
+                                                onClick={this.toggleMenu}
+                                            />
+                                        ) : (
+                                            <MenuFold
+                                                style={{ color: '#000000a6', margin: '0 10px', fontSize: 20 }}
+                                                onClick={this.toggleMenu}
+                                            />
+                                        )
+                                    }
                                     <div
                                         style={{ display: 'inline-block', flex: 1 }}
                                     >
@@ -463,13 +451,13 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
                             )
                         }
                         <ConfigProvider getPopupContainer={() => document.getElementById('main-content') || document.body}>
-                            <Content id="main-content">
+                            <Content id="main-content" style={{ paddingTop: showHeader ? 50 : 0 }}>
                                 {children(this.nodeMap, loadingMenus)}
                             </Content>
                         </ConfigProvider>
                         {
                             showHeader && (
-                                <Footer>
+                                <Footer id="main-footer">
                                     <div style={{ textAlign: 'center' }}>© Demo</div>
                                 </Footer>
                             )

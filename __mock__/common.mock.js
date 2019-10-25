@@ -21,6 +21,21 @@ const menu = {
         }))
         next()
     },
+    'GET /form': (req, res, next) => {
+        const data = {}
+        const fieldsLength = (req.query && req.query.size) || 10
+        for (let i = 0; i < fieldsLength; i += 1) {
+            data[`field${i + 1}`] = `field${i + 1}`
+        }
+        res.json(Mock.mock({
+            code: 0,
+            data,
+            errorUrl: '',
+            msg: 'success',
+            success: true,
+        }))
+        next()
+    },
     'GET /manage/identify/generator': (req, res, next) => {
         res.json(Mock.mock({
             code: 0,

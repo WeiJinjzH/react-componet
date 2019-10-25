@@ -27,6 +27,7 @@ npm run build
 
 - 界面构建: [react 16.11.0](https://reactjs.org/versions)
 - UI组件库: [antd 4.0.0-alpha.7](https://ant.design/index-cn)
+- TS版本: [typescript 3.6.4](https://www.typescriptlang.org/)
 - 图表组件库: [bizcharts 3.5.5](https://bizcharts.net/index)
 - 代码打包: [webpack 4.41.2](https://webpack.js.org/)
 - 项目构建优化: [happypack 5.0.1](https://www.npmjs.com/package/happypack)
