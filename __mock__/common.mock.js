@@ -3,18 +3,40 @@ const Mock = require('mockjs')
 
 const menu = {
     'GET /table': (req, res, next) => {
+        const { pageSize = 10, pageNum = 1 } = req.query
+        const total = Mock.Random.integer(0, 100)
+        const pages = Math.ceil(total / pageSize)
         res.json(Mock.mock({
             code: 0,
-            'data|0-10': [
-                {
-                    'rowIndex|+1': 1,
-                    id: '@id',
-                    name: '@cname',
-                    address: '@county(true)',
-                    avatar: 'http://avatar.3sd.me/96',
-                    createTime: '@date',
-                },
-            ],
+            data: {
+                hasNextPage: (pages - pageNum) > 0,
+                hasPreviousPage: pageNum > 1,
+                isFirstPage: true,
+                isLastPage: true,
+                [`list|${total}`]: [
+                    {
+                        'rowIndex|+1': 1,
+                        id: '@id',
+                        name: '@cname',
+                        address: '@county(true)',
+                        avatar: 'http://avatar.3sd.me/96',
+                        createTime: '@date',
+                    },
+                ],
+                // navigateFirstPage: 1,
+                // navigateLastPage: 1,
+                // navigatePages: 8,
+                // navigatepageNums: [1],
+                prePage: Math.max(0, pageNum - 1),
+                nextPage: Math.min(pages, pageNum + 1),
+                pageNum,
+                pageSize,
+                pages,
+                size: Math.min(pageSize, total - (pageSize * (pageNum - 1))),
+                startRow: pageSize * (pageNum - 1),
+                endRow: Math.min(pageSize * pageNum, total),
+                total,
+            },
             errorUrl: '',
             msg: 'success',
             success: true,
