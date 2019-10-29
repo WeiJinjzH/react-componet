@@ -1,9 +1,15 @@
-import { Button, Form, Input } from 'antd'
+import {
+    Button,
+    Form,
+    Divider,
+    Input,
+} from 'antd'
 import React, { useState } from 'react'
 import './index.less'
 
-export const SearchBar = ({ fields = [], ...restProps }) => {
-    const [form] = Form.useForm()
+// eslint-disable-next-line object-curly-newline
+export const SearchBar = ({ form: _form = null, fields = [], onReset, ...restProps }) => {
+    const [form] = Form.useForm(_form)
 
     const deps = {}
 
@@ -13,13 +19,22 @@ export const SearchBar = ({ fields = [], ...restProps }) => {
         })
     }
 
+    if (fields.length === 0) {
+        return null
+    }
+
     return (
         <div className="search-bar">
-            <Form form={form} layout="inline" onFinish={restProps.onFinish}>
+            <Form form={form} layout="inline" {...restProps}>
                 {
-                    fields.map((item) => (
-                        <FormItem key={item.name} item={item} form={form} forceUpdateValues={updateRenderItems} deps={deps} />
-                    ))
+                    fields.map((item, index) => {
+                        if (item.type === 'Divider') {
+                            return <Divider key={item.name || `_Divider${index}`} dashed style={{ margin: '8px 0' }} />
+                        }
+                        return (
+                            <FormItem key={item.name} item={item} form={form} updateRenderItems={updateRenderItems} deps={deps} />
+                        )
+                    })
                 }
                 <Form.Item>
                     <Button htmlType="submit" type="primary">查询</Button>
@@ -30,6 +45,7 @@ export const SearchBar = ({ fields = [], ...restProps }) => {
                         onClick={() => {
                             form.resetFields()
                             updateRenderItems()
+                            onReset && onReset()
                         }}
                     >
                         重置
@@ -41,7 +57,7 @@ export const SearchBar = ({ fields = [], ...restProps }) => {
 }
 
 // eslint-disable-next-line object-curly-newline
-const FormItem = ({ item, form, forceUpdateValues, deps }) => {
+const FormItem = ({ item, form, updateRenderItems, deps }) => {
     const [, forceUpdate] = useState()
 
     const { hidden, ...restProps } = item
@@ -65,7 +81,7 @@ const FormItem = ({ item, form, forceUpdateValues, deps }) => {
                         },
                         setValues: (values) => {
                             form.setFieldsValue(values)
-                            forceUpdateValues(values)
+                            updateRenderItems(values)
                         },
                     })
                     : item.node || <Input />
