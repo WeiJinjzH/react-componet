@@ -1,10 +1,24 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { Table, Form } from 'antd'
 import { http } from 'src/utils'
+import { TableProps } from 'antd/lib/table'
 import SearchBar from '../SearchBar'
 
-// eslint-disable-next-line object-curly-newline
-const SearchableTable = ({ searchFileds, searchURL, columns, initialValues = {} }) => {
+interface Store {
+    [name: string]: any
+}
+
+interface SearchableTableProps extends TableProps<Store> {
+    searchFileds: any[];
+    searchURL: string;
+    extra?: React.ReactNode;
+    rowKey: string;
+    initialValues?: Store;
+}
+
+const SearchableTable = ({
+    searchFileds, searchURL, columns, initialValues = {}, rowKey, extra, ...restTableProps
+}: SearchableTableProps) => {
     const [dataSource, setDataSourch] = useState([])
     const [params, setParams] = useState()
     const [pageInfo, setPageInfo] = useState({ pageNum: 1, pageSize: 10 })
@@ -32,23 +46,35 @@ const SearchableTable = ({ searchFileds, searchURL, columns, initialValues = {} 
         getData({ ...params, pageNum, pageSize })
     }
 
+    const onShowSizeChange = (pageNum, pageSize) => {
+        setPageInfo({ pageNum: 1, pageSize })
+        getData({ ...params, pageNum: 1, pageSize })
+    }
+
     return (
         <div>
             <SearchBar
                 form={form}
                 fields={searchFileds}
-                onFinish={onSearch}
+                onSearch={onSearch}
                 onReset={onSearch}
                 initialValues={initialValues}
-            />
+            >
+                { extra }
+            </SearchBar>
             <Table
                 style={{ backgroundColor: 'white', padding: 24 }}
                 columns={columns}
                 dataSource={dataSource}
-                rowKey="rowIndex" // TODO:
+                rowKey={rowKey}
                 pagination={{
+                    showQuickJumper: true,
+                    showTotal: (total) => `共 ${total} 条`,
                     onChange,
+                    showSizeChanger: true,
+                    onShowSizeChange,
                 }}
+                {...restTableProps}
             />
         </div>
     )

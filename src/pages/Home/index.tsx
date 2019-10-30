@@ -1,5 +1,5 @@
 import {
-    Button, Select, Input, Form, InputNumber, Table,
+    Button, Select, InputNumber, Table,
 } from 'antd'
 import React, { Component } from 'react'
 import SearchBar from 'src/components/SearchBar'
@@ -24,6 +24,7 @@ class Home extends Component<any, any> {
             <div>
                 <SearchableTable
                     searchURL="/table"
+                    rowKey="rowIndex"
                     initialValues={{ fields1: 11 }}
                     searchFileds={[
                         {
@@ -37,6 +38,7 @@ class Home extends Component<any, any> {
                         { title: 'rowIndex', dataIndex: 'rowIndex' },
                         { title: 'name', dataIndex: 'name' },
                         { title: 'address', dataIndex: 'address' },
+                        { title: 'createTime', dataIndex: 'createTime' },
                     ]}
                 />
                 {/* <div style={{ backgroundColor: '#fff', padding: 24, marginBottom: 24 }}>

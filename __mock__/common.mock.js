@@ -3,8 +3,8 @@ const Mock = require('mockjs')
 
 const menu = {
     'GET /table': (req, res, next) => {
-        const { pageSize = 10, pageNum = 1 } = req.query
-        const total = Mock.Random.integer(0, 100)
+        const { pageSize = 10, pageNum = 1, dataSize } = req.query
+        const total = dataSize || Mock.Random.integer(0, 100)
         const pages = Math.ceil(total / pageSize)
         res.json(Mock.mock({
             code: 0,
