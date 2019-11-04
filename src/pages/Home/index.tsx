@@ -1,28 +1,65 @@
 import {
-    Button, Select, InputNumber, Table,
+    Button, Select, InputNumber, Table, Form, Input, Descriptions, Statistic,
 } from 'antd'
 import React, { Component } from 'react'
 import SearchBar from 'src/components/SearchBar'
 import TextButton from 'src/components/TextButton'
-import { http } from 'src/utils'
+import { http } from 'utils'
 import PreviewImageModal from 'src/components/PreviewImageModal'
 import SearchableTable from 'src/components/SearchableTable'
+import FormBlock from 'src/components/FormBlock'
+import { FormInstance } from 'antd/lib/form'
 import style from './index.less'
 
 class Home extends Component<any, any> {
-    form = React.createRef();
+    form: FormInstance;
+
+    hidden: boolean;
 
     constructor(props) {
         super(props)
         this.state = {
             href: 'https://volibearcat.top/static/background.jpg', // http://images.mofcom.gov.cn/sczxs/201806/20180622090409090.pdf
         }
+        this.hidden = false
     }
+
 
     render() {
         return (
             <div>
-                <SearchableTable
+                <FormBlock
+                    initialValues={{ fields2: { a: 555 }, fields3: 777 }}
+                    data={{ fields1: 123 }}
+                    columnCount={3}
+                    labelCol={5 || { span: 4 }} // 支持number类型
+                    wrapperCol={{ span: 4 }}
+                    getForm={(_form) => { this.form = _form }}
+                    fields={[
+                        {
+                            label: '字段1', name: 'fields1', type: 'Text', hidden: this.hidden,
+                        },
+                        {
+                            label: '字段2', name: ['fields2', 'a'], type: 'Input', props: { onChange: (value) => { this.form.setFieldsValue({ fields3: value.target.value }) } },
+                        },
+                        {
+                            label: '字段3',
+                            name: 'fields3',
+                            render: (value) => <button onClick={() => { this.hidden = !this.hidden }}>{value}</button>,
+                        },
+                    ]}
+                />
+                <div>Some Element</div>
+                <FormBlock
+                    // form={this.form} // 可选
+                    data={{ fields1: 123 }}
+                    fields={[
+                        { label: '字段4', name: 'fields4', type: 'Text' },
+                        { label: '字段5', name: 'fields5', render: (value) => value },
+                    ]}
+                    // getForm={(_form) => { this.form = _form }}
+                />
+                {/* <SearchableTable
                     searchURL="/table"
                     rowKey="rowIndex"
                     initialValues={{ fields1: 11 }}
@@ -40,7 +77,7 @@ class Home extends Component<any, any> {
                         { title: 'address', dataIndex: 'address' },
                         { title: 'createTime', dataIndex: 'createTime' },
                     ]}
-                />
+                /> */}
                 {/* <div style={{ backgroundColor: '#fff', padding: 24, marginBottom: 24 }}>
                     <TextButton className={style.abDdd} onClick={() => { http.get('/form?size=10') }} style={{ color: 'black' }}>测试文本</TextButton>
                     <TextButton canPreview href={this.state.href}>image...</TextButton>

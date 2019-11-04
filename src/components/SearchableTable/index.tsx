@@ -63,7 +63,7 @@ const SearchableTable = ({
                 { extra }
             </SearchBar>
             <Table
-                style={{ backgroundColor: 'white', padding: 24 }}
+                style={{ backgroundColor: 'white', borderRadius: 4, padding: 24 }}
                 columns={columns}
                 dataSource={dataSource}
                 rowKey={rowKey}

@@ -24,14 +24,14 @@ function handlePreview(href: string) {
 }
 
 class TextButton extends PureComponent<TextButtonProps> {
-    static defaultProps = {
-        type: 'button',
-        canPreview: true,
-    }
-
     static propTypes = {
         type: PropTypes.oneOf(['button', 'submit', 'reset']),
         canPreview: PropTypes.bool,
+    }
+
+    static defaultProps = {
+        type: 'button',
+        canPreview: true,
     }
 
     constructor(props: TextButtonProps) {

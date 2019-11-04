@@ -70,7 +70,7 @@
         "max-len": ["error", { "code": 140, "tabWidth": 4, "ignoreComments": true, "ignoreTrailingComments": true }],
         "jsx-a11y/no-static-element-interactions": "off",
         "import/no-extraneous-dependencies": "off",
-        "react/jsx-one-expression-per-line": ["error", { "allow": "literal" }],
+        "react/jsx-one-expression-per-line": ["error", { "allow": "single-child" }],
         "no-bitwise": [
             "error",
             {
