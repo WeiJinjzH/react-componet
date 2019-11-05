@@ -13,8 +13,11 @@ import routes from './routes'
 
 class App extends React.Component {
     render() {
+        const validateMessages = {
+            required: '必填',
+        }
         return (
-            <ConfigProvider locale={zhCN}>
+            <ConfigProvider locale={zhCN} form={{ validateMessages }}>
                 <HashRouter>
                     <Switch>
                         <Route path="/login" component={Login} />

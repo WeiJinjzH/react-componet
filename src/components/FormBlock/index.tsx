@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import {
-    Form, Row, Col, Input, InputNumber, Typography,
+    Form, Row, Col, Input, InputNumber, Typography, Select, DatePicker,
 } from 'antd'
 import './index.less'
+
+const { MonthPicker } = DatePicker
 
 function getValue(data, namePath) {
     const name = namePath[0]
@@ -40,11 +42,11 @@ const FORM_ITEM_TYPE = {
     Input,
     InputNumber,
     // InputSearch,
-    // Select,
+    Select,
     // XzSelect,
-    // DatePicker,
+    DatePicker,
     // RangePicker,
-    // MonthPicker,
+    MonthPicker,
     // TreeSelect,
     // RadioGroup,
     // Cascader,
@@ -62,7 +64,7 @@ const FORM_ITEM_TYPE = {
 
 const FormBlock = (props) => {
     const {
-        getForm, columnCount, fields = [], initialValues, name, form: _form,
+        getForm, columnCount, fields = [], initialValues, form: _form, ...restFormProps
     } = props
     let { labelCol, wrapperCol } = props
     let hasHiddenFunction = false
@@ -81,16 +83,16 @@ const FormBlock = (props) => {
 
     useEffect(() => {
         getForm && getForm(form)
-    }, [getForm, form, columnCount, fields, initialValues])
+    }, [getForm, form])
 
     return (
         <Form
             className="form-block"
-            name={name}
             form={form}
+            initialValues={initialValues}
+            {...restFormProps}
             labelCol={labelCol}
             wrapperCol={wrapperCol}
-            initialValues={initialValues}
             onFieldsChange={() => {
                 if (hasHiddenFunction) {
                     update()
@@ -99,26 +101,29 @@ const FormBlock = (props) => {
         >
             <Row type="flex" style={{ flexWrap: 'wrap' }}>
                 {
-                    fields.map((item) => {
-                        if (typeof item.hidden === 'function') {
+                    fields.map((field) => {
+                        const {
+                            name, type, hidden, render, props: componentProps, span, height = 0, ...restFieldProps
+                        } = field
+                        if (typeof hidden === 'function') {
                             hasHiddenFunction = true
-                            const hidden = item.hidden({ ...initialValues, ...form.getFieldsValue() })
-                            if (hidden) {
+                            const isHidden = hidden({ ...initialValues, ...form.getFieldsValue() })
+                            if (isHidden) {
                                 return null
                             }
-                        } else if (item.hidden) {
+                        } else if (hidden) {
                             return null
                         }
-                        if (item.type === 'WhiteSpace') {
-                            return <div key={item.name} style={{ height: item.height || 0, width: '100%', clear: 'both' }} />
+                        if (type === 'WhiteSpace') {
+                            return <div key={name} style={{ height, width: '100%', clear: 'both' }} />
                         }
-                        if (item.render) {
+                        if (render) {
                             return (
-                                <Col key={item.name} span={item.colSpan || ~~(24 / columnCount) || 24}>
-                                    <Form.Item label={item.label} shouldUpdate>
+                                <Col key={name} span={span || ~~(24 / columnCount) || 24}>
+                                    <Form.Item shouldUpdate {...restFieldProps} name={undefined}>
                                         {() => {
                                             const values = form.getFieldsValue()
-                                            const node = item.render(getValue(values, [item.name]), values, form)
+                                            const node = render(getValue(values, [name]), values, form)
                                             if (typeof node === 'string' || typeof node === 'number') {
                                                 return <span className="ant-form-text">{node}</span>
                                             }
@@ -128,11 +133,18 @@ const FormBlock = (props) => {
                                 </Col>
                             )
                         }
-                        const Comp = FORM_ITEM_TYPE[item.type] || <div>不支持的组件类型</div>
+                        const Comp = FORM_ITEM_TYPE[type] || (() => (
+                            <Typography.Text
+                                className="ant-form-text"
+                                type="danger"
+                            >
+                                {`不支持的组件类型: ${type}`}
+                            </Typography.Text>
+                        ))
                         return (
-                            <Col key={item.name} span={item.colSpan || ~~(24 / columnCount) || 24}>
-                                <Form.Item label={item.label} name={item.name}>
-                                    <Comp {...item.props} />
+                            <Col key={name} span={span || ~~(24 / columnCount) || 24}>
+                                <Form.Item name={name} {...restFieldProps}>
+                                    <Comp {...componentProps} />
                                 </Form.Item>
                             </Col>
                         )

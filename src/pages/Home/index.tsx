@@ -16,7 +16,9 @@ class Home extends Component<any, any> {
     form: FormInstance;
 
     hidden: boolean;
+
     form2: any
+
     form1: any
 
     constructor(props) {
@@ -31,20 +33,28 @@ class Home extends Component<any, any> {
     render() {
         return (
             <div>
-                <FormProvider onFinish={(values) => { console.log(values) }} getForm={(func) => { this.form = func }}>
+                <FormProvider onFinish={(values) => { console.log(values) }} getForm={(func) => { this.form = func }} onFinishFailed={(errorInfo) => { console.log(errorInfo) }}>
                     {
                         (form) => (
                             <>
                                 <FormBlock
                                     form={form} // 可选
                                     initialValues={{ fields2: { a: 555 }, fields3: 777 }}
-                                    columnCount={3}
+                                    columnCount={2}
                                     labelCol={5 || { span: 4 }} // 支持number类型
-                                    wrapperCol={{ span: 4 }}
+                                    wrapperCol={{ span: 19 }}
                                     // getForm={(_form) => { this.form1 = _form }}
                                     fields={[
                                         {
-                                            label: '字段1', name: 'fields1', type: 'Text', hidden: this.hidden,
+                                            label: '字段1',
+                                            name: 'fields1',
+                                            type: 'Input',
+                                            rules: [{ required: true }],
+                                        },
+                                        {
+                                            label: '字段1',
+                                            name: 'fields11',
+                                            type: 'MonthPicker',
                                         },
                                         {
                                             label: '字段2', name: ['fields2', 'a'], type: 'Input', props: { onChange: (value) => { form.setFieldsValue({ fields3: value.target.value }) } },
