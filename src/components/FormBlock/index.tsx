@@ -23,6 +23,9 @@ const Text = (props) => {
     const editable = {
         onChange,
     }
+    if (props.value !== null && !['number', 'undefined', 'string'].includes(typeof props.value)) {
+        return <Typography.Text className="ant-form-text" type="danger">{`数据类型错误, 类型不能是"${typeof props.value}"`}</Typography.Text>
+    }
     return (
         <Typography.Text
             className="ant-form-text"
@@ -59,15 +62,15 @@ const FORM_ITEM_TYPE = {
 
 const FormBlock = (props) => {
     const {
-        getForm, columnCount, fields = [], initialValues,
+        getForm, columnCount, fields = [], initialValues, name, form: _form,
     } = props
     let { labelCol, wrapperCol } = props
-    let hasHiddenItem = false
+    let hasHiddenFunction = false
 
     const [, _update] = useState()
     const update = _update.bind(null, {})
 
-    const [form] = Form.useForm()
+    const [form] = Form.useForm(_form)
 
     if (typeof labelCol === 'number') {
         labelCol = { span: labelCol }
@@ -83,12 +86,13 @@ const FormBlock = (props) => {
     return (
         <Form
             className="form-block"
+            name={name}
             form={form}
             labelCol={labelCol}
             wrapperCol={wrapperCol}
             initialValues={initialValues}
             onFieldsChange={() => {
-                if (hasHiddenItem) {
+                if (hasHiddenFunction) {
                     update()
                 }
             }}
@@ -96,10 +100,8 @@ const FormBlock = (props) => {
             <Row type="flex" style={{ flexWrap: 'wrap' }}>
                 {
                     fields.map((item) => {
-                        if ('hidden' in item) {
-                            hasHiddenItem = true
-                        }
                         if (typeof item.hidden === 'function') {
+                            hasHiddenFunction = true
                             const hidden = item.hidden({ ...initialValues, ...form.getFieldsValue() })
                             if (hidden) {
                                 return null

@@ -9,12 +9,15 @@ import PreviewImageModal from 'src/components/PreviewImageModal'
 import SearchableTable from 'src/components/SearchableTable'
 import FormBlock from 'src/components/FormBlock'
 import { FormInstance } from 'antd/lib/form'
+import FormProvider from 'src/components/FormProvider'
 import style from './index.less'
 
 class Home extends Component<any, any> {
     form: FormInstance;
 
     hidden: boolean;
+    form2: any
+    form1: any
 
     constructor(props) {
         super(props)
@@ -28,37 +31,46 @@ class Home extends Component<any, any> {
     render() {
         return (
             <div>
-                <FormBlock
-                    initialValues={{ fields2: { a: 555 }, fields3: 777 }}
-                    data={{ fields1: 123 }}
-                    columnCount={3}
-                    labelCol={5 || { span: 4 }} // 支持number类型
-                    wrapperCol={{ span: 4 }}
-                    getForm={(_form) => { this.form = _form }}
-                    fields={[
-                        {
-                            label: '字段1', name: 'fields1', type: 'Text', hidden: this.hidden,
-                        },
-                        {
-                            label: '字段2', name: ['fields2', 'a'], type: 'Input', props: { onChange: (value) => { this.form.setFieldsValue({ fields3: value.target.value }) } },
-                        },
-                        {
-                            label: '字段3',
-                            name: 'fields3',
-                            render: (value) => <button onClick={() => { this.hidden = !this.hidden }}>{value}</button>,
-                        },
-                    ]}
-                />
-                <div>Some Element</div>
-                <FormBlock
-                    // form={this.form} // 可选
-                    data={{ fields1: 123 }}
-                    fields={[
-                        { label: '字段4', name: 'fields4', type: 'Text' },
-                        { label: '字段5', name: 'fields5', render: (value) => value },
-                    ]}
-                    // getForm={(_form) => { this.form = _form }}
-                />
+                <FormProvider onFinish={(values) => { console.log(values) }} getForm={(func) => { this.form = func }}>
+                    {
+                        (form) => (
+                            <>
+                                <FormBlock
+                                    form={form} // 可选
+                                    initialValues={{ fields2: { a: 555 }, fields3: 777 }}
+                                    columnCount={3}
+                                    labelCol={5 || { span: 4 }} // 支持number类型
+                                    wrapperCol={{ span: 4 }}
+                                    // getForm={(_form) => { this.form1 = _form }}
+                                    fields={[
+                                        {
+                                            label: '字段1', name: 'fields1', type: 'Text', hidden: this.hidden,
+                                        },
+                                        {
+                                            label: '字段2', name: ['fields2', 'a'], type: 'Input', props: { onChange: (value) => { form.setFieldsValue({ fields3: value.target.value }) } },
+                                        },
+                                        {
+                                            label: '字段3',
+                                            name: 'fields3',
+                                            render: (value) => <button onClick={() => { this.hidden = !this.hidden; this.forceUpdate() }}>{value}</button>,
+                                        },
+                                    ]}
+                                />
+                                <div>Some Element</div>
+                                <FormBlock
+                                    form={form} // 可选
+                                    initialValues={{ fields4: '', fields5: 777 }}
+                                    fields={[
+                                        { label: '字段4', name: 'fields4', type: 'Text' },
+                                        { label: '字段5', name: 'fields5', render: (value) => value },
+                                    ]}
+                                    // getForm={(_form) => { this.form2 = _form }}
+                                />
+                            </>
+                        )
+                    }
+                </FormProvider>
+                <button onClick={() => { this.form.submit() }}>submit</button>
                 {/* <SearchableTable
                     searchURL="/table"
                     rowKey="rowIndex"
