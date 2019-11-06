@@ -29,58 +29,52 @@ class Home extends Component<any, any> {
         this.hidden = false
     }
 
-
     render() {
         return (
             <div>
                 <FormProvider onFinish={(values) => { console.log(values) }} getForm={(func) => { this.form = func }} onFinishFailed={(errorInfo) => { console.log(errorInfo) }}>
-                    {
-                        (form) => (
-                            <>
-                                <FormBlock
-                                    form={form} // 可选
-                                    initialValues={{ fields2: { a: 555 }, fields3: 777 }}
-                                    columnCount={2}
-                                    labelCol={5 || { span: 4 }} // 支持number类型
-                                    wrapperCol={{ span: 19 }}
-                                    // getForm={(_form) => { this.form1 = _form }}
-                                    fields={[
-                                        {
-                                            label: '字段1',
-                                            name: 'fields1',
-                                            type: 'Input',
-                                            rules: [{ required: true }],
-                                        },
-                                        {
-                                            label: '字段2', name: ['fields2', 'a'], type: 'Input', props: { onChange: (value) => { form.setFieldsValue({ fields5: value.target.value }) } },
-                                        },
-                                        {
-                                            label: '字段3',
-                                            name: 'fields3',
-                                            render: (value) => <Button onClick={() => { this.hidden = !this.hidden; this.forceUpdate() }}>{value}</Button>,
-                                        },
-                                        {
-                                            label: '字段6',
-                                            name: 'fields6',
-                                            render: (value, values, _form) => <DatePicker.MonthPicker onChange={(m, dateStr) => { _form.setFieldsValue({ fields6: dateStr }) }} />,
-                                        },
-                                    ]}
-                                />
-                                <div>Some Element</div>
-                                <FormBlock
-                                    form={form} // 可选
-                                    initialValues={{ fields4: '', fields5: 777 }}
-                                    fields={[
-                                        { label: '字段4', name: 'fields4', type: 'Text' },
-                                        {
-                                            label: '字段5', name: 'fields5', render: (value) => value,
-                                        },
-                                    ]}
-                                    // getForm={(_form) => { this.form2 = _form }}
-                                />
-                            </>
-                        )
-                    }
+                    <FormBlock
+                        name="1"
+                        initialValues={{ fields2: { a: 555 }, fields3: 777 }}
+                        columnCount={2}
+                        labelCol={5 || { span: 4 }} // 支持number类型
+                        wrapperCol={{ span: 19 }}
+                        getForm={(_form) => { this.form1 = _form }}
+                        fields={[
+                            {
+                                label: '字段1',
+                                name: 'fields1',
+                                type: 'Input',
+                                rules: [{ required: true }],
+                                hidden: (values) => { return values.fields1 === '777' },
+                                // shouldUpdate: true,
+                            },
+                            {
+                                label: '字段2', name: ['fields2', 'a'], type: 'Input', props: { onChange: (value) => { this.form1.setFieldsValue({ fields5: value.target.value }) } },
+                            },
+                            {
+                                label: '字段3',
+                                name: 'fields3',
+                                render: (value) => <Button onClick={() => { this.hidden = !this.hidden }}>{value}</Button>,
+                            },
+                            {
+                                label: '字段6',
+                                name: 'fields6',
+                                render: (value, values, _form) => <DatePicker.MonthPicker onChange={(m, dateStr) => { _form.setFieldsValue({ fields4: dateStr }) }} />,
+                            },
+                        ]}
+                    />
+                    <div>Some Element</div>
+                    <FormBlock
+                        initialValues={{ fields4: '', fields5: 777 }}
+                        fields={[
+                            { label: '字段4', name: 'fields4', type: 'Text' },
+                            {
+                                label: '字段5', name: 'fields5', render: (value) => value,
+                            },
+                        ]}
+                        // getForm={(_form) => { this.form2 = _form }}
+                    />
                 </FormProvider>
                 <button onClick={() => { this.form.submit() }}>submit</button>
                 {/* <SearchableTable

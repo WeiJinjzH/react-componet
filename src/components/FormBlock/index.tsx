@@ -4,6 +4,8 @@ import {
 } from 'antd'
 import './index.less'
 
+import { FormContext } from '../FormProvider'
+
 const { MonthPicker } = DatePicker
 
 function getValue(data, namePath) {
@@ -64,7 +66,18 @@ const FORM_ITEM_TYPE = {
 
 const FormBlock = (props) => {
     const {
-        getForm, columnCount, fields = [], initialValues, form: _form, ...restFormProps
+        getForm,
+        columnCount,
+        fields = [],
+        initialValues,
+        form: _form,
+        onFinish,
+        onFinishFailed,
+        onFormFinish,
+        onFormFinishFailed,
+        addValuesChangeListener,
+        onFormValuesChange,
+        ...restFormProps
     } = props
     let { labelCol, wrapperCol } = props
     let hasHiddenFunction = false
@@ -82,8 +95,14 @@ const FormBlock = (props) => {
     }
 
     useEffect(() => {
+        const onValuesChange = () => {
+            if (hasHiddenFunction) {
+                update()
+            }
+        }
+        addValuesChangeListener && addValuesChangeListener(onValuesChange)
         getForm && getForm(form)
-    }, [getForm, form])
+    }, [getForm, form, addValuesChangeListener, hasHiddenFunction, update])
 
     return (
         <Form
@@ -93,10 +112,20 @@ const FormBlock = (props) => {
             {...restFormProps}
             labelCol={labelCol}
             wrapperCol={wrapperCol}
-            onFieldsChange={() => {
-                if (hasHiddenFunction) {
+            onValuesChange={(values) => {
+                if (addValuesChangeListener) {
+                    onFormValuesChange(values)
+                } else if (hasHiddenFunction) {
                     update()
                 }
+            }}
+            onFinish={(values) => {
+                onFormFinish && onFormFinish()
+                onFinish && onFinish(values)
+            }}
+            onFinishFailed={(errorInfo) => {
+                onFormFinishFailed && onFormFinishFailed(errorInfo)
+                onFinishFailed && onFinishFailed(errorInfo)
             }}
         >
             <Row type="flex" style={{ flexWrap: 'wrap' }}>
@@ -159,4 +188,21 @@ const FormBlock = (props) => {
     )
 }
 
-export default FormBlock
+const FormBlockWraper = (props) => (
+    <FormContext.Consumer>
+        {({
+            form, onFormFinish, onFormFinishFailed, onFormValuesChange, addValuesChangeListener,
+        }) => (
+            <FormBlock
+                form={form}
+                onFormFinish={onFormFinish}
+                onFormFinishFailed={onFormFinishFailed}
+                addValuesChangeListener={addValuesChangeListener}
+                onFormValuesChange={onFormValuesChange}
+                {...props}
+            />
+        )}
+    </FormContext.Consumer>
+)
+
+export default FormBlockWraper
