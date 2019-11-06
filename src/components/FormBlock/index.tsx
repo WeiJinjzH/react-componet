@@ -120,7 +120,11 @@ const FormBlock = (props) => {
                         if (render) {
                             return (
                                 <Col key={name} span={span || ~~(24 / columnCount) || 24}>
-                                    <Form.Item shouldUpdate {...restFieldProps} name={undefined}>
+                                    <Form.Item
+                                        shouldUpdate={({ [name]: prevValue }, { [name]: nextValue }) => prevValue !== nextValue}
+                                        {...restFieldProps}
+                                        name={undefined}
+                                    >
                                         {() => {
                                             const values = form.getFieldsValue()
                                             const node = render(getValue(values, [name]), values, form)

@@ -1,5 +1,5 @@
 import {
-    Button, Select, InputNumber, Table, Form, Input, Descriptions, Statistic,
+    Button, Select, InputNumber, Table, Form, Input, Descriptions, Statistic, DatePicker,
 } from 'antd'
 import React, { Component } from 'react'
 import SearchBar from 'src/components/SearchBar'
@@ -52,17 +52,17 @@ class Home extends Component<any, any> {
                                             rules: [{ required: true }],
                                         },
                                         {
-                                            label: '字段1',
-                                            name: 'fields11',
-                                            type: 'MonthPicker',
-                                        },
-                                        {
-                                            label: '字段2', name: ['fields2', 'a'], type: 'Input', props: { onChange: (value) => { form.setFieldsValue({ fields3: value.target.value }) } },
+                                            label: '字段2', name: ['fields2', 'a'], type: 'Input', props: { onChange: (value) => { form.setFieldsValue({ fields5: value.target.value }) } },
                                         },
                                         {
                                             label: '字段3',
                                             name: 'fields3',
-                                            render: (value) => <button onClick={() => { this.hidden = !this.hidden; this.forceUpdate() }}>{value}</button>,
+                                            render: (value) => <Button onClick={() => { this.hidden = !this.hidden; this.forceUpdate() }}>{value}</Button>,
+                                        },
+                                        {
+                                            label: '字段6',
+                                            name: 'fields6',
+                                            render: (value, values, _form) => <DatePicker.MonthPicker onChange={(m, dateStr) => { _form.setFieldsValue({ fields6: dateStr }) }} />,
                                         },
                                     ]}
                                 />
@@ -72,7 +72,9 @@ class Home extends Component<any, any> {
                                     initialValues={{ fields4: '', fields5: 777 }}
                                     fields={[
                                         { label: '字段4', name: 'fields4', type: 'Text' },
-                                        { label: '字段5', name: 'fields5', render: (value) => value },
+                                        {
+                                            label: '字段5', name: 'fields5', render: (value) => value,
+                                        },
                                     ]}
                                     // getForm={(_form) => { this.form2 = _form }}
                                 />
