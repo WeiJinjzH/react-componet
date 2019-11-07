@@ -46,16 +46,16 @@ class Home extends Component<any, any> {
                                 name: 'fields1',
                                 type: 'Input',
                                 rules: [{ required: true }],
-                                hidden: (values) => { return values.fields1 === '777' },
+                                hidden: (values) => values.fields1 === '777',
                                 // shouldUpdate: true,
                             },
                             {
-                                label: '字段2', name: ['fields2', 'a'], type: 'Input', props: { onChange: (value) => { this.form1.setFieldsValue({ fields5: value.target.value }) } },
+                                label: '字段2', name: ['fields2', 'a'], type: 'Input', props: { onInput: (value) => { this.form1.setFieldsValue({ fields1: value.target.value }) } },
                             },
                             {
                                 label: '字段3',
                                 name: 'fields3',
-                                render: (value) => <Button onClick={() => { this.hidden = !this.hidden }}>{value}</Button>,
+                                render: (value) => <Button onClick={() => { this.hidden = !this.hidden; this.forceUpdate() }}>{value}</Button>,
                             },
                             {
                                 label: '字段6',

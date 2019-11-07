@@ -81,6 +81,7 @@ const FormBlock = (props) => {
     } = props
     let { labelCol, wrapperCol } = props
     let hasHiddenFunction = false
+    const hiddenStatusCaches = {}
 
     const [, _update] = useState()
     const update = _update.bind(null, {})
@@ -95,14 +96,16 @@ const FormBlock = (props) => {
     }
 
     useEffect(() => {
-        const onValuesChange = () => {
+        const onValuesChange = (changedValues, values) => {
             if (hasHiddenFunction) {
-                update()
+                const requireUpdate = fields.filter((item) => typeof item.hidden === 'function')
+                    .some((item) => item.hidden(values) !== hiddenStatusCaches[item.name])
+                requireUpdate && update()
             }
         }
         addValuesChangeListener && addValuesChangeListener(onValuesChange)
         getForm && getForm(form)
-    }, [getForm, form, addValuesChangeListener, hasHiddenFunction, update])
+    }, [getForm, form, addValuesChangeListener, hasHiddenFunction, update, fields, hiddenStatusCaches])
 
     return (
         <Form
@@ -112,11 +115,13 @@ const FormBlock = (props) => {
             {...restFormProps}
             labelCol={labelCol}
             wrapperCol={wrapperCol}
-            onValuesChange={(values) => {
+            onValuesChange={(changedValues, values) => {
                 if (addValuesChangeListener) {
-                    onFormValuesChange(values)
+                    onFormValuesChange(changedValues, values)
                 } else if (hasHiddenFunction) {
-                    update()
+                    const requireUpdate = fields.filter((item) => typeof item.hidden === 'function')
+                        .some((item) => item.hidden(values) !== hiddenStatusCaches[item.name])
+                    requireUpdate && update()
                 }
             }}
             onFinish={(values) => {
@@ -137,6 +142,7 @@ const FormBlock = (props) => {
                         if (typeof hidden === 'function') {
                             hasHiddenFunction = true
                             const isHidden = hidden({ ...initialValues, ...form.getFieldsValue() })
+                            hiddenStatusCaches[name] = isHidden
                             if (isHidden) {
                                 return null
                             }

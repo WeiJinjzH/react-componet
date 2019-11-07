@@ -36,9 +36,9 @@ const FormProvider = ({
                 addValuesChangeListener: (onValuesChange) => { valuesChangeListeners.push(onValuesChange) },
                 onFormFinish: () => { onFinish(form.getFieldsValue()) },
                 onFormFinishFailed: (errorInfo) => { onFinishFailed(errorInfo) },
-                onFormValuesChange: (values) => {
+                onFormValuesChange: (changedValues, values) => {
                     valuesChangeListeners.forEach((onValuesChange) => {
-                        onValuesChange(values)
+                        onValuesChange(changedValues, values)
                     })
                 },
             }}
