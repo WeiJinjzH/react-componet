@@ -32,8 +32,8 @@
     <span id="current-env"></span>
     <input id="modify-proxy" placeholder="修改代理" onchange="changeProxy(this)" onkeydown="onKeyDown(this, event)" />
     <script>
-        document.getElementById('modify-proxy').value = window.localStorage.getItem('proxy').slice(1)
-        document.getElementById('current-env').innerHTML = 'API 环境: ' + (window.localStorage.getItem('proxy').slice(1) || '默认')
+        document.getElementById('modify-proxy').value = (window.localStorage.getItem('proxy') || '').slice(1)
+        document.getElementById('current-env').innerHTML = 'API 环境: ' + ((window.localStorage.getItem('proxy') || '').slice(1) || '默认')
         function changeProxy(el) {
             var value = el.value.trim()
             window.localStorage.setItem('proxy', value ? ('/' + value) : '')
