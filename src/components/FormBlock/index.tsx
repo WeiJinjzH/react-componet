@@ -4,21 +4,7 @@ import {
 } from 'antd'
 import './index.less'
 
-import { FormContext } from '../FormProvider'
-
 const { MonthPicker } = DatePicker
-
-function getValue(data, namePath) {
-    const name = namePath[0]
-    const restNamePath = namePath.slice(1)
-    if (restNamePath.length) {
-        if (data[name]) {
-            return getValue(data[name], restNamePath)
-        }
-        return undefined
-    }
-    return data[name]
-}
 
 const Text = (props) => {
     const onChange = (props.editable && props.editable.onChange) || ((str) => {
@@ -71,12 +57,7 @@ const FormBlock = (props) => {
         fields = [],
         initialValues,
         form: _form,
-        onFinish,
-        onFinishFailed,
-        onFormFinish,
-        onFormFinishFailed,
-        addValuesChangeListener,
-        onFormValuesChange,
+        children,
         ...restFormProps
     } = props
     let { labelCol, wrapperCol } = props
@@ -96,16 +77,8 @@ const FormBlock = (props) => {
     }
 
     useEffect(() => {
-        const onValuesChange = (changedValues, values) => {
-            if (hasHiddenFunction) {
-                const requireUpdate = fields.filter((item) => typeof item.hidden === 'function')
-                    .some((item) => item.hidden(values) !== hiddenStatusCaches[item.name])
-                requireUpdate && update()
-            }
-        }
-        addValuesChangeListener && addValuesChangeListener(onValuesChange)
         getForm && getForm(form)
-    }, [getForm, form, addValuesChangeListener, hasHiddenFunction, update, fields, hiddenStatusCaches])
+    }, [getForm, form])
 
     return (
         <Form
@@ -116,28 +89,18 @@ const FormBlock = (props) => {
             labelCol={labelCol}
             wrapperCol={wrapperCol}
             onValuesChange={(changedValues, values) => {
-                if (addValuesChangeListener) {
-                    onFormValuesChange(changedValues, values)
-                } else if (hasHiddenFunction) {
+                if (hasHiddenFunction) {
                     const requireUpdate = fields.filter((item) => typeof item.hidden === 'function')
                         .some((item) => item.hidden(values) !== hiddenStatusCaches[item.name])
                     requireUpdate && update()
                 }
-            }}
-            onFinish={(values) => {
-                onFormFinish && onFormFinish()
-                onFinish && onFinish(values)
-            }}
-            onFinishFailed={(errorInfo) => {
-                onFormFinishFailed && onFormFinishFailed(errorInfo)
-                onFinishFailed && onFinishFailed(errorInfo)
             }}
         >
             <Row type="flex" style={{ flexWrap: 'wrap' }}>
                 {
                     fields.map((field) => {
                         const {
-                            name, type, hidden, render, props: componentProps, span, height = 0, ...restFieldProps
+                            label, name, type, hidden, render, props: componentProps, span, height = 0, ...restFieldProps
                         } = field
                         if (typeof hidden === 'function') {
                             hasHiddenFunction = true
@@ -158,15 +121,24 @@ const FormBlock = (props) => {
                                     <Form.Item
                                         shouldUpdate={({ [name]: prevValue }, { [name]: nextValue }) => prevValue !== nextValue}
                                         {...restFieldProps}
+                                        label={label}
                                         name={undefined}
                                     >
-                                        {() => {
-                                            const values = form.getFieldsValue()
-                                            const node = render(getValue(values, [name]), values, form)
+                                        {({ getFieldValue, getFieldsValue }) => {
+                                            const values = getFieldsValue()
+                                            const node = render(getFieldValue(name), values, form)
                                             if (typeof node === 'string' || typeof node === 'number') {
-                                                return <span className="ant-form-text">{node}</span>
+                                                return (
+                                                    <Form.Item name={name}>
+                                                        <span className="ant-form-text">{node}</span>
+                                                    </Form.Item>
+                                                )
                                             }
-                                            return node
+                                            return (
+                                                <Form.Item name={name} {...restFieldProps}>
+                                                    {node}
+                                                </Form.Item>
+                                            )
                                         }}
                                     </Form.Item>
                                 </Col>
@@ -182,7 +154,7 @@ const FormBlock = (props) => {
                         ))
                         return (
                             <Col key={name} span={span || ~~(24 / columnCount) || 24}>
-                                <Form.Item name={name} {...restFieldProps}>
+                                <Form.Item label={label} name={name} {...restFieldProps}>
                                     <Comp {...componentProps} />
                                 </Form.Item>
                             </Col>
@@ -190,25 +162,9 @@ const FormBlock = (props) => {
                     })
                 }
             </Row>
+            {children}
         </Form>
     )
 }
 
-const FormBlockWraper = (props) => (
-    <FormContext.Consumer>
-        {({
-            form, onFormFinish, onFormFinishFailed, onFormValuesChange, addValuesChangeListener,
-        }) => (
-            <FormBlock
-                form={form}
-                onFormFinish={onFormFinish}
-                onFormFinishFailed={onFormFinishFailed}
-                addValuesChangeListener={addValuesChangeListener}
-                onFormValuesChange={onFormValuesChange}
-                {...props}
-            />
-        )}
-    </FormContext.Consumer>
-)
-
-export default FormBlockWraper
+export default FormBlock

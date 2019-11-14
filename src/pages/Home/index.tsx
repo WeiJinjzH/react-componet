@@ -9,8 +9,8 @@ import PreviewImageModal from 'src/components/PreviewImageModal'
 import SearchableTable from 'src/components/SearchableTable'
 import FormBlock from 'src/components/FormBlock'
 import { FormInstance } from 'antd/lib/form'
-import FormProvider from 'src/components/FormProvider'
 import style from './index.less'
+import moment from 'moment'
 
 class Home extends Component<any, any> {
     form: FormInstance;
@@ -32,7 +32,42 @@ class Home extends Component<any, any> {
     render() {
         return (
             <div>
-                <FormProvider onFinish={(values) => { console.log(values) }} getForm={(func) => { this.form = func }} onFinishFailed={(errorInfo) => { console.log(errorInfo) }}>
+                <FormBlock
+                    initialValues={{ fields2: { a: 555 }, fields3: 777, fields5: moment('2019-02', 'YYYY-MM') }}
+                    columnCount={2}
+                    labelCol={5 || { span: 4 }} // 支持number类型
+                    wrapperCol={{ span: 19 }}
+                    getForm={(_form) => { this.form1 = _form }}
+                    onFinish={(values) => { console.log(values) }}
+                    fields={[
+                        {
+                            label: '字段1',
+                            name: 'fields1',
+                            type: 'Input',
+                            rules: [{ required: true }],
+                            hidden: (values) => values.fields1 === '777',
+                        },
+                        {
+                            label: '字段2', name: ['fields2', 'a'], type: 'Input', props: { onInput: (value) => { this.form1.setFieldsValue({ fields1: value.target.value }) } },
+                        },
+                        {
+                            label: '字段3',
+                            name: 'fields3',
+                            render: (value) => value,
+                            hidden: (values) => values.fields5 && values.fields5.format('YYYY-MM') === '2019-01',
+                        },
+                        {
+                            label: '字段5',
+                            name: 'fields5',
+                            normalize: (value, prevValue, prevValues) => { console.log(value); return moment(value, 'YYYY-MM') },
+                            getValueFromEvent: (momentInstance, dateStr) => { console.log(dateStr); return dateStr },
+                            render: (value, values, _form) => <DatePicker.MonthPicker onChange={(m, dateStr) => { _form.setFieldsValue({ fields3: dateStr }) }} />,
+                        },
+                    ]}
+                >
+                    <Button htmlType="submit">submit</Button>
+                </FormBlock>
+                {/* <FormProvider onFinish={(values) => { console.log(values) }} getForm={(func) => { this.form = func }} onFinishFailed={(errorInfo) => { console.log(errorInfo) }}>
                     <FormBlock
                         name="1"
                         initialValues={{ fields2: { a: 555 }, fields3: 777 }}
@@ -75,8 +110,7 @@ class Home extends Component<any, any> {
                         ]}
                         // getForm={(_form) => { this.form2 = _form }}
                     />
-                </FormProvider>
-                <button onClick={() => { this.form.submit() }}>submit</button>
+                </FormProvider> */}
                 {/* <SearchableTable
                     searchURL="/table"
                     rowKey="rowIndex"
