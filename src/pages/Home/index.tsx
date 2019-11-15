@@ -9,8 +9,8 @@ import PreviewImageModal from 'src/components/PreviewImageModal'
 import SearchableTable from 'src/components/SearchableTable'
 import FormBlock from 'src/components/FormBlock'
 import { FormInstance } from 'antd/lib/form'
-import style from './index.less'
 import moment from 'moment'
+import style from './index.less'
 
 class Home extends Component<any, any> {
     form: FormInstance;
@@ -32,7 +32,7 @@ class Home extends Component<any, any> {
     render() {
         return (
             <div>
-                <FormBlock
+                {/* <FormBlock
                     initialValues={{ fields2: { a: 555 }, fields3: 777, fields5: moment('2019-02', 'YYYY-MM') }}
                     columnCount={2}
                     labelCol={5 || { span: 4 }} // 支持number类型
@@ -66,7 +66,7 @@ class Home extends Component<any, any> {
                     ]}
                 >
                     <Button htmlType="submit">submit</Button>
-                </FormBlock>
+                </FormBlock> */}
                 {/* <FormProvider onFinish={(values) => { console.log(values) }} getForm={(func) => { this.form = func }} onFinishFailed={(errorInfo) => { console.log(errorInfo) }}>
                     <FormBlock
                         name="1"
@@ -111,16 +111,45 @@ class Home extends Component<any, any> {
                         // getForm={(_form) => { this.form2 = _form }}
                     />
                 </FormProvider> */}
-                {/* <SearchableTable
+                <SearchableTable
                     searchURL="/table"
                     rowKey="rowIndex"
+                    collapsible
+                    visibleFieldsCount={3}
                     initialValues={{ fields1: 11 }}
                     searchFileds={[
                         {
                             label: '字段1',
                             name: 'fields1',
-                            hidden: this.state.hidden,
-                            node: <InputNumber />,
+                            type: 'Input',
+                        },
+                        {
+                            label: '字段2',
+                            name: 'fields2',
+                            type: 'InputNumber',
+                            props: {
+                                style: { width: '100%' },
+                            },
+                        },
+                        {
+                            label: '字段3',
+                            name: 'fields3',
+                            render: () => <DatePicker />,
+                        },
+                        {
+                            label: '字段4',
+                            name: 'fields4',
+                            render: () => <DatePicker />,
+                        },
+                        {
+                            label: '字段5',
+                            name: 'fields5',
+                            render: () => <DatePicker />,
+                        },
+                        {
+                            label: '字段6',
+                            name: 'fields6',
+                            render: () => <DatePicker />,
                         },
                     ]}
                     columns={[
@@ -129,7 +158,12 @@ class Home extends Component<any, any> {
                         { title: 'address', dataIndex: 'address' },
                         { title: 'createTime', dataIndex: 'createTime' },
                     ]}
-                /> */}
+                >
+                    <Button type="primary">导入数据</Button>
+                    <Button type="primary">导入数据</Button>
+                    <TextButton>测试</TextButton>
+                    <Button type="primary">导入数据</Button>
+                </SearchableTable>
                 {/* <div style={{ backgroundColor: '#fff', padding: 24, marginBottom: 24 }}>
                     <TextButton className={style.abDdd} onClick={() => { http.get('/form?size=10') }} style={{ color: 'black' }}>测试文本</TextButton>
                     <TextButton canPreview href={this.state.href}>image...</TextButton>

@@ -1,7 +1,7 @@
-import React, { useState, useCallback, useEffect } from 'react'
-import { Table, Form } from 'antd'
-import { http } from 'src/utils'
+import { Form, Table } from 'antd'
 import { TableProps } from 'antd/lib/table'
+import React, { useCallback, useEffect, useState } from 'react'
+import { http } from 'src/utils'
 import SearchBar from '../SearchBar'
 
 interface Store {
@@ -11,20 +11,22 @@ interface Store {
 interface SearchableTableProps extends TableProps<Store> {
     searchFileds: any[];
     searchURL: string;
-    extra?: React.ReactNode;
+    children?: React.ReactNode;
     rowKey: string;
+    collapsible?: boolean;
+    visibleFieldsCount?: number;
     initialValues?: Store;
 }
 
 const SearchableTable = ({
-    searchFileds, searchURL, columns, initialValues = {}, rowKey, extra, ...restTableProps
+    searchFileds, searchURL, columns, initialValues = {}, rowKey, children, collapsible, visibleFieldsCount, ...restTableProps
 }: SearchableTableProps) => {
     const [dataSource, setDataSourch] = useState([])
     const [params, setParams] = useState()
     const [pageInfo, setPageInfo] = useState({ pageNum: 1, pageSize: 10 })
     const [form] = Form.useForm()
 
-    const getData = useCallback((values = {}) => {
+    const getData = useCallback((values?: Object) => {
         http.get(searchURL, { ...initialValues, ...values }).then((res) => {
             if (res.code === 0) {
                 setDataSourch(res.data.list)
@@ -52,15 +54,18 @@ const SearchableTable = ({
     }
 
     return (
-        <div>
+        <div className="searchable-table">
             <SearchBar
+                style={{ marginBottom: children ? -24 : 24 }}
                 form={form}
                 fields={searchFileds}
                 onSearch={onSearch}
                 onReset={onSearch}
                 initialValues={initialValues}
+                collapsible={collapsible}
+                visibleFieldsCount={visibleFieldsCount}
             >
-                { extra }
+                { children }
             </SearchBar>
             <Table
                 style={{ backgroundColor: 'white', borderRadius: 4, padding: 24 }}
