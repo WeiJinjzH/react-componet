@@ -1,5 +1,5 @@
 import { Form, Table } from 'antd'
-import { TableProps } from 'antd/lib/table'
+import { TableProps } from 'rc-table/lib/Table'
 import React, { useCallback, useEffect, useState } from 'react'
 import { http } from 'src/utils'
 import SearchBar from '../SearchBar'

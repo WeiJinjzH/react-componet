@@ -28,7 +28,7 @@ export const SearchBar = ({
             {
                 key: '__operate-items',
                 style: { marginRight: 8 },
-                render: function SubmitButton() {
+                render: function OperateItems() {
                     return (
                         <>
                             <Button htmlType="submit" type="primary">查询</Button>
@@ -41,7 +41,7 @@ export const SearchBar = ({
                                             onReset()
                                         }}
                                     >
-                                                重置
+                                        重置
                                     </Button>
                                 ) : null
                             }

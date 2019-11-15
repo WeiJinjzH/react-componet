@@ -32,7 +32,7 @@ class Home extends Component<any, any> {
     render() {
         return (
             <div>
-                {/* <FormBlock
+                <FormBlock
                     initialValues={{ fields2: { a: 555 }, fields3: 777, fields5: moment('2019-02', 'YYYY-MM') }}
                     columnCount={2}
                     labelCol={5 || { span: 4 }} // 支持number类型
@@ -48,7 +48,10 @@ class Home extends Component<any, any> {
                             hidden: (values) => values.fields1 === '777',
                         },
                         {
-                            label: '字段2', name: ['fields2', 'a'], type: 'Input', props: { onInput: (value) => { this.form1.setFieldsValue({ fields1: value.target.value }) } },
+                            label: '字段2',
+                            name: ['fields2', 'a'],
+                            type: 'Input',
+                            props: { onInput: (value) => { this.form1.setFieldsValue({ fields1: value.target.value }) } },
                         },
                         {
                             label: '字段3',
@@ -59,14 +62,14 @@ class Home extends Component<any, any> {
                         {
                             label: '字段5',
                             name: 'fields5',
-                            normalize: (value, prevValue, prevValues) => { console.log(value); return moment(value, 'YYYY-MM') },
-                            getValueFromEvent: (momentInstance, dateStr) => { console.log(dateStr); return dateStr },
+                            // normalize: (value, prevValue, prevValues) => { console.log(value); return moment(value, 'YYYY-MM') },
+                            // getValueFromEvent: (momentInstance, dateStr) => { console.log(dateStr); return dateStr },
                             render: (value, values, _form) => <DatePicker.MonthPicker onChange={(m, dateStr) => { _form.setFieldsValue({ fields3: dateStr }) }} />,
                         },
                     ]}
                 >
                     <Button htmlType="submit">submit</Button>
-                </FormBlock> */}
+                </FormBlock>
                 {/* <FormProvider onFinish={(values) => { console.log(values) }} getForm={(func) => { this.form = func }} onFinishFailed={(errorInfo) => { console.log(errorInfo) }}>
                     <FormBlock
                         name="1"
@@ -111,7 +114,7 @@ class Home extends Component<any, any> {
                         // getForm={(_form) => { this.form2 = _form }}
                     />
                 </FormProvider> */}
-                <SearchableTable
+                {/* <SearchableTable
                     searchURL="/table"
                     rowKey="rowIndex"
                     collapsible
@@ -134,7 +137,7 @@ class Home extends Component<any, any> {
                         {
                             label: '字段3',
                             name: 'fields3',
-                            render: () => <DatePicker />,
+                            render: () => <DatePicker.RangePicker />,
                         },
                         {
                             label: '字段4',
@@ -163,7 +166,7 @@ class Home extends Component<any, any> {
                     <Button type="primary">导入数据</Button>
                     <TextButton>测试</TextButton>
                     <Button type="primary">导入数据</Button>
-                </SearchableTable>
+                </SearchableTable> */}
                 {/* <div style={{ backgroundColor: '#fff', padding: 24, marginBottom: 24 }}>
                     <TextButton className={style.abDdd} onClick={() => { http.get('/form?size=10') }} style={{ color: 'black' }}>测试文本</TextButton>
                     <TextButton canPreview href={this.state.href}>image...</TextButton>
