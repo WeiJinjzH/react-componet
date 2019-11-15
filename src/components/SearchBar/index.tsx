@@ -1,105 +1,92 @@
-import {
-    Button, Divider, Form, Input,
-} from 'antd'
+import { Button, Form } from 'antd'
 import { FormInstance } from 'antd/lib/form'
-import React, { useState } from 'react'
-import './index.less'
 import { FormProps } from 'rc-field-form/lib/Form'
+import React, { useState, useMemo } from 'react'
+import { CaretDown, CaretUp } from '@ant-design/icons'
+import FormBlock from '../FormBlock'
+import TextButton from '../TextButton'
+import './index.less'
 
 interface SearchBarProps extends FormProps {
     form?: FormInstance;
     fields: any[];
+    collapsible?: boolean;
+    visibleFieldsCount?: number;
     onSearch?: (values?: any) => void;
     onReset?: (values?: any) => void;
+    extra?: React.ReactNode;
 }
 
-// eslint-disable-next-line object-curly-newline
-export const SearchBar = ({ form: _form, fields = [], onSearch, onReset, children, ...restProps }: SearchBarProps) => {
+export const SearchBar = ({
+    form: _form, fields = [], onSearch, onReset, children, collapsible, visibleFieldsCount = 4, style, extra, ...restProps
+}: SearchBarProps) => {
     const [form] = Form.useForm(_form)
+    const [collapse, setCollapse] = useState(true)
 
-    const deps = {}
-
-    const updateRenderItems = (values = deps) => {
-        Object.keys(values).forEach((key) => {
-            deps[key] && deps[key]()
-        })
-    }
+    const integratedFields = useMemo(() => {
+        const operateFields = [
+            {
+                key: '__operate-items',
+                style: { marginRight: 8 },
+                render: function SubmitButton() {
+                    return (
+                        <>
+                            <Button htmlType="submit" type="primary">查询</Button>
+                            {
+                                onReset ? (
+                                    <Button
+                                        htmlType="reset"
+                                        onClick={() => {
+                                            form.resetFields()
+                                            onReset()
+                                        }}
+                                    >
+                                                重置
+                                    </Button>
+                                ) : null
+                            }
+                            {
+                                collapsible ? (
+                                    <TextButton className="collapse-btn" onClick={() => { setCollapse(!collapse) }}>
+                                        {collapse ? '展开' : '收起'}
+                                        {collapse ? <CaretDown /> : <CaretUp />}
+                                    </TextButton>
+                                ) : null
+                            }
+                        </>
+                    )
+                },
+            },
+        ]
+        return [
+            ...fields.slice(0, (collapsible && collapse) ? visibleFieldsCount : Number.MAX_SAFE_INTEGER),
+            ...operateFields,
+        ]
+    }, [fields, form, onReset, collapsible, collapse, visibleFieldsCount])
 
     if (fields.length === 0) {
         return null
     }
 
     return (
-        <div className="search-bar" style={{ marginBottom: children ? 0 : 24 }}>
-            <Form form={form} layout="inline" onFinish={onSearch} {...restProps}>
-                {
-                    fields.map((item, index) => {
-                        if (item.type === 'Divider') {
-                            return <Divider key={String(item.name) || `_Divider${index}`} dashed style={{ margin: '8px 0' }} />
-                        }
-                        return (
-                            <FormItem key={String(item.name)} item={item} form={form} updateRenderItems={updateRenderItems} deps={deps} />
-                        )
-                    })
-                }
-                <Form.Item>
-                    <Button htmlType="submit" type="primary">查询</Button>
-                </Form.Item>
-                {
-                    onReset ? (
-                        <Form.Item>
-                            <Button
-                                htmlType="reset"
-                                onClick={() => {
-                                    form.resetFields()
-                                    updateRenderItems()
-                                    onReset()
-                                }}
-                            >
-                                重置
-                            </Button>
-                        </Form.Item>
-                    ) : null
-                }
-            </Form>
-            <div style={{ marginTop: 24, marginBottom: -24 }}>
-                { children }
-            </div>
-        </div>
-    )
-}
-
-// eslint-disable-next-line object-curly-newline
-const FormItem = ({ item, form, updateRenderItems, deps }) => {
-    const [, forceUpdate] = useState()
-
-    const { hidden, ...restProps } = item
-
-    if (hidden) { return null }
-
-    if (typeof item.node === 'function') {
-        deps[String(item.name)] = forceUpdate.bind(null, {})
-    }
-
-    return (
-        <Form.Item {...restProps}>
+        <div className="search-bar" style={style}>
+            <FormBlock
+                form={form}
+                layout="inline"
+                fields={integratedFields}
+                onFinish={onSearch}
+                {...restProps}
+            >
+                {extra}
+            </FormBlock>
             {
-                typeof item.node === 'function'
-                    ? item.node({
-                        form,
-                        value: form.getFieldValue(item.name),
-                        setValue: (value) => {
-                            form.setFieldsValue({ [String(item.name)]: value })
-                            forceUpdate({})
-                        },
-                        setValues: (values) => {
-                            form.setFieldsValue(values)
-                            updateRenderItems(values)
-                        },
-                    })
-                    : item.node || <Input />
+                children ? (
+                    <div className="search-bar-children" style={{ paddingBottom: 24 }}>
+                        { children }
+                    </div>
+                ) : null
             }
-        </Form.Item>
+        </div>
     )
 }
 
