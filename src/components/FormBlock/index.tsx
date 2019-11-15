@@ -58,6 +58,7 @@ const FormBlock = (props) => {
         initialValues,
         form: _form,
         children,
+        layout,
         ...restFormProps
     } = props
     let { labelCol, wrapperCol } = props
@@ -84,6 +85,7 @@ const FormBlock = (props) => {
         <Form
             className="form-block"
             form={form}
+            layout={layout}
             initialValues={initialValues}
             {...restFormProps}
             labelCol={labelCol}
@@ -96,11 +98,11 @@ const FormBlock = (props) => {
                 }
             }}
         >
-            <Row type="flex" style={{ flexWrap: 'wrap' }}>
+            <Row type="flex" style={{ flexWrap: 'wrap' }} className="items-wrapper">
                 {
                     fields.map((field) => {
                         const {
-                            label, name, type, hidden, render, props: componentProps, span, height = 0, ...restFieldProps
+                            key, label, name, type, hidden, render, props: componentProps, span, height = 0, ...restFieldProps
                         } = field
                         if (typeof hidden === 'function') {
                             hasHiddenFunction = true
@@ -115,9 +117,10 @@ const FormBlock = (props) => {
                         if (type === 'WhiteSpace') {
                             return <div key={name} style={{ height, width: '100%', clear: 'both' }} />
                         }
+                        const colSpan = span || layout === 'inline' ? undefined : (~~(24 / columnCount) || 24)
                         if (render) {
                             return (
-                                <Col key={name} span={span || ~~(24 / columnCount) || 24}>
+                                <Col key={key || name} span={colSpan}>
                                     <Form.Item
                                         shouldUpdate={({ [name]: prevValue }, { [name]: nextValue }) => prevValue !== nextValue}
                                         {...restFieldProps}
@@ -153,7 +156,7 @@ const FormBlock = (props) => {
                             </Typography.Text>
                         ))
                         return (
-                            <Col key={name} span={span || ~~(24 / columnCount) || 24}>
+                            <Col key={key || name} span={colSpan}>
                                 <Form.Item label={label} name={name} {...restFieldProps}>
                                     <Comp {...componentProps} />
                                 </Form.Item>
