@@ -10,8 +10,8 @@ import SearchableTable from 'src/components/SearchableTable'
 import FormBlock from 'src/components/FormBlock'
 import { FormInstance } from 'antd/lib/form'
 import moment from 'moment'
-import style from './index.less'
 import { Delete } from '@ant-design/icons'
+import style from './index.less'
 
 class Home extends Component<any, any> {
     form: FormInstance;
@@ -35,7 +35,7 @@ class Home extends Component<any, any> {
             <div>
                 <FormBlock
                     initialValues={{
-                        fields2: { a: 555 }, fields3: 777, fields4: moment('2019-02', 'YYYY-MM'), fields5: [1, 2, 3],
+                        fields2: { a: 555 }, fields3: 777, fields4: '2019-12', fields5: [1, 2, 3],
                     }}
                     columnCount={2}
                     labelCol={5 || { span: 4 }} // 支持number类型
@@ -60,30 +60,44 @@ class Home extends Component<any, any> {
                             label: '字段3',
                             name: 'fields3',
                             render: (value) => value,
-                            hidden: (values) => values.fields5 && values.fields4.format('YYYY-MM') === '2019-01',
+                            hidden: (values) => values.fields4 === '2019-01',
                         },
                         {
                             label: '字段4',
                             name: 'fields4',
+                            type: 'MonthPicker',
+                            parse: (value) => moment(value, 'YYYY-MM'),
+                            format: (momentInstance, dateStr) => dateStr,
                             // normalize: (value, prevValue, prevValues) => { console.log(value); return moment(value, 'YYYY-MM') },
                             // getValueFromEvent: (momentInstance, dateStr) => { console.log(dateStr); return dateStr },
-                            render: (value, values, _form) => <DatePicker.MonthPicker onChange={(m, dateStr) => { _form.setFieldsValue({ fields3: dateStr }) }} />,
+                            // render: (value, values, _form) => <DatePicker.MonthPicker onChange={(m, dateStr) => { _form.setFieldsValue({ fields3: dateStr }) }} />,
                         },
                         {
                             label: '字段5',
                             name: 'fields5',
-                            renderList: (itemNodes, { fields, add, remove }) => (
-                                <div>
-                                    {itemNodes}
-                                    <Button onClick={add} type="primary">Add</Button>
-                                </div>
-                            ),
+                            // renderList: (itemNodes, { fields, add, remove }) => (
+                            //     <div>
+                            //         {itemNodes}
+                            //         <Button onClick={add} type="primary">Add</Button>
+                            //     </div>
+                            // ),
                             renderListItem: (field, index, { formItemWrapper, add, remove }) => (
                                 <Input
                                     allowClear
                                     addonAfter={<Delete onClick={() => { remove(field.name) }} />}
                                 />
                             ),
+                        },
+                        {
+                            label: '字段6',
+                            name: 'fields6',
+                            type: 'RadioGroup',
+                            props: {
+                                options: [
+                                    { label: '是', value: 1 },
+                                    { label: '否', value: 0 },
+                                ],
+                            },
                         },
                     ]}
                 >

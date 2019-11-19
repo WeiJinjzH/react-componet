@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import {
-    Form, Row, Col, Input, InputNumber, Typography, Select, DatePicker,
+    Form, Row, Col, Input, InputNumber, Typography, Select, DatePicker, Radio,
 } from 'antd'
 import './index.less'
 
 const { MonthPicker } = DatePicker
+const { Group: RadioGroup } = Radio
 
 const Text = (props) => {
     const onChange = (props.editable && props.editable.onChange) || ((str) => {
@@ -31,12 +32,11 @@ const FORM_ITEM_TYPE = {
     InputNumber,
     // InputSearch,
     Select,
-    // XzSelect,
     DatePicker,
     // RangePicker,
     MonthPicker,
     // TreeSelect,
-    // RadioGroup,
+    RadioGroup,
     // Cascader,
     // Checkbox,
     // CheckboxGroup,
@@ -112,6 +112,8 @@ const FormBlock = (props) => {
                             renderListItem,
                             props: componentProps,
                             span,
+                            parse,
+                            format,
                             height = 0,
                             ...restFieldProps
                         } = field
@@ -227,6 +229,26 @@ const FormBlock = (props) => {
                                 {`不支持的组件类型: ${type}`}
                             </Typography.Text>
                         ))
+                        if (parse && format) {
+                            const CompWrapper = function CompWrapper(_props) {
+                                return (
+                                    <Comp
+                                        value={parse(_props.value)}
+                                        onChange={(...args) => {
+                                            _props.onChange(format(...args))
+                                        }}
+                                        {...componentProps}
+                                    />
+                                )
+                            }
+                            return (
+                                <Col key={key || name} span={colSpan}>
+                                    <Form.Item label={label} name={name} {...restFieldProps}>
+                                        <CompWrapper {...componentProps} />
+                                    </Form.Item>
+                                </Col>
+                            )
+                        }
                         return (
                             <Col key={key || name} span={colSpan}>
                                 <Form.Item label={label} name={name} {...restFieldProps}>
