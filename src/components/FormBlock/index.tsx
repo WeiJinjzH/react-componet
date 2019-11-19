@@ -150,6 +150,27 @@ const FormBlock = (props) => {
                                                     </Form.Item>
                                                 )
                                             }
+                                            if (parse && format) {
+                                                const CompWrapper = function CompWrapper(_props) {
+                                                    const Comp = node.type
+                                                    return (
+                                                        <Comp
+                                                            {...node.props}
+                                                            {...componentProps}
+                                                            value={parse(_props.value)}
+                                                            onChange={(...args) => {
+                                                                _props.onChange(format(...args))
+                                                                node.props && node.props.onChange && node.props.onChange(...args)
+                                                            }}
+                                                        />
+                                                    )
+                                                }
+                                                return (
+                                                    <Form.Item name={name} {...restFieldProps}>
+                                                        <CompWrapper />
+                                                    </Form.Item>
+                                                )
+                                            }
                                             return (
                                                 <Form.Item name={name} {...restFieldProps}>
                                                     {node}
@@ -244,7 +265,7 @@ const FormBlock = (props) => {
                             return (
                                 <Col key={key || name} span={colSpan}>
                                     <Form.Item label={label} name={name} {...restFieldProps}>
-                                        <CompWrapper {...componentProps} />
+                                        <CompWrapper />
                                     </Form.Item>
                                 </Col>
                             )

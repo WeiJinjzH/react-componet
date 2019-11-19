@@ -35,7 +35,7 @@ class Home extends Component<any, any> {
             <div>
                 <FormBlock
                     initialValues={{
-                        fields2: { a: 555 }, fields3: 777, fields4: '2019-12', fields5: [1, 2, 3],
+                        fields2: { a: 555 }, fields3: 777, fields5: [1, 2, 3],
                     }}
                     columnCount={2}
                     labelCol={5 || { span: 4 }} // 支持number类型
@@ -65,12 +65,17 @@ class Home extends Component<any, any> {
                         {
                             label: '字段4',
                             name: 'fields4',
-                            type: 'MonthPicker',
-                            parse: (value) => moment(value, 'YYYY-MM'),
+                            // type: 'MonthPicker',
+                            parse: (value) => (value ? moment(value, 'YYYY-MM') : null),
                             format: (momentInstance, dateStr) => dateStr,
                             // normalize: (value, prevValue, prevValues) => { console.log(value); return moment(value, 'YYYY-MM') },
                             // getValueFromEvent: (momentInstance, dateStr) => { console.log(dateStr); return dateStr },
-                            // render: (value, values, _form) => <DatePicker.MonthPicker onChange={(m, dateStr) => { _form.setFieldsValue({ fields3: dateStr }) }} />,
+                            render: (value, values, _form) => (
+                                <DatePicker.MonthPicker
+                                    value={value}
+                                    onChange={(m, dateStr) => { _form.setFieldsValue({ fields3: dateStr, fields4: dateStr }) }}
+                                />
+                            ),
                         },
                         {
                             label: '字段5',
