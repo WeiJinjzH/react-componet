@@ -11,6 +11,7 @@ import FormBlock from 'src/components/FormBlock'
 import { FormInstance } from 'antd/lib/form'
 import moment from 'moment'
 import style from './index.less'
+import { Delete } from '@ant-design/icons'
 
 class Home extends Component<any, any> {
     form: FormInstance;
@@ -33,7 +34,9 @@ class Home extends Component<any, any> {
         return (
             <div>
                 <FormBlock
-                    initialValues={{ fields2: { a: 555 }, fields3: 777, fields5: moment('2019-02', 'YYYY-MM') }}
+                    initialValues={{
+                        fields2: { a: 555 }, fields3: 777, fields4: moment('2019-02', 'YYYY-MM'), fields5: [1, 2, 3],
+                    }}
                     columnCount={2}
                     labelCol={5 || { span: 4 }} // 支持number类型
                     wrapperCol={{ span: 19 }}
@@ -44,7 +47,7 @@ class Home extends Component<any, any> {
                             label: '字段1',
                             name: 'fields1',
                             type: 'Input',
-                            rules: [{ required: true }],
+                            // rules: [{ required: true }],
                             hidden: (values) => values.fields1 === '777',
                         },
                         {
@@ -57,14 +60,30 @@ class Home extends Component<any, any> {
                             label: '字段3',
                             name: 'fields3',
                             render: (value) => value,
-                            hidden: (values) => values.fields5 && values.fields5.format('YYYY-MM') === '2019-01',
+                            hidden: (values) => values.fields5 && values.fields4.format('YYYY-MM') === '2019-01',
+                        },
+                        {
+                            label: '字段4',
+                            name: 'fields4',
+                            // normalize: (value, prevValue, prevValues) => { console.log(value); return moment(value, 'YYYY-MM') },
+                            // getValueFromEvent: (momentInstance, dateStr) => { console.log(dateStr); return dateStr },
+                            render: (value, values, _form) => <DatePicker.MonthPicker onChange={(m, dateStr) => { _form.setFieldsValue({ fields3: dateStr }) }} />,
                         },
                         {
                             label: '字段5',
                             name: 'fields5',
-                            // normalize: (value, prevValue, prevValues) => { console.log(value); return moment(value, 'YYYY-MM') },
-                            // getValueFromEvent: (momentInstance, dateStr) => { console.log(dateStr); return dateStr },
-                            render: (value, values, _form) => <DatePicker.MonthPicker onChange={(m, dateStr) => { _form.setFieldsValue({ fields3: dateStr }) }} />,
+                            renderList: (itemNodes, { fields, add, remove }) => (
+                                <div>
+                                    {itemNodes}
+                                    <Button onClick={add} type="primary">Add</Button>
+                                </div>
+                            ),
+                            renderListItem: (field, index, { formItemWrapper, add, remove }) => (
+                                <Input
+                                    allowClear
+                                    addonAfter={<Delete onClick={() => { remove(field.name) }} />}
+                                />
+                            ),
                         },
                     ]}
                 >

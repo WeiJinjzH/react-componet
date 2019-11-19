@@ -102,7 +102,18 @@ const FormBlock = (props) => {
                 {
                     fields.map((field) => {
                         const {
-                            key, label, name, type, hidden, render, props: componentProps, span, height = 0, ...restFieldProps
+                            key,
+                            label,
+                            name,
+                            type,
+                            hidden,
+                            render,
+                            renderList,
+                            renderListItem,
+                            props: componentProps,
+                            span,
+                            height = 0,
+                            ...restFieldProps
                         } = field
                         if (typeof hidden === 'function') {
                             hasHiddenFunction = true
@@ -122,7 +133,7 @@ const FormBlock = (props) => {
                             return (
                                 <Col key={key || name} span={colSpan}>
                                     <Form.Item
-                                        shouldUpdate={({ [name]: prevValue }, { [name]: nextValue }) => prevValue !== nextValue}
+                                        shouldUpdate={(prevValues, nextValues) => prevValues[name] !== nextValues[name]}
                                         {...restFieldProps}
                                         label={label}
                                         name={undefined}
@@ -143,6 +154,67 @@ const FormBlock = (props) => {
                                                 </Form.Item>
                                             )
                                         }}
+                                    </Form.Item>
+                                </Col>
+                            )
+                        }
+                        if (renderList || renderListItem) {
+                            return (
+                                <Col key={key || name} span={colSpan}>
+                                    <Form.Item label={label}>
+                                        <Form.List
+                                            shouldUpdate={(prevValues, nextValues) => prevValues[name] !== nextValues[name]}
+                                            name={name}
+                                            {...restFieldProps}
+                                        >
+                                            {
+                                                (_fields, { add, remove }) => {
+                                                    const itemNodes = []
+                                                    if (renderListItem) {
+                                                        _fields.forEach((_field, index) => {
+                                                            let usedFormItemWrapper = false
+                                                            const formItemWrapper = (_node) => {
+                                                                usedFormItemWrapper = true
+                                                                return (
+                                                                    <Form.Item key={_field.key} {..._field}>
+                                                                        { _node }
+                                                                    </Form.Item>
+                                                                )
+                                                            }
+                                                            let node = renderListItem(_field, index, {
+                                                                formItemWrapper,
+                                                                add,
+                                                                remove,
+                                                                value: form.getFieldValue(name),
+                                                                values: form.getFieldsValue(),
+                                                                form,
+                                                            })
+                                                            if (!usedFormItemWrapper) {
+                                                                node = (
+                                                                    <Form.Item key={_field.key} {..._field}>
+                                                                        { node }
+                                                                    </Form.Item>
+                                                                )
+                                                            }
+                                                            itemNodes.push(node)
+                                                        })
+                                                    }
+                                                    if (renderList) {
+                                                        return renderList(
+                                                            itemNodes.length > 0 ? itemNodes : _fields,
+                                                            {
+                                                                add,
+                                                                remove,
+                                                                value: form.getFieldValue(name),
+                                                                values: form.getFieldsValue(),
+                                                                form,
+                                                            },
+                                                        )
+                                                    }
+                                                    return <>{itemNodes}</>
+                                                }
+                                            }
+                                        </Form.List>
                                     </Form.Item>
                                 </Col>
                             )
