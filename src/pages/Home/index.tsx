@@ -104,6 +104,15 @@ class Home extends Component<any, any> {
                                 ],
                             },
                         },
+                        {
+                            label: '字段7',
+                            name: 'fields7',
+                            parse: (value) => value,
+                            format: (event) => { console.log(event.currentTarget.checked); return event.currentTarget.checked },
+                            valuePropName: 'checked',
+                            validateTrigger: 'onChange',
+                            render: () => <input type="checkbox" onChange={(e) => { console.log(e) }} />,
+                        },
                     ]}
                 >
                     <Button htmlType="submit">submit</Button>

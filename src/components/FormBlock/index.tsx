@@ -153,14 +153,19 @@ const FormBlock = (props) => {
                                             if (parse && format) {
                                                 const CompWrapper = function CompWrapper(_props) {
                                                     const Comp = node.type
+                                                    const { validateTrigger, valuePropName } = restFieldProps
                                                     return (
                                                         <Comp
                                                             {...node.props}
                                                             {...componentProps}
-                                                            value={parse(_props.value)}
-                                                            onChange={(...args) => {
-                                                                _props.onChange(format(...args))
-                                                                node.props && node.props.onChange && node.props.onChange(...args)
+                                                            {...{
+                                                                [validateTrigger || 'onChange']: (...args) => {
+                                                                    _props[validateTrigger || 'onChange'](format(...args))
+                                                                    node.props
+                                                                    && node.props[validateTrigger || 'onChange']
+                                                                    && node.props[validateTrigger || 'onChange'](...args)
+                                                                },
+                                                                [valuePropName || 'value']: parse(_props[valuePropName || 'value']),
                                                             }}
                                                         />
                                                     )
@@ -252,11 +257,14 @@ const FormBlock = (props) => {
                         ))
                         if (parse && format) {
                             const CompWrapper = function CompWrapper(_props) {
+                                const { validateTrigger, valuePropName } = restFieldProps
                                 return (
                                     <Comp
-                                        value={parse(_props.value)}
-                                        onChange={(...args) => {
-                                            _props.onChange(format(...args))
+                                        {...{
+                                            [validateTrigger || 'onChange']: (...args) => {
+                                                _props[validateTrigger || 'onChange'](format(...args))
+                                            },
+                                            [valuePropName || 'value']: parse(_props[valuePropName || 'value']),
                                         }}
                                         {...componentProps}
                                     />
