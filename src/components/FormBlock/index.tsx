@@ -95,11 +95,17 @@ const FormBlock = (props) => {
             onFinish={(_values) => {
                 // TODO: 使用deform属性时, key属性需要为必填项, 需补充控制台警告提示
                 const deformValue = fields.filter((field) => 'deform' in field)
-                    .map((field) => field.deform(_values[field.key]))
+                    .map((field) => field.deform(_values[`INTERNAL__${field.key}`]))
                     .reduce((result, value) => ({ ...result, ...value }), {})
                 // TODO: deform属性需完善与 finishWithHiddenValues属性 的兼容问题
                 const values = finishWithHiddenValues ? form.getFieldsValue() : _values
-                onFinish({ ...values, ...deformValue })
+                const mixValues = { ...values, ...deformValue }
+                Object.keys(mixValues).forEach((vKey) => {
+                    if (vKey.includes('INTERNAL__')) {
+                        delete mixValues[vKey]
+                    }
+                })
+                onFinish(mixValues)
             }}
             onValuesChange={(changedValues, values) => {
                 if (hasHiddenFunction) {
@@ -113,7 +119,7 @@ const FormBlock = (props) => {
                 {
                     fields.map((field) => {
                         const {
-                            key,
+                            key: _key,
                             label,
                             name,
                             deform,
@@ -129,6 +135,7 @@ const FormBlock = (props) => {
                             height = 0,
                             ...restFieldProps
                         } = field
+                        const key = `INTERNAL__${_key}`
                         if (typeof hidden === 'function') {
                             hasHiddenFunction = true
                             const isHidden = hidden({ ...initialValues, ...form.getFieldsValue() })
