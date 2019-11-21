@@ -74,6 +74,7 @@ export const SearchBar = ({
                 form={form}
                 layout="inline"
                 fields={integratedFields}
+                finishWithHiddenValues
                 onFinish={onSearch}
                 {...restProps}
             >

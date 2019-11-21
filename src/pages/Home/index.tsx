@@ -33,7 +33,7 @@ class Home extends Component<any, any> {
     render() {
         return (
             <div>
-                <FormBlock
+                {/* <FormBlock
                     initialValues={{
                         fields2: { a: 555 }, fields3: 777, fields5: [1, 2, 3],
                     }}
@@ -116,7 +116,7 @@ class Home extends Component<any, any> {
                     ]}
                 >
                     <Button htmlType="submit">submit</Button>
-                </FormBlock>
+                </FormBlock> */}
                 {/* <FormProvider onFinish={(values) => { console.log(values) }} getForm={(func) => { this.form = func }} onFinishFailed={(errorInfo) => { console.log(errorInfo) }}>
                     <FormBlock
                         name="1"
@@ -161,7 +161,7 @@ class Home extends Component<any, any> {
                         // getForm={(_form) => { this.form2 = _form }}
                     />
                 </FormProvider> */}
-                {/* <SearchableTable
+                <SearchableTable
                     searchURL="/table"
                     rowKey="rowIndex"
                     collapsible
@@ -175,7 +175,10 @@ class Home extends Component<any, any> {
                         },
                         {
                             label: '字段2',
-                            name: 'fields2',
+                            key: 'fields2',
+                            deform: (values) => ({
+                                fields2: values + 666,
+                            }),
                             type: 'InputNumber',
                             props: {
                                 style: { width: '100%' },
@@ -183,7 +186,11 @@ class Home extends Component<any, any> {
                         },
                         {
                             label: '字段3',
-                            name: 'fields3',
+                            key: 'fields3',
+                            deform: (values) => ({
+                                startTime: values && values[0] && values[0].format('YYYY-MM-DD'),
+                                endTime: values && values[1] && values[1].format('YYYY-MM-DD'),
+                            }),
                             render: () => <DatePicker.RangePicker />,
                         },
                         {
@@ -208,12 +215,7 @@ class Home extends Component<any, any> {
                         { title: 'address', dataIndex: 'address' },
                         { title: 'createTime', dataIndex: 'createTime' },
                     ]}
-                >
-                    <Button type="primary">导入数据</Button>
-                    <Button type="primary">导入数据</Button>
-                    <TextButton>测试</TextButton>
-                    <Button type="primary">导入数据</Button>
-                </SearchableTable> */}
+                />
                 {/* <div style={{ backgroundColor: '#fff', padding: 24, marginBottom: 24 }}>
                     <TextButton className={style.abDdd} onClick={() => { http.get('/form?size=10') }} style={{ color: 'black' }}>测试文本</TextButton>
                     <TextButton canPreview href={this.state.href}>image...</TextButton>
