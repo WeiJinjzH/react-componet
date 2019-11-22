@@ -192,6 +192,7 @@ class Home extends Component<any, any> {
                                 endTime: values && values[1] && values[1].format('YYYY-MM-DD'),
                             }),
                             render: () => <DatePicker.RangePicker />,
+                            hidden: (values) => values.fields1 === '111',
                         },
                         {
                             label: '字段4',

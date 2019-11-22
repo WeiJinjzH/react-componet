@@ -93,19 +93,21 @@ const FormBlock = (props) => {
             labelCol={labelCol}
             wrapperCol={wrapperCol}
             onFinish={(_values) => {
-                // TODO: 使用transform属性时, key属性需要为必填项, 需补充控制台警告提示
-                const transformValue = fields.filter((field) => 'transform' in field)
-                    .map((field) => field.transform(_values[`INTERNAL__${field.key}`]))
+                /* form.getFieldsValue 可获取包含隐藏字段的值 */
+                const rawValues = finishWithHiddenValues ? form.getFieldsValue() : _values
+                /* 调用"transform"转换输出值 */
+                const transformValue = fields.filter((field) => field.transform)
+                    .map((field) => field.transform(rawValues[`INTERNAL__${field.key}`]))
                     .reduce((result, value) => ({ ...result, ...value }), {})
-                // TODO: transform属性需完善与 finishWithHiddenValues属性 的兼容问题
-                const values = finishWithHiddenValues ? form.getFieldsValue() : _values
-                const mixValues = { ...values, ...transformValue }
-                Object.keys(mixValues).forEach((vKey) => {
+                /* 合并转换后的数据 */
+                const values = { ...rawValues, ...transformValue }
+                /* 过滤"INTERNAL__"标识的字段值 */
+                Object.keys(values).forEach((vKey) => {
                     if (vKey.includes('INTERNAL__')) {
-                        delete mixValues[vKey]
+                        delete values[vKey]
                     }
                 })
-                onFinish(mixValues)
+                onFinish(values)
             }}
             onValuesChange={(changedValues, values) => {
                 if (hasHiddenFunction) {
@@ -136,6 +138,14 @@ const FormBlock = (props) => {
                             ...restFieldProps
                         } = field
                         let key = _key
+                        if (transform && !key) {
+                            window.console.warn('使用"transform"时, "key"为必填项.')
+                            return (
+                                <Typography.Text className="ant-form-text" type="danger">
+                                    使用&quot;transform&quot;时, &quot;key&quot;为必填项.
+                                </Typography.Text>
+                            )
+                        }
                         if (transform) {
                             key = `INTERNAL__${_key}`
                         }
@@ -172,22 +182,28 @@ const FormBlock = (props) => {
                                                     </Form.Item>
                                                 )
                                             }
-                                            if (parse && format) { // TODO: parse 与 format 需要支持单个属性独立使用
+                                            if (parse || format) {
                                                 const CompWrapper = function CompWrapper(_props) {
                                                     const Comp = node.type
                                                     const { validateTrigger, valuePropName } = restFieldProps
+                                                    const valueKey = valuePropName || 'value'
+                                                    const ttiggerKey = validateTrigger || 'onChange'
                                                     return (
                                                         <Comp
                                                             {...node.props}
                                                             {...componentProps}
                                                             {...{
-                                                                [validateTrigger || 'onChange']: (...args) => {
-                                                                    _props[validateTrigger || 'onChange'](format(...args))
+                                                                [ttiggerKey]: (...args) => {
+                                                                    if (format) {
+                                                                        _props[ttiggerKey](format(...args))
+                                                                    } else {
+                                                                        _props[ttiggerKey](...args)
+                                                                    }
                                                                     node.props
-                                                                    && node.props[validateTrigger || 'onChange']
-                                                                    && node.props[validateTrigger || 'onChange'](...args)
+                                                                    && node.props[ttiggerKey]
+                                                                    && node.props[ttiggerKey](...args)
                                                                 },
-                                                                [valuePropName || 'value']: parse(_props[valuePropName || 'value']),
+                                                                [valueKey]: parse ? parse(_props[valueKey]) : _props[valueKey],
                                                             }}
                                                         />
                                                     )
