@@ -135,7 +135,10 @@ const FormBlock = (props) => {
                             height = 0,
                             ...restFieldProps
                         } = field
-                        const key = `INTERNAL__${_key}`
+                        let key = _key
+                        if (transform) {
+                            key = `INTERNAL__${_key}`
+                        }
                         if (typeof hidden === 'function') {
                             hasHiddenFunction = true
                             const isHidden = hidden({ ...initialValues, ...form.getFieldsValue() })
@@ -147,7 +150,7 @@ const FormBlock = (props) => {
                             return null
                         }
                         if (type === 'WhiteSpace') {
-                            return <div key={name} style={{ height, width: '100%', clear: 'both' }} />
+                            return <div key={key || name} style={{ height, width: '100%', clear: 'both' }} />
                         }
                         const colSpan = span || layout === 'inline' ? undefined : (~~(24 / columnCount) || 24)
                         if (render) {

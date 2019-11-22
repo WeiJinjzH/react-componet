@@ -177,7 +177,7 @@ class Home extends Component<any, any> {
                             label: '字段2',
                             key: 'fields2',
                             transform: (values) => ({
-                                fields2: values + 666,
+                                fields2: (values || 0) + 666,
                             }),
                             type: 'InputNumber',
                             props: {
