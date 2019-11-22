@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import {
     Form, Row, Col, Input, InputNumber, Typography, Select, DatePicker, Radio,
 } from 'antd'
 import './index.less'
+import moment from 'moment'
 
-const { MonthPicker } = DatePicker
 const { Group: RadioGroup } = Radio
 
 const Text = (props) => {
@@ -27,27 +27,20 @@ const Text = (props) => {
     )
 }
 
-const FORM_ITEM_TYPE = {
+const PRESET_FORM_COMPONENT_TYPE = {
     Input,
     InputNumber,
-    // InputSearch,
     Select,
     DatePicker,
-    // RangePicker,
-    MonthPicker,
-    // TreeSelect,
     RadioGroup,
-    // Cascader,
-    // Checkbox,
-    // CheckboxGroup,
-    // InputGroup,
-    // TimePicker,
-    // TextArea,
-    // CustomItem,
     Text,
-    // FilesUpload,
-    // PhotoUpload,
-    // MultiPhotoUpload,
+}
+
+const PRESET_PROPS_MAP = {
+    DatePicker: {
+        parse: (value) => value && moment(value),
+        format: (momentInstance) => momentInstance && momentInstance.format('YYYY-MM-DD'),
+    },
 }
 
 const FormBlock = (props) => {
@@ -83,6 +76,19 @@ const FormBlock = (props) => {
         getForm && getForm(form)
     }, [getForm, form])
 
+    // TODO: transform 转换后的 name 与其他字段的 name 冲突时给予警告
+
+    fields.filter((field) => 'transform' in field)
+        .forEach((field) => {
+            const value = field.transform(undefined, field.key)
+            console.log(value)
+            Object.keys(value).forEach((key) => {
+                initialValues[`INTERNAL__${field.key}`] = initialValues[`INTERNAL__${field.key}`] || {}
+                initialValues[`INTERNAL__${field.key}`][key] = initialValues[field.key][key]
+            })
+            delete initialValues[field.key]
+        })
+
     return (
         <Form
             className="form-block"
@@ -97,7 +103,7 @@ const FormBlock = (props) => {
                 const rawValues = finishWithHiddenValues ? form.getFieldsValue() : _values
                 /* 调用"transform"转换输出值 */
                 const transformValue = fields.filter((field) => field.transform)
-                    .map((field) => field.transform(rawValues[`INTERNAL__${field.key}`]))
+                    .map((field) => field.transform(rawValues[`INTERNAL__${field.key}`], field.key))
                     .reduce((result, value) => ({ ...result, ...value }), {})
                 /* 合并转换后的数据 */
                 const values = { ...rawValues, ...transformValue }
@@ -119,7 +125,14 @@ const FormBlock = (props) => {
         >
             <Row type="flex" style={{ flexWrap: 'wrap' }} className="items-wrapper">
                 {
-                    fields.map((field) => {
+                    fields.map((rawField) => {
+                        let field = rawField
+                        /* 预设属性 */
+                        if (field.type && PRESET_PROPS_MAP[field.type]) {
+                            const { props: presetProps, ..._presetFieldProps } = PRESET_PROPS_MAP[field.type]
+                            field = { ..._presetFieldProps, ...field }
+                            field.props = { ...presetProps, ...field.props }
+                        }
                         const {
                             key: _key,
                             label,
@@ -137,6 +150,7 @@ const FormBlock = (props) => {
                             height = 0,
                             ...restFieldProps
                         } = field
+                        /* prop: transform */
                         let key = _key
                         if (transform && !key) {
                             window.console.warn('使用"transform"时, "key"为必填项.')
@@ -149,6 +163,7 @@ const FormBlock = (props) => {
                         if (transform) {
                             key = `INTERNAL__${_key}`
                         }
+                        /* prop: hidden */
                         if (typeof hidden === 'function') {
                             hasHiddenFunction = true
                             const isHidden = hidden({ ...initialValues, ...form.getFieldsValue() })
@@ -159,9 +174,11 @@ const FormBlock = (props) => {
                         } else if (hidden) {
                             return null
                         }
+                        /* props.type: WhiteSpace */
                         if (type === 'WhiteSpace') {
                             return <div key={key || name} style={{ height, width: '100%', clear: 'both' }} />
                         }
+                        /* prop: span, layout, columnCount */
                         const colSpan = span || layout === 'inline' ? undefined : (~~(24 / columnCount) || 24)
                         if (render) {
                             return (
@@ -187,21 +204,21 @@ const FormBlock = (props) => {
                                                     const Comp = node.type
                                                     const { validateTrigger, valuePropName } = restFieldProps
                                                     const valueKey = valuePropName || 'value'
-                                                    const ttiggerKey = validateTrigger || 'onChange'
+                                                    const triggerKey = validateTrigger || 'onChange'
                                                     return (
                                                         <Comp
                                                             {...node.props}
                                                             {...componentProps}
                                                             {...{
-                                                                [ttiggerKey]: (...args) => {
+                                                                [triggerKey]: (...args) => {
                                                                     if (format) {
-                                                                        _props[ttiggerKey](format(...args))
+                                                                        _props[triggerKey](format(...args))
                                                                     } else {
-                                                                        _props[ttiggerKey](...args)
+                                                                        _props[triggerKey](...args)
                                                                     }
                                                                     node.props
-                                                                    && node.props[ttiggerKey]
-                                                                    && node.props[ttiggerKey](...args)
+                                                                    && node.props[triggerKey]
+                                                                    && node.props[triggerKey](...args)
                                                                 },
                                                                 [valueKey]: parse ? parse(_props[valueKey]) : _props[valueKey],
                                                             }}
@@ -285,7 +302,7 @@ const FormBlock = (props) => {
                                 </Col>
                             )
                         }
-                        const Comp = FORM_ITEM_TYPE[type] || (() => (
+                        const Comp = PRESET_FORM_COMPONENT_TYPE[type] || (() => (
                             <Typography.Text
                                 className="ant-form-text"
                                 type="danger"
@@ -293,16 +310,18 @@ const FormBlock = (props) => {
                                 {`不支持的组件类型: ${type}`}
                             </Typography.Text>
                         ))
-                        if (parse && format) {
+                        if (parse || format) {
                             const CompWrapper = function CompWrapper(_props) {
                                 const { validateTrigger, valuePropName } = restFieldProps
+                                const valueKey = valuePropName || 'value'
+                                const triggerKey = validateTrigger || 'onChange'
                                 return (
                                     <Comp
                                         {...{
-                                            [validateTrigger || 'onChange']: (...args) => {
-                                                _props[validateTrigger || 'onChange'](format(...args))
+                                            [triggerKey]: (...args) => {
+                                                _props[triggerKey](format(...args))
                                             },
-                                            [valuePropName || 'value']: parse(_props[valuePropName || 'value']),
+                                            [valueKey]: parse(_props[valueKey]),
                                         }}
                                         {...componentProps}
                                     />

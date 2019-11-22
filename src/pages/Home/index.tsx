@@ -166,7 +166,7 @@ class Home extends Component<any, any> {
                     rowKey="rowIndex"
                     collapsible
                     visibleFieldsCount={3}
-                    initialValues={{ fields1: 11 }}
+                    initialValues={{ fields1: 11, fields5: '2019-11-22' }}
                     searchFileds={[
                         {
                             label: '字段1',
@@ -187,7 +187,7 @@ class Home extends Component<any, any> {
                         {
                             label: '字段3',
                             key: 'fields3',
-                            transform: (values) => ({
+                            transform: (values, key) => ({
                                 startTime: values && values[0] && values[0].format('YYYY-MM-DD'),
                                 endTime: values && values[1] && values[1].format('YYYY-MM-DD'),
                             }),
@@ -197,12 +197,17 @@ class Home extends Component<any, any> {
                         {
                             label: '字段4',
                             name: 'fields4',
+                            parse: (value) => value && moment(value),
+                            format: (momentInstance) => momentInstance && momentInstance.format('YYYY-MM-DD'),
                             render: () => <DatePicker />,
                         },
                         {
                             label: '字段5',
-                            name: 'fields5',
-                            render: () => <DatePicker />,
+                            key: 'fields5',
+                            transform: (value, key) => ({
+                                [key + 777]: `${value} 嘎嘎嘎`,
+                            }),
+                            type: 'DatePicker',
                         },
                         {
                             label: '字段6',
