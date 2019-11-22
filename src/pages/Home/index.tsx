@@ -176,7 +176,7 @@ class Home extends Component<any, any> {
                         {
                             label: '字段2',
                             key: 'fields2',
-                            deform: (values) => ({
+                            transform: (values) => ({
                                 fields2: values + 666,
                             }),
                             type: 'InputNumber',
@@ -187,7 +187,7 @@ class Home extends Component<any, any> {
                         {
                             label: '字段3',
                             key: 'fields3',
-                            deform: (values) => ({
+                            transform: (values) => ({
                                 startTime: values && values[0] && values[0].format('YYYY-MM-DD'),
                                 endTime: values && values[1] && values[1].format('YYYY-MM-DD'),
                             }),

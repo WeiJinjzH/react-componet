@@ -93,13 +93,13 @@ const FormBlock = (props) => {
             labelCol={labelCol}
             wrapperCol={wrapperCol}
             onFinish={(_values) => {
-                // TODO: 使用deform属性时, key属性需要为必填项, 需补充控制台警告提示
-                const deformValue = fields.filter((field) => 'deform' in field)
-                    .map((field) => field.deform(_values[`INTERNAL__${field.key}`]))
+                // TODO: 使用transform属性时, key属性需要为必填项, 需补充控制台警告提示
+                const transformValue = fields.filter((field) => 'transform' in field)
+                    .map((field) => field.transform(_values[`INTERNAL__${field.key}`]))
                     .reduce((result, value) => ({ ...result, ...value }), {})
-                // TODO: deform属性需完善与 finishWithHiddenValues属性 的兼容问题
+                // TODO: transform属性需完善与 finishWithHiddenValues属性 的兼容问题
                 const values = finishWithHiddenValues ? form.getFieldsValue() : _values
-                const mixValues = { ...values, ...deformValue }
+                const mixValues = { ...values, ...transformValue }
                 Object.keys(mixValues).forEach((vKey) => {
                     if (vKey.includes('INTERNAL__')) {
                         delete mixValues[vKey]
@@ -122,7 +122,7 @@ const FormBlock = (props) => {
                             key: _key,
                             label,
                             name,
-                            deform,
+                            transform,
                             type,
                             hidden,
                             render,
@@ -164,7 +164,7 @@ const FormBlock = (props) => {
                                             const node = render(getFieldValue(name), values, form)
                                             if (typeof node === 'string' || typeof node === 'number') {
                                                 return (
-                                                    <Form.Item name={deform ? key : name}>
+                                                    <Form.Item name={transform ? key : name}>
                                                         <span className="ant-form-text">{node}</span>
                                                     </Form.Item>
                                                 )
@@ -190,13 +190,13 @@ const FormBlock = (props) => {
                                                     )
                                                 }
                                                 return (
-                                                    <Form.Item name={deform ? key : name} {...restFieldProps}>
+                                                    <Form.Item name={transform ? key : name} {...restFieldProps}>
                                                         <CompWrapper />
                                                     </Form.Item>
                                                 )
                                             }
                                             return (
-                                                <Form.Item name={deform ? key : name} {...restFieldProps}>
+                                                <Form.Item name={transform ? key : name} {...restFieldProps}>
                                                     {node}
                                                 </Form.Item>
                                             )
@@ -211,7 +211,7 @@ const FormBlock = (props) => {
                                     <Form.Item label={label}>
                                         <Form.List
                                             shouldUpdate={(prevValues, nextValues) => prevValues[name] !== nextValues[name]}
-                                            name={deform ? key : name}
+                                            name={transform ? key : name}
                                             {...restFieldProps}
                                         >
                                             {
@@ -291,7 +291,7 @@ const FormBlock = (props) => {
                             }
                             return (
                                 <Col key={key || name} span={colSpan}>
-                                    <Form.Item label={label} name={deform ? key : name} {...restFieldProps}>
+                                    <Form.Item label={label} name={transform ? key : name} {...restFieldProps}>
                                         <CompWrapper />
                                     </Form.Item>
                                 </Col>
@@ -299,7 +299,7 @@ const FormBlock = (props) => {
                         }
                         return (
                             <Col key={key || name} span={colSpan}>
-                                <Form.Item label={label} name={deform ? key : name} {...restFieldProps}>
+                                <Form.Item label={label} name={transform ? key : name} {...restFieldProps}>
                                     <Comp {...componentProps} />
                                 </Form.Item>
                             </Col>
