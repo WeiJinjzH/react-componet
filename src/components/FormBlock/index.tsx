@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState, useMemo, useLayoutEffect } from 'react'
 import {
     Form, Row, Col, Input, InputNumber, Typography, Select, DatePicker, Radio,
 } from 'antd'
@@ -72,19 +72,16 @@ const FormBlock = (props) => {
         wrapperCol = { span: wrapperCol }
     }
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         getForm && getForm(form)
     }, [getForm, form])
-
-    // TODO: transform 转换后的 name 与其他字段的 name 冲突时给予警告
 
     fields.filter((field) => 'transform' in field)
         .forEach((field) => {
             const value = field.transform(undefined, field.key)
-            console.log(value)
             Object.keys(value).forEach((key) => {
                 initialValues[`INTERNAL__${field.key}`] = initialValues[`INTERNAL__${field.key}`] || {}
-                initialValues[`INTERNAL__${field.key}`][key] = initialValues[field.key][key]
+                initialValues[`INTERNAL__${field.key}`] = initialValues[key]
             })
             delete initialValues[field.key]
         })

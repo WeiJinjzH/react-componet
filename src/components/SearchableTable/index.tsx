@@ -1,6 +1,9 @@
 import { Form, Table } from 'antd'
+import { FormInstance } from 'antd/lib/form'
 import { TableProps } from 'rc-table/lib/Table'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, {
+    useCallback, useEffect, useLayoutEffect, useState,
+} from 'react'
 import { http } from 'src/utils'
 import SearchBar from '../SearchBar'
 
@@ -11,20 +14,32 @@ interface Store {
 interface SearchableTableProps extends TableProps<Store> {
     searchFileds: any[];
     searchURL: string;
-    children?: React.ReactNode;
     rowKey: string;
+    children?: React.ReactNode;
+    form?: FormInstance;
     collapsible?: boolean;
     visibleFieldsCount?: number;
     initialValues?: Store;
+    getForm?: (FormInstance) => void;
 }
 
 const SearchableTable = ({
-    searchFileds, searchURL, columns, initialValues = {}, rowKey, children, collapsible, visibleFieldsCount, ...restTableProps
+    searchFileds,
+    searchURL,
+    columns,
+    initialValues = {},
+    rowKey,
+    children,
+    collapsible,
+    visibleFieldsCount,
+    form: _form,
+    getForm,
+    ...restTableProps
 }: SearchableTableProps) => {
     const [dataSource, setDataSourch] = useState([])
     const [params, setParams] = useState()
     const [pageInfo, setPageInfo] = useState({ pageNum: 1, pageSize: 10 })
-    const [form] = Form.useForm()
+    const [form] = Form.useForm(_form)
 
     const getData = useCallback((values?: Object) => {
         http.get(searchURL, { ...initialValues, ...values }).then((res) => {
@@ -33,6 +48,10 @@ const SearchableTable = ({
             }
         })
     }, [searchURL, initialValues])
+
+    useLayoutEffect(() => {
+        getForm && getForm(form)
+    }, [getForm, form])
 
     useEffect(() => {
         getData()

@@ -30,6 +30,14 @@ class Home extends Component<any, any> {
         this.hidden = false
     }
 
+    componentDidMount() {
+        this.form.setFieldsValue({ startTime: '2019-11-01', endTime: '2019-11-24' })
+        // setTimeout(() => {
+        //     console.log(this.form)
+        //     this.form.setFieldsValue({ fields1: 111 })
+        // }, 1000)
+    }
+
     render() {
         return (
             <div>
@@ -165,8 +173,11 @@ class Home extends Component<any, any> {
                     searchURL="/table"
                     rowKey="rowIndex"
                     collapsible
+                    getForm={(_form) => { this.form = _form }}
                     visibleFieldsCount={3}
-                    initialValues={{ fields1: 11, fields5: '2019-11-22' }}
+                    initialValues={{
+                        fields1: 11, fields5: '2019-11-22',
+                    }}
                     searchFileds={[
                         {
                             label: '字段1',
@@ -175,10 +186,7 @@ class Home extends Component<any, any> {
                         },
                         {
                             label: '字段2',
-                            key: 'fields2',
-                            transform: (values) => ({
-                                fields2: (values || 0) + 666,
-                            }),
+                            name: 'fields2',
                             type: 'InputNumber',
                             props: {
                                 style: { width: '100%' },
@@ -186,11 +194,25 @@ class Home extends Component<any, any> {
                         },
                         {
                             label: '字段3',
-                            key: 'fields3',
-                            transform: (values, key) => ({
-                                startTime: values && values[0] && values[0].format('YYYY-MM-DD'),
-                                endTime: values && values[1] && values[1].format('YYYY-MM-DD'),
-                            }),
+                            name: 'fields3',
+                            // parse: (value) => {
+                            //     if (value && value.length) {
+                            //         return [
+                            //             moment(value[0], 'YYYY-MM-DD'),
+                            //             moment(value[1], 'YYYY-MM-DD'),
+                            //         ]
+                            //     }
+                            //     return undefined
+                            // },
+                            // format: (value) => {
+                            //     if (value && value.length) {
+                            //         return [
+                            //             value[0].format('YYYY-MM-DD'),
+                            //             value[1].format('YYYY-MM-DD'),
+                            //         ]
+                            //     }
+                            //     return undefined
+                            // },
                             render: () => <DatePicker.RangePicker />,
                             hidden: (values) => values.fields1 === '111',
                         },
@@ -212,7 +234,11 @@ class Home extends Component<any, any> {
                         {
                             label: '字段6',
                             name: 'fields6',
-                            render: () => <DatePicker />,
+                            type: 'Select',
+                            props: {
+                                options: [{ label: '111', value: 0 }],
+                            },
+                            // render: () => <DatePicker />,
                         },
                     ]}
                     columns={[

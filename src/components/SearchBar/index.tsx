@@ -1,8 +1,8 @@
+import { CaretDown, CaretUp } from '@ant-design/icons'
 import { Button, Form } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import { FormProps } from 'rc-field-form/lib/Form'
-import React, { useState, useMemo } from 'react'
-import { CaretDown, CaretUp } from '@ant-design/icons'
+import React, { useLayoutEffect, useMemo, useState } from 'react'
 import FormBlock from '../FormBlock'
 import TextButton from '../TextButton'
 import './index.less'
@@ -14,14 +14,19 @@ interface SearchBarProps extends FormProps {
     visibleFieldsCount?: number;
     onSearch?: (values?: any) => void;
     onReset?: (values?: any) => void;
+    getForm?: (FormInstance) => void;
     extra?: React.ReactNode;
 }
 
 export const SearchBar = ({
-    form: _form, fields = [], onSearch, onReset, children, collapsible, visibleFieldsCount = 4, style, extra, ...restProps
+    form: _form, fields = [], onSearch, onReset, children, collapsible, visibleFieldsCount = 4, style, extra, getForm, ...restProps
 }: SearchBarProps) => {
     const [form] = Form.useForm(_form)
     const [collapse, setCollapse] = useState(true)
+
+    useLayoutEffect(() => {
+        getForm && getForm(form)
+    }, [getForm, form])
 
     const integratedFields = useMemo(() => {
         const operateFields = [
