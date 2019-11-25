@@ -1,47 +1,10 @@
-import React, { useEffect, useState, useMemo, useLayoutEffect } from 'react'
 import {
-    Form, Row, Col, Input, InputNumber, Typography, Select, DatePicker, Radio,
+    Col, Form, Row, Typography,
 } from 'antd'
+import React, { useLayoutEffect, useState } from 'react'
+import classNames from 'classnames'
+import { PRESET_FORM_COMPONENT_TYPE, PRESET_PROPS_MAP } from './preset.js'
 import './index.less'
-import moment from 'moment'
-
-const { Group: RadioGroup } = Radio
-
-const Text = (props) => {
-    const onChange = (props.editable && props.editable.onChange) || ((str) => {
-        props.onChange && props.onChange(str)
-    })
-    const editable = {
-        onChange,
-    }
-    if (props.value !== null && !['number', 'undefined', 'string'].includes(typeof props.value)) {
-        return <Typography.Text className="ant-form-text" type="danger">{`数据类型错误, 类型不能是"${typeof props.value}"`}</Typography.Text>
-    }
-    return (
-        <Typography.Text
-            className="ant-form-text"
-            editable={props.editable && editable}
-        >
-            {props.value || (props.value === 0 ? 0 : props.editable ? <span style={{ marginRight: -8 }} /> : '-')}
-        </Typography.Text>
-    )
-}
-
-const PRESET_FORM_COMPONENT_TYPE = {
-    Input,
-    InputNumber,
-    Select,
-    DatePicker,
-    RadioGroup,
-    Text,
-}
-
-const PRESET_PROPS_MAP = {
-    DatePicker: {
-        parse: (value) => value && moment(value),
-        format: (momentInstance) => momentInstance && momentInstance.format('YYYY-MM-DD'),
-    },
-}
 
 const FormBlock = (props) => {
     const {
@@ -54,6 +17,7 @@ const FormBlock = (props) => {
         layout,
         finishWithHiddenValues = false,
         onFinish,
+        compact,
         ...restFormProps
     } = props
     let { labelCol, wrapperCol } = props
@@ -76,19 +40,12 @@ const FormBlock = (props) => {
         getForm && getForm(form)
     }, [getForm, form])
 
-    fields.filter((field) => 'transform' in field)
-        .forEach((field) => {
-            const value = field.transform(undefined, field.key)
-            Object.keys(value).forEach((key) => {
-                initialValues[`INTERNAL__${field.key}`] = initialValues[`INTERNAL__${field.key}`] || {}
-                initialValues[`INTERNAL__${field.key}`] = initialValues[key]
-            })
-            delete initialValues[field.key]
-        })
-
     return (
         <Form
-            className="form-block"
+            className={classNames({
+                'form-block': true,
+                'form-block--compact': compact,
+            })}
             form={form}
             layout={layout}
             initialValues={initialValues}
@@ -98,18 +55,12 @@ const FormBlock = (props) => {
             onFinish={(_values) => {
                 /* form.getFieldsValue 可获取包含隐藏字段的值 */
                 const rawValues = finishWithHiddenValues ? form.getFieldsValue() : _values
-                /* 调用"transform"转换输出值 */
-                const transformValue = fields.filter((field) => field.transform)
-                    .map((field) => field.transform(rawValues[`INTERNAL__${field.key}`], field.key))
+                /* 调用"attach"转换输出值 */
+                const attachValue = fields.filter((field) => field.attach)
+                    .map((field) => field.attach(rawValues[field.name], field.name, rawValues))
                     .reduce((result, value) => ({ ...result, ...value }), {})
                 /* 合并转换后的数据 */
-                const values = { ...rawValues, ...transformValue }
-                /* 过滤"INTERNAL__"标识的字段值 */
-                Object.keys(values).forEach((vKey) => {
-                    if (vKey.includes('INTERNAL__')) {
-                        delete values[vKey]
-                    }
-                })
+                const values = { ...rawValues, ...attachValue }
                 onFinish(values)
             }}
             onValuesChange={(changedValues, values) => {
@@ -131,10 +82,10 @@ const FormBlock = (props) => {
                             field.props = { ...presetProps, ...field.props }
                         }
                         const {
-                            key: _key,
+                            key,
                             label,
                             name,
-                            transform,
+                            attach,
                             type,
                             hidden,
                             render,
@@ -147,18 +98,17 @@ const FormBlock = (props) => {
                             height = 0,
                             ...restFieldProps
                         } = field
-                        /* prop: transform */
-                        let key = _key
-                        if (transform && !key) {
-                            window.console.warn('使用"transform"时, "key"为必填项.')
+                        /* prop: attach */
+                        if (attach) {
+                            rawField.attach = attach
+                        }
+                        if (attach && !name) {
+                            window.console.warn('使用"attach"时, "name"为必填项.')
                             return (
                                 <Typography.Text className="ant-form-text" type="danger">
-                                    使用&quot;transform&quot;时, &quot;key&quot;为必填项.
+                                    使用&quot;attach&quot;时, &quot;name&quot;为必填项.
                                 </Typography.Text>
                             )
-                        }
-                        if (transform) {
-                            key = `INTERNAL__${_key}`
                         }
                         /* prop: hidden */
                         if (typeof hidden === 'function') {
@@ -191,7 +141,7 @@ const FormBlock = (props) => {
                                             const node = render(getFieldValue(name), values, form)
                                             if (typeof node === 'string' || typeof node === 'number') {
                                                 return (
-                                                    <Form.Item name={transform ? key : name}>
+                                                    <Form.Item name={name}>
                                                         <span className="ant-form-text">{node}</span>
                                                     </Form.Item>
                                                 )
@@ -223,13 +173,13 @@ const FormBlock = (props) => {
                                                     )
                                                 }
                                                 return (
-                                                    <Form.Item name={transform ? key : name} {...restFieldProps}>
+                                                    <Form.Item name={name} {...restFieldProps}>
                                                         <CompWrapper />
                                                     </Form.Item>
                                                 )
                                             }
                                             return (
-                                                <Form.Item name={transform ? key : name} {...restFieldProps}>
+                                                <Form.Item name={name} {...restFieldProps}>
                                                     {node}
                                                 </Form.Item>
                                             )
@@ -244,7 +194,7 @@ const FormBlock = (props) => {
                                     <Form.Item label={label}>
                                         <Form.List
                                             shouldUpdate={(prevValues, nextValues) => prevValues[name] !== nextValues[name]}
-                                            name={transform ? key : name}
+                                            name={name}
                                             {...restFieldProps}
                                         >
                                             {
@@ -326,7 +276,7 @@ const FormBlock = (props) => {
                             }
                             return (
                                 <Col key={key || name} span={colSpan}>
-                                    <Form.Item label={label} name={transform ? key : name} {...restFieldProps}>
+                                    <Form.Item label={label} name={name} {...restFieldProps}>
                                         <CompWrapper />
                                     </Form.Item>
                                 </Col>
@@ -334,7 +284,7 @@ const FormBlock = (props) => {
                         }
                         return (
                             <Col key={key || name} span={colSpan}>
-                                <Form.Item label={label} name={transform ? key : name} {...restFieldProps}>
+                                <Form.Item label={label} name={name} {...restFieldProps}>
                                     <Comp {...componentProps} />
                                 </Form.Item>
                             </Col>

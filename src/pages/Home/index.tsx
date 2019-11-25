@@ -31,7 +31,7 @@ class Home extends Component<any, any> {
     }
 
     componentDidMount() {
-        this.form.setFieldsValue({ startTime: '2019-11-01', endTime: '2019-11-24' })
+        this.form.setFieldsValue({ startTime: '2019-11-01', endTime: '2019-11-24', aaa: [1, 2] })
         // setTimeout(() => {
         //     console.log(this.form)
         //     this.form.setFieldsValue({ fields1: 111 })
@@ -194,26 +194,8 @@ class Home extends Component<any, any> {
                         },
                         {
                             label: '字段3',
-                            name: 'fields3',
-                            // parse: (value) => {
-                            //     if (value && value.length) {
-                            //         return [
-                            //             moment(value[0], 'YYYY-MM-DD'),
-                            //             moment(value[1], 'YYYY-MM-DD'),
-                            //         ]
-                            //     }
-                            //     return undefined
-                            // },
-                            // format: (value) => {
-                            //     if (value && value.length) {
-                            //         return [
-                            //             value[0].format('YYYY-MM-DD'),
-                            //             value[1].format('YYYY-MM-DD'),
-                            //         ]
-                            //     }
-                            //     return undefined
-                            // },
-                            render: () => <DatePicker.RangePicker />,
+                            name: 'Time',
+                            type: 'RangePicker',
                             hidden: (values) => values.fields1 === '111',
                         },
                         {
@@ -225,8 +207,8 @@ class Home extends Component<any, any> {
                         },
                         {
                             label: '字段5',
-                            key: 'fields5',
-                            transform: (value, key) => ({
+                            name: 'fields5',
+                            attach: (value, key) => ({
                                 [key + 777]: `${value} 嘎嘎嘎`,
                             }),
                             type: 'DatePicker',

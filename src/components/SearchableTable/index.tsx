@@ -20,6 +20,7 @@ interface SearchableTableProps extends TableProps<Store> {
     collapsible?: boolean;
     visibleFieldsCount?: number;
     initialValues?: Store;
+    finishWithHiddenValues?: boolean;
     getForm?: (FormInstance) => void;
 }
 
@@ -34,6 +35,7 @@ const SearchableTable = ({
     visibleFieldsCount,
     form: _form,
     getForm,
+    finishWithHiddenValues,
     ...restTableProps
 }: SearchableTableProps) => {
     const [dataSource, setDataSourch] = useState([])
@@ -83,6 +85,7 @@ const SearchableTable = ({
                 initialValues={initialValues}
                 collapsible={collapsible}
                 visibleFieldsCount={visibleFieldsCount}
+                finishWithHiddenValues={finishWithHiddenValues}
             >
                 { children }
             </SearchBar>

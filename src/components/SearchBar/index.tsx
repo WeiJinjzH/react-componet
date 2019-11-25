@@ -15,6 +15,7 @@ interface SearchBarProps extends FormProps {
     onSearch?: (values?: any) => void;
     onReset?: (values?: any) => void;
     getForm?: (FormInstance) => void;
+    finishWithHiddenValues?: boolean;
     extra?: React.ReactNode;
 }
 

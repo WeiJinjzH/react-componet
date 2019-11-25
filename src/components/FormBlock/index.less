@@ -16,15 +16,16 @@
             min-height: 31px;
         }
     }
+    &--compact>.items-wrapper>.ant-col {
+        margin-bottom: 4px !important;
+    }
 }
 
 .form-block.ant-form-inline {
     .ant-form-item-with-help {
         margin-bottom: 0;
     }
-    .items-wrapper {
-        &>:global(.ant-col) {
-            margin-bottom: 24px;
-        }
+    .items-wrapper>.ant-col{
+        margin-bottom: 24px;
     }
 }
