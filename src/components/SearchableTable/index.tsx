@@ -22,6 +22,7 @@ interface SearchableTableProps extends TableProps<Store> {
     initialValues?: Store;
     finishWithHiddenValues?: boolean;
     getForm?: (FormInstance) => void;
+    onSearch?: (any) => void;
 }
 
 const SearchableTable = ({
@@ -35,6 +36,7 @@ const SearchableTable = ({
     visibleFieldsCount,
     form: _form,
     getForm,
+    onSearch: _onSearch,
     finishWithHiddenValues,
     ...restTableProps
 }: SearchableTableProps) => {
@@ -61,6 +63,7 @@ const SearchableTable = ({
 
     const onSearch = (values) => {
         setParams(values)
+        _onSearch && _onSearch({ ...values, ...pageInfo })
         getData({ ...values, ...pageInfo })
     }
 

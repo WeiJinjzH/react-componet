@@ -1,4 +1,5 @@
 import 'whatwg-fetch'
+import { Modal } from 'antd'
 import utils from './utils'
 
 class Http {
@@ -58,7 +59,8 @@ class Http {
                 if (contentType.indexOf('text/html') > -1) {
                     return res.text().then((text) => {
                         if (text.indexOf('请重新登录') > -1) {
-                            utils.showSingleModal('error', {
+                            Modal.destroyAll()
+                            Modal.error({
                                 title: '登录已失效，请重新登录',
                             })
                         }
@@ -66,14 +68,16 @@ class Http {
                 }
                 return res.json().then((data) => data)
             }
-            utils.showSingleModal('error', {
+            Modal.destroyAll()
+            Modal.error({
                 title: `${res.status}`,
                 content: res.statusText || '网络错误，请检查网络或接口',
                 okText: '确定',
             })
             return Promise.reject(res)
         } catch (err) {
-            utils.showSingleModal('error', {
+            Modal.destroyAll()
+            Modal.error({
                 title: '网络错误，请检查网络或接口',
             })
             return Promise.reject(err)

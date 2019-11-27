@@ -173,6 +173,7 @@ class Home extends Component<any, any> {
                     searchURL="/table"
                     rowKey="rowIndex"
                     collapsible
+                    onSearch={(values) => { console.log(values) }}
                     getForm={(_form) => { this.form = _form }}
                     visibleFieldsCount={3}
                     initialValues={{

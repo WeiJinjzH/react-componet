@@ -66,7 +66,7 @@ const FormBlock = (props) => {
             onValuesChange={(changedValues, values) => {
                 if (hasHiddenFunction) {
                     const requireUpdate = fields.filter((item) => typeof item.hidden === 'function')
-                        .some((item) => item.hidden(values) !== hiddenStatusCaches[item.name])
+                        .some((item) => item.hidden(values) !== hiddenStatusCaches[item.name || item.key])
                     requireUpdate && update()
                 }
             }}
@@ -98,12 +98,18 @@ const FormBlock = (props) => {
                             height = 0,
                             ...restFieldProps
                         } = field
+                        if (typeof restFieldProps.labelCol === 'number') {
+                            restFieldProps.labelCol = { span: restFieldProps.labelCol }
+                        }
+                        if (typeof restFieldProps.wrapperCol === 'number') {
+                            restFieldProps.wrapperCol = { span: restFieldProps.wrapperCol }
+                        }
                         /* prop: attach */
                         if (attach) {
                             rawField.attach = attach
                         }
                         if (attach && !name) {
-                            window.console.warn('使用"attach"时, "name"为必填项.')
+                            window.console.error('Warning: 使用"attach"时, "name"为必填项.')
                             return (
                                 <Typography.Text className="ant-form-text" type="danger">
                                     使用&quot;attach&quot;时, &quot;name&quot;为必填项.
@@ -114,20 +120,26 @@ const FormBlock = (props) => {
                         if (typeof hidden === 'function') {
                             hasHiddenFunction = true
                             const isHidden = hidden({ ...initialValues, ...form.getFieldsValue() })
-                            hiddenStatusCaches[name] = isHidden
+                            hiddenStatusCaches[name || key] = isHidden
                             if (isHidden) {
                                 return null
                             }
                         } else if (hidden) {
                             return null
                         }
-                        /* props.type: WhiteSpace */
-                        if (type === 'WhiteSpace') {
-                            return <div key={key || name} style={{ height, width: '100%', clear: 'both' }} />
-                        }
                         /* prop: span, layout, columnCount */
-                        const colSpan = span || layout === 'inline' ? undefined : (~~(24 / columnCount) || 24)
+                        const colSpan = span || (layout === 'inline' ? undefined : (~~(24 / columnCount) || 24))
                         if (render) {
+                            if (type) {
+                                window.console.error('Warning: 使用"render"时, "type"将不生效.')
+                                return (
+                                    <Form.Item label={label}>
+                                        <Typography.Text className="ant-form-text" type="danger">
+                                        使用&quot;render&quot;时, &quot;type&quot;将不生效.
+                                        </Typography.Text>
+                                    </Form.Item>
+                                )
+                            }
                             return (
                                 <Col key={key || name} span={colSpan}>
                                     <Form.Item
@@ -147,6 +159,14 @@ const FormBlock = (props) => {
                                                 )
                                             }
                                             if (parse || format) {
+                                                if (!name) {
+                                                    window.console.error('Warning: 使用"parse"或"format"时, "name"为必填项.')
+                                                    return (
+                                                        <Typography.Text className="ant-form-text" type="danger">
+                                                            使用&quot;parse&quot;或&quot;format&quot;时, &quot;name&quot;为必填项.
+                                                        </Typography.Text>
+                                                    )
+                                                }
                                                 const CompWrapper = function CompWrapper(_props) {
                                                     const Comp = node.type
                                                     const { validateTrigger, valuePropName } = restFieldProps
@@ -248,6 +268,10 @@ const FormBlock = (props) => {
                                     </Form.Item>
                                 </Col>
                             )
+                        }
+                        /* props.type: WhiteSpace */
+                        if (type === 'WhiteSpace') {
+                            return <div key={key || name} style={{ height, width: '100%', clear: 'both' }} />
                         }
                         const Comp = PRESET_FORM_COMPONENT_TYPE[type] || (() => (
                             <Typography.Text

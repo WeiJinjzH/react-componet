@@ -50,7 +50,7 @@ const common = {
         const proxy = window.localStorage.getItem('proxy') || ''
         return proxy + baseUrl
     },
-    getUrlParam(name, url) {
+    getUrlParam(url, name) {
         const reg = new RegExp(`(^|&)${encodeURIComponent(name)}=([^&]*)(&|$)`)
         const r = (url || window.location.search).substr(1).match(reg)
         let value
@@ -59,7 +59,7 @@ const common = {
         }
         return value
     },
-    getAllUrlParam(url) {
+    getUrlParams(url) {
         url = url || location.search
         const str = url.split('?')[1] || ''
         const arr = str.split('&')
@@ -94,27 +94,6 @@ const common = {
         url = url.slice(0, url.length - 1)
         return url
     },
-    showSingleModal: (() => {
-        let hasFlag = false
-        return (modalType, { onOk = () => {}, onCancel = () => {}, ...props }) => {
-            if (hasFlag) {
-                return
-            }
-            const type = ['success', 'error', 'info', 'confirm', 'warning'].find(item => item === modalType) || 'error'
-            hasFlag = true
-            Modal[type]({
-                ...props,
-                onOk() {
-                    hasFlag = false
-                    onOk && onOk()
-                },
-                onCancel: () => {
-                    hasFlag = false
-                    onCancel && onCancel()
-                },
-            })
-        }
-    })(),
     // 添加序号
     addRowIndex(res) {
         const { data } = res
@@ -238,24 +217,6 @@ const common = {
             .replace(/(\d{3})(?=\d)/g, `$1${thousand}`) + (places
             ? decimal + Math.abs(Number(number) - Number(i)).toFixed(places).slice(2)
             : '')
-    },
-    getWindowSize() {
-        const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
-        const height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
-        return {
-            width,
-            height,
-        }
-    },
-    // 移除对象里的null值，防止form.
-    removeNull(obj = {}) {
-        const out = { ...obj }
-        Object.keys(obj).forEach((key) => {
-            if (out[key] === null) {
-                delete out[key]
-            }
-        })
-        return out
     },
     /* 节流函数 */
     throttle(action, delay: number) {
