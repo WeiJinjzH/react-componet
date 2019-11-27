@@ -13,7 +13,7 @@ const menu = {
                 hasPreviousPage: pageNum > 1,
                 isFirstPage: true,
                 isLastPage: true,
-                [`list|${total}`]: [
+                [`list|0-${total}`]: [
                     {
                         'rowIndex|+1': 1,
                         id: '@id',
