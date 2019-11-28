@@ -1,6 +1,6 @@
 import { Form, Table } from 'antd'
 import { FormInstance } from 'antd/lib/form'
-import { TableProps } from 'rc-table/lib/Table'
+import { TableProps } from 'antd/lib/table/Table'
 import React, {
     useCallback, useEffect, useLayoutEffect, useState,
 } from 'react'
@@ -40,6 +40,7 @@ const SearchableTable = ({
     onSearch: _onSearch,
     finishWithHiddenValues,
     attachSequence,
+    size,
     ...restTableProps
 }: SearchableTableProps) => {
     const [initialValues] = useState(() => _initialValues)
@@ -52,7 +53,8 @@ const SearchableTable = ({
 
     const columns = [..._columns]
     if (attachSequence) {
-        columns.unshift({ title: '序号', dataIndex: 'INTERNAL_SEQUENCE' })
+        const preWidth = (`${total}`.length * 8) + (size === 'small' ? 16 : 32)
+        columns.unshift({ title: '序号', dataIndex: 'INTERNAL_SEQUENCE', width: preWidth > 60 ? preWidth : 60 })
     }
 
     const getData = useCallback((values?: Object) => {
@@ -120,8 +122,11 @@ const SearchableTable = ({
                 columns={columns}
                 dataSource={dataSource}
                 rowKey={rowKey || (attachSequence && 'INTERNAL_SEQUENCE')}
+                size={size}
                 pagination={{
                     showQuickJumper: true,
+                    current: pageInfo.pageNum,
+                    total,
                     showTotal: () => `共 ${total} 条`,
                     onChange,
                     showSizeChanger: true,
