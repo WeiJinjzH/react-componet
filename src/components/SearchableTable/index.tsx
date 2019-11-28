@@ -29,7 +29,7 @@ const SearchableTable = ({
     searchFileds,
     searchURL,
     columns,
-    initialValues = {},
+    initialValues: _initialValues = {},
     rowKey,
     children,
     collapsible,
@@ -43,6 +43,7 @@ const SearchableTable = ({
     const [dataSource, setDataSourch] = useState([])
     const [params, setParams] = useState()
     const [pageInfo, setPageInfo] = useState({ pageNum: 1, pageSize: 10 })
+    const [initialValues] = useState(() => _initialValues)
     const [form] = Form.useForm(_form)
 
     const getData = useCallback((values?: Object) => {
