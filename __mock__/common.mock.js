@@ -3,8 +3,10 @@ const Mock = require('mockjs')
 
 const menu = {
     'GET /table': (req, res, next) => {
-        const { pageSize = 10, pageNum = 1, total: _total } = req.query
-        const total = _total || Mock.Random.integer(0, 100)
+        let { pageSize = 10, pageNum = 1, total } = req.query
+        pageSize = +pageSize
+        pageNum = +pageNum
+        total = +total || Mock.Random.integer(0, 100)
         const pages = Math.ceil(total / pageSize)
         /* size 当前页数据量 */
         const size = Math.min(pageSize, total - (pageSize * (pageNum - 1)))
