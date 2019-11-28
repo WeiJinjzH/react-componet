@@ -12,7 +12,7 @@ interface Store {
 }
 
 interface SearchableTableProps extends TableProps<Store> {
-    searchFileds: any[];
+    searchFileds?: any[];
     searchURL: string;
     rowKey?: string;
     children?: React.ReactNode;
@@ -42,12 +42,13 @@ const SearchableTable = ({
     attachSequence,
     ...restTableProps
 }: SearchableTableProps) => {
+    const [initialValues] = useState(() => _initialValues)
     const [dataSource, setDataSourch] = useState([])
     const [params, setParams] = useState()
     const [pageInfo, setPageInfo] = useState({ pageNum: 1, pageSize: 10 })
     const [total, setTotal] = useState(0)
-    const [initialValues] = useState(() => _initialValues)
     const [form] = Form.useForm(_form)
+    const [loading, setLoading] = useState(false)
 
     const columns = [..._columns]
     if (attachSequence) {
@@ -55,7 +56,9 @@ const SearchableTable = ({
     }
 
     const getData = useCallback((values?: Object) => {
+        setLoading(true)
         http.get(searchURL, { ...initialValues, ...values }).then((res) => {
+            setLoading(false)
             if (res.code === 0) {
                 if (attachSequence) {
                     res.data.list.forEach((item, index) => {
@@ -67,6 +70,8 @@ const SearchableTable = ({
                 }
                 setDataSourch(res.data.list)
             }
+        }).catch(() => {
+            setLoading(false)
         })
     }, [searchURL, initialValues, attachSequence])
 
@@ -111,6 +116,7 @@ const SearchableTable = ({
             </SearchBar>
             <Table
                 style={{ backgroundColor: 'white', borderRadius: 4, padding: 24 }}
+                loading={loading}
                 columns={columns}
                 dataSource={dataSource}
                 rowKey={rowKey || (attachSequence && 'INTERNAL_SEQUENCE')}
