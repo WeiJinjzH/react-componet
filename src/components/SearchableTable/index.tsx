@@ -14,13 +14,14 @@ interface Store {
 interface SearchableTableProps extends TableProps<Store> {
     searchFileds: any[];
     searchURL: string;
-    rowKey: string;
+    rowKey?: string;
     children?: React.ReactNode;
     form?: FormInstance;
     collapsible?: boolean;
     visibleFieldsCount?: number;
     initialValues?: Store;
     finishWithHiddenValues?: boolean;
+    attachSequence?: boolean;
     getForm?: (FormInstance) => void;
     onSearch?: (any) => void;
 }
@@ -28,7 +29,7 @@ interface SearchableTableProps extends TableProps<Store> {
 const SearchableTable = ({
     searchFileds,
     searchURL,
-    columns,
+    columns: _columns,
     initialValues: _initialValues = {},
     rowKey,
     children,
@@ -38,21 +39,36 @@ const SearchableTable = ({
     getForm,
     onSearch: _onSearch,
     finishWithHiddenValues,
+    attachSequence,
     ...restTableProps
 }: SearchableTableProps) => {
     const [dataSource, setDataSourch] = useState([])
     const [params, setParams] = useState()
     const [pageInfo, setPageInfo] = useState({ pageNum: 1, pageSize: 10 })
+    const [total, setTotal] = useState(0)
     const [initialValues] = useState(() => _initialValues)
     const [form] = Form.useForm(_form)
+
+    const columns = [..._columns]
+    if (attachSequence) {
+        columns.unshift({ title: '序号', dataIndex: 'INTERNAL_SEQUENCE' })
+    }
 
     const getData = useCallback((values?: Object) => {
         http.get(searchURL, { ...initialValues, ...values }).then((res) => {
             if (res.code === 0) {
+                if (attachSequence) {
+                    res.data.list.forEach((item, index) => {
+                        setPageInfo({ pageNum: res.data.pageNum, pageSize: res.data.pageSize })
+                        setTotal(res.data.total)
+                        // eslint-disable-next-line no-underscore-dangle
+                        item.INTERNAL_SEQUENCE = ((res.data.pageNum - 1) * res.data.pageSize) + index + 1
+                    })
+                }
                 setDataSourch(res.data.list)
             }
         })
-    }, [searchURL, initialValues])
+    }, [searchURL, initialValues, attachSequence])
 
     useLayoutEffect(() => {
         getForm && getForm(form)
@@ -97,10 +113,10 @@ const SearchableTable = ({
                 style={{ backgroundColor: 'white', borderRadius: 4, padding: 24 }}
                 columns={columns}
                 dataSource={dataSource}
-                rowKey={rowKey}
+                rowKey={rowKey || (attachSequence && 'INTERNAL_SEQUENCE')}
                 pagination={{
                     showQuickJumper: true,
-                    showTotal: (total) => `共 ${total} 条`,
+                    showTotal: () => `共 ${total} 条`,
                     onChange,
                     showSizeChanger: true,
                     onShowSizeChange,

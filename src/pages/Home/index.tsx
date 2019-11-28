@@ -171,8 +171,8 @@ class Home extends Component<any, any> {
                 </FormProvider> */}
                 <SearchableTable
                     searchURL="/table"
-                    rowKey="rowIndex"
                     collapsible
+                    attachSequence
                     onSearch={(values) => { console.log(values) }}
                     getForm={(_form) => { this.form = _form }}
                     visibleFieldsCount={3}
@@ -225,14 +225,13 @@ class Home extends Component<any, any> {
                         },
                     ]}
                     columns={[
-                        { title: 'rowIndex', dataIndex: 'rowIndex' },
                         {
                             title: 'name',
                             dataIndex: 'name',
                             render: (value, record) => (
                                 <div>
+                                    <Avatar style={{ marginRight: 8 }} src={record.avatar} />
                                     {value}
-                                    <Avatar style={{ marginLeft: 4 }} src={record.avatar} />
                                 </div>
                             ),
                         },

@@ -3,9 +3,11 @@ const Mock = require('mockjs')
 
 const menu = {
     'GET /table': (req, res, next) => {
-        const { pageSize = 10, pageNum = 1, dataSize } = req.query
-        const total = dataSize || Mock.Random.integer(0, 100)
+        const { pageSize = 10, pageNum = 1, total: _total } = req.query
+        const total = _total || Mock.Random.integer(0, 100)
         const pages = Math.ceil(total / pageSize)
+        /* size 当前页数据量 */
+        const size = Math.min(pageSize, total - (pageSize * (pageNum - 1)))
         res.json(Mock.mock({
             code: 0,
             data: {
@@ -13,13 +15,12 @@ const menu = {
                 hasPreviousPage: pageNum > 1,
                 isFirstPage: true,
                 isLastPage: true,
-                [`list|0-${total}`]: [
+                [`list|${size}-${size}`]: [
                     {
-                        'rowIndex|+1': 1,
                         id: '@id',
                         name: '@cname',
                         address: '@county(true)',
-                        avatar: `https://api.uomg.com/api/rand.avatar?&format=images&row-index=@rowIndex&timestamp=${new Date().getTime()}`,
+                        avatar: `https://api.uomg.com/api/rand.avatar?&format=images&id=@id&name=@name&timestamp=${new Date().getTime()}`,
                         createTime: '@date',
                     },
                 ],
@@ -32,7 +33,7 @@ const menu = {
                 pageNum,
                 pageSize,
                 pages,
-                size: Math.min(pageSize, total - (pageSize * (pageNum - 1))),
+                size,
                 startRow: pageSize * (pageNum - 1),
                 endRow: Math.min(pageSize * pageNum, total),
                 total,
