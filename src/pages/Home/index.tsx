@@ -1,5 +1,5 @@
 import {
-    Button, Select, InputNumber, Table, Form, Input, Descriptions, Statistic, DatePicker,
+    Button, Select, InputNumber, Table, Form, Input, Descriptions, Statistic, DatePicker, Avatar,
 } from 'antd'
 import React, { Component } from 'react'
 import SearchBar from 'src/components/SearchBar'
@@ -176,9 +176,9 @@ class Home extends Component<any, any> {
                     onSearch={(values) => { console.log(values) }}
                     getForm={(_form) => { this.form = _form }}
                     visibleFieldsCount={3}
-                    initialValues={{
-                        fields1: 11, fields5: '2019-11-22',
-                    }}
+                    // initialValues={{
+                    //     fields1: 11, fields5: '2019-11-22',
+                    // }}
                     searchFileds={[
                         {
                             label: '字段1',
@@ -226,7 +226,16 @@ class Home extends Component<any, any> {
                     ]}
                     columns={[
                         { title: 'rowIndex', dataIndex: 'rowIndex' },
-                        { title: 'name', dataIndex: 'name' },
+                        {
+                            title: 'name',
+                            dataIndex: 'name',
+                            render: (value, record) => (
+                                <div>
+                                    {value}
+                                    <Avatar style={{ marginLeft: 4 }} src={record.avatar} />
+                                </div>
+                            ),
+                        },
                         { title: 'address', dataIndex: 'address' },
                         { title: 'createTime', dataIndex: 'createTime' },
                     ]}

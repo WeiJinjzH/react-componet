@@ -53,15 +53,17 @@ const FormBlock = (props) => {
             labelCol={labelCol}
             wrapperCol={wrapperCol}
             onFinish={(_values) => {
-                /* form.getFieldsValue 可获取包含隐藏字段的值 */
-                const rawValues = finishWithHiddenValues ? form.getFieldsValue() : _values
-                /* 调用"attach"转换输出值 */
-                const attachValue = fields.filter((field) => field.attach)
-                    .map((field) => field.attach(rawValues[field.name], field.name, rawValues))
-                    .reduce((result, value) => ({ ...result, ...value }), {})
-                /* 合并转换后的数据 */
-                const values = { ...rawValues, ...attachValue }
-                onFinish(values)
+                if (onFinish) {
+                    /* form.getFieldsValue 可获取包含隐藏字段的值 */
+                    const rawValues = finishWithHiddenValues ? form.getFieldsValue() : _values
+                    /* 调用"attach"转换输出值 */
+                    const attachValue = fields.filter((field) => field.attach)
+                        .map((field) => field.attach(rawValues[field.name], field.name, rawValues))
+                        .reduce((result, value) => ({ ...result, ...value }), {})
+                    /* 合并转换后的数据 */
+                    const values = { ...rawValues, ...attachValue }
+                    onFinish(values)
+                }
             }}
             onValuesChange={(changedValues, values) => {
                 if (hasHiddenFunction) {
