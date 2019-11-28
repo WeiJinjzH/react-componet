@@ -19,7 +19,7 @@ const menu = {
                         id: '@id',
                         name: '@cname',
                         address: '@county(true)',
-                        avatar: 'http://avatar.3sd.me/96',
+                        avatar: `https://api.uomg.com/api/rand.avatar?&format=images&row-index=@rowIndex&timestamp=${new Date().getTime()}`,
                         createTime: '@date',
                     },
                 ],
