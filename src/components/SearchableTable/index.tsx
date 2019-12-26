@@ -1,9 +1,9 @@
-import { Form, Table } from 'antd'
+import {
+    Form, message, Modal, Table,
+} from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import { TableProps } from 'antd/lib/table/Table'
-import React, {
-    useCallback, useEffect, useLayoutEffect, useState,
-} from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { http } from 'src/utils'
 import SearchBar from '../SearchBar'
 
@@ -22,9 +22,28 @@ interface SearchableTableProps extends TableProps<Store> {
     initialValues?: Store;
     finishWithHiddenValues?: boolean;
     attachSequence?: boolean;
+    renderMiddleNode?: Function;
+    paged?: boolean;
+    dataPaths?: string[];
+    refreshCounter?: number;
+    extra?: React.ReactNode;
     getForm?: (FormInstance) => void;
     onSearch?: (any) => void;
 }
+
+const getDataSourceFromPaths = (_data, paths) => {
+    if (typeof _data !== 'undefined' && paths && paths.length) {
+        const path = paths.shift()
+        const data = _data[path]
+        return getDataSourceFromPaths(data, paths)
+    }
+    if (typeof _data === 'undefined') {
+        window.console.error('无法正确获取数据, 检查响应数据是否是分页格式. 检查"paged"及"dataPaths"的配置.')
+        return []
+    }
+    return _data
+}
+
 
 const SearchableTable = ({
     searchFileds,
@@ -41,6 +60,11 @@ const SearchableTable = ({
     finishWithHiddenValues,
     attachSequence,
     size,
+    extra,
+    renderMiddleNode,
+    paged = true, // 获取的数据是否是分页形式的数据
+    dataPaths = paged ? ['data', 'list'] : ['data'], // 接口数据获取路径
+    refreshCounter,
     ...restTableProps
 }: SearchableTableProps) => {
     const [initialValues] = useState(() => _initialValues)
@@ -57,25 +81,42 @@ const SearchableTable = ({
         columns.unshift({ title: '序号', dataIndex: 'INTERNAL_SEQUENCE', width: preWidth > 60 ? preWidth : 60 })
     }
 
-    const getData = useCallback((values?: Object) => {
+    const getData = (values = { ...initialValues, ...params, ...pageInfo }) => {
         setLoading(true)
-        http.get(searchURL, { ...initialValues, ...values }).then((res) => {
+        http.get(searchURL, values).then((res) => {
             setLoading(false)
             if (res.code === 0) {
+                const data = getDataSourceFromPaths(res, [...dataPaths])
                 if (attachSequence) {
-                    res.data.list.forEach((item, index) => {
-                        setPageInfo({ pageNum: res.data.pageNum, pageSize: res.data.pageSize })
-                        setTotal(res.data.total)
-                        // eslint-disable-next-line no-underscore-dangle
-                        item.INTERNAL_SEQUENCE = ((res.data.pageNum - 1) * res.data.pageSize) + index + 1
+                    data.forEach((item, index) => {
+                        if (paged) {
+                            item.INTERNAL_SEQUENCE = ((res.data.pageNum - 1) * res.data.pageSize) + index + 1
+                        } else {
+                            item.INTERNAL_SEQUENCE = index + 1
+                        }
                     })
                 }
-                setDataSourch(res.data.list)
+                if (paged) {
+                    setPageInfo({ pageNum: res.data.pageNum, pageSize: res.data.pageSize })
+                    setTotal(res.data.total)
+                } else {
+                    setPageInfo({ pageNum: 1, pageSize: pageInfo.pageSize })
+                    setTotal(data.length)
+                }
+                setDataSourch(data)
+            } else {
+                if (res.code === -3) { return }
+                Modal.error({
+                    title: '错误',
+                    content: res.message || res.msg,
+                    okText: '确定',
+                })
             }
-        }).catch(() => {
+        }).catch((error) => {
+            message.error(error)
             setLoading(false)
         })
-    }, [searchURL, initialValues, attachSequence])
+    }
 
     useLayoutEffect(() => {
         getForm && getForm(form)
@@ -83,7 +124,8 @@ const SearchableTable = ({
 
     useEffect(() => {
         getData()
-    }, [getData])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [refreshCounter])
 
     const onSearch = (values) => {
         setParams(values)
@@ -108,14 +150,16 @@ const SearchableTable = ({
                 form={form}
                 fields={searchFileds}
                 onSearch={onSearch}
-                onReset={onSearch}
+                showReset
                 initialValues={initialValues}
                 collapsible={collapsible}
                 visibleFieldsCount={visibleFieldsCount}
                 finishWithHiddenValues={finishWithHiddenValues}
+                extra={extra}
             >
                 { children }
             </SearchBar>
+            {renderMiddleNode && renderMiddleNode()}
             <Table
                 style={{ backgroundColor: 'white', borderRadius: 4, padding: 24 }}
                 loading={loading}

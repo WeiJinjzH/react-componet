@@ -8,13 +8,17 @@ import './index.less'
 
 const FormBlock = (props) => {
     const {
+        /* 回调获取表单实例 FormInstance */
         getForm,
+        /* 布局划分: 纵向数列数量 */
         columnCount,
+        /* 字段配置 */
         fields = [],
         initialValues,
         form: _form,
         children,
         layout,
+        /* 表单提交时, 是否返回 hidden 为 true 时隐藏的字段值 */
         finishWithHiddenValues = false,
         onFinish,
         compact,
