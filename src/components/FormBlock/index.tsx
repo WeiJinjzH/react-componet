@@ -77,7 +77,7 @@ const FormBlock = (props) => {
                 }
             }}
         >
-            <Row type="flex" style={{ flexWrap: 'wrap' }} className="items-wrapper">
+            <Row style={{ flexWrap: 'wrap' }} className="items-wrapper">
                 {
                     fields.map((rawField) => {
                         let field = rawField

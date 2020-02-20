@@ -5,7 +5,7 @@ import moment from 'moment'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { http } from 'src/utils/http'
-import { MenuFold, MenuUnfold } from '@ant-design/icons'
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import './layout.less'
 import MainLayoutContext from './MainLayoutContext'
 
@@ -381,12 +381,12 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
                                 <div className="menu-footer">
                                     {
                                         collapsed ? (
-                                            <MenuUnfold
+                                            <MenuUnfoldOutlined
                                                 style={{ fontSize: 20 }}
                                                 onClick={this.toggleMenu}
                                             />
                                         ) : (
-                                            <MenuFold
+                                            <MenuFoldOutlined
                                                 style={{ fontSize: 20 }}
                                                 onClick={this.toggleMenu}
                                             />
@@ -402,12 +402,12 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
                                 <Header id="main-header" style={{ width: `calc(100% - ${collapsed ? 80 : 220}px)` }}>
                                     {
                                         collapsed ? (
-                                            <MenuUnfold
+                                            <MenuUnfoldOutlined
                                                 style={{ color: '#000000a6', margin: '0 10px', fontSize: 20 }}
                                                 onClick={this.toggleMenu}
                                             />
                                         ) : (
-                                            <MenuFold
+                                            <MenuFoldOutlined
                                                 style={{ color: '#000000a6', margin: '0 10px', fontSize: 20 }}
                                                 onClick={this.toggleMenu}
                                             />

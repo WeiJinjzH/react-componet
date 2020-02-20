@@ -1,4 +1,4 @@
-import { CaretDown, CaretUp } from '@ant-design/icons'
+import { CaretDownFilled, CaretUpFilled } from '@ant-design/icons'
 import { Button, Form } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import { FormProps } from 'rc-field-form/lib/Form'
@@ -99,7 +99,7 @@ export const SearchBar = ({
                                 collapsible ? (
                                     <Button type="link" className="collapse-btn" onClick={() => { setCollapse(!collapse) }}>
                                         {collapse ? '展开' : '收起'}
-                                        {collapse ? <CaretDown /> : <CaretUp />}
+                                        {collapse ? <CaretDownFilled /> : <CaretUpFilled />}
                                     </Button>
                                 ) : null
                             }

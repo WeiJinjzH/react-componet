@@ -10,7 +10,7 @@ import SearchableTable from 'src/components/SearchableTable'
 import FormBlock from 'src/components/FormBlock'
 import { FormInstance } from 'antd/lib/form'
 import moment from 'moment'
-import { Delete } from '@ant-design/icons'
+import { DeleteOutlined } from '@ant-design/icons'
 import style from './index.less'
 
 class Home extends Component<any, any> {
@@ -97,7 +97,7 @@ class Home extends Component<any, any> {
                             renderListItem: (field, index, { formItemWrapper, add, remove }) => (
                                 <Input
                                     allowClear
-                                    addonAfter={<Delete onClick={() => { remove(field.name) }} />}
+                                    addonAfter={<DeleteDeleteOutlined onClick={() => { remove(field.name) }} />}
                                 />
                             ),
                         },
@@ -224,6 +224,7 @@ class Home extends Component<any, any> {
                             type: 'Select',
                             props: {
                                 options: [{ label: '111', value: 0 }],
+                                style: { width: 100 },
                             },
                             // render: () => <DatePicker />,
                         },
