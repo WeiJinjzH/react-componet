@@ -97,7 +97,7 @@ export const SearchBar = ({
                             { extra }
                             {
                                 collapsible ? (
-                                    <Button type="link" className="collapse-btn" onClick={() => { setCollapse(!collapse) }}>
+                                    <Button type="link" onClick={() => { setCollapse(!collapse) }}>
                                         {collapse ? '展开' : '收起'}
                                         {collapse ? <CaretDownFilled /> : <CaretUpFilled />}
                                     </Button>

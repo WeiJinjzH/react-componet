@@ -69,7 +69,7 @@ const SearchableTable = ({
 }: SearchableTableProps) => {
     const [initialValues] = useState(() => _initialValues)
     const [dataSource, setDataSourch] = useState([])
-    const [params, setParams] = useState()
+    const [params, setParams] = useState({})
     const [pageInfo, setPageInfo] = useState({ pageNum: 1, pageSize: 10 })
     const [total, setTotal] = useState(0)
     const [form] = Form.useForm(_form)

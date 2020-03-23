@@ -3,7 +3,6 @@ import {
 } from 'antd'
 import React, { Component } from 'react'
 import SearchBar from 'src/components/SearchBar'
-import TextButton from 'src/components/TextButton'
 import { http } from 'utils'
 import PreviewImageModal from 'src/components/PreviewImageModal'
 import SearchableTable from 'src/components/SearchableTable'
@@ -97,7 +96,7 @@ class Home extends Component<any, any> {
                             renderListItem: (field, index, { formItemWrapper, add, remove }) => (
                                 <Input
                                     allowClear
-                                    addonAfter={<DeleteDeleteOutlined onClick={() => { remove(field.name) }} />}
+                                    addonAfter={<DeleteOutlined onClick={() => { remove(field.name) }} />}
                                 />
                             ),
                         },
@@ -245,11 +244,9 @@ class Home extends Component<any, any> {
                     ]}
                 />
                 {/* <div style={{ backgroundColor: '#fff', padding: 24, marginBottom: 24 }}>
-                    <TextButton className={style.abDdd} onClick={() => { http.get('/form?size=10') }} style={{ color: 'black' }}>测试文本</TextButton>
-                    <TextButton canPreview href={this.state.href}>image...</TextButton>
                     <button onClick={() => { this.setState({ href: 'http://localhost:7099/static/assets/logo.png' }) }}>change href</button>
                     <button onClick={() => { this.setState({ visible: true }) }}>change modal</button>
-                    <PreviewImageModal visible={this.state.visible} href="https://volibearcat.top/static/background.jpg" onCancel={() => { this.setState({ visible: false }) }} />
+                    <PreviewImageModal visible={this.state.visible} href={this.state.href || 'https://volibearcat.top/static/background.jpg'} onCancel={() => { this.setState({ visible: false }) }} />
                 </div> */}
                 {/* <SearchBar
                     onFinish={(values) => {

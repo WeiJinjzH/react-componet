@@ -77,7 +77,7 @@ const FormBlock = (props) => {
                 }
             }}
         >
-            <Row style={{ flexWrap: 'wrap' }} className="items-wrapper">
+            <Row className="items-wrapper">
                 {
                     fields.map((rawField) => {
                         let field = rawField
@@ -125,6 +125,7 @@ const FormBlock = (props) => {
                         /* prop: hidden */
                         if (typeof hidden === 'function') {
                             hasHiddenFunction = true
+                            // TODO: Warning: Instance created by `useForm` is not connect to any Form element. Forget to pass `form` prop?
                             const isHidden = hidden({ ...initialValues, ...form.getFieldsValue() })
                             hiddenStatusCaches[name || key] = isHidden
                             if (isHidden) {
