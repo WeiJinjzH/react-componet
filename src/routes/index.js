@@ -26,6 +26,22 @@ const pageRoutes = [
                 })
         }),
     },
+    /* FormHelper */
+    {
+        name: 'FormHelper',
+        path: '/form-helper',
+        exact: true,
+        needCheckPermission: false,
+        component: asyncDecorator((nextState, cb) => {
+            import(/* webpackChunkName: "form-helper" */ '../pages/FormHelper')
+                .then(({ default: Component }) => {
+                    cb(null, Component)
+                })
+                .catch((error) => {
+                    handleChunkError(error, cb)
+                })
+        }),
+    },
     /* 无权限访问 */
     {
         name: '无权限访问',
