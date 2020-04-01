@@ -1,7 +1,7 @@
 import {
     Col, Form, Row, Typography,
 } from 'antd'
-import React, { useLayoutEffect, useState } from 'react'
+import React, { useLayoutEffect, useState, useRef } from 'react'
 import classNames from 'classnames'
 import { PRESET_FORM_COMPONENT_TYPE, PRESET_PROPS_MAP } from './preset.js'
 import './index.less'
@@ -18,10 +18,10 @@ const FormBlock = (props) => {
         form: _form,
         children,
         layout,
-        /* 表单提交时, 是否返回 hidden 为 true 时隐藏的字段值 */
-        finishWithHiddenValues = false,
         onFinish,
         compact,
+        className,
+        onValuesChange,
         ...restFormProps
     } = props
     let { labelCol, wrapperCol } = props
@@ -33,6 +33,8 @@ const FormBlock = (props) => {
 
     const [form] = Form.useForm(_form)
 
+    const ref = useRef({ mounted: false })
+
     if (typeof labelCol === 'number') {
         labelCol = { span: labelCol }
     }
@@ -42,6 +44,7 @@ const FormBlock = (props) => {
 
     useLayoutEffect(() => {
         getForm && getForm(form)
+        ref.current.mounted = true
     }, [getForm, form])
 
     return (
@@ -49,6 +52,7 @@ const FormBlock = (props) => {
             className={classNames({
                 'form-block': true,
                 'form-block--compact': compact,
+                [className]: !!className,
             })}
             form={form}
             layout={layout}
@@ -56,17 +60,14 @@ const FormBlock = (props) => {
             {...restFormProps}
             labelCol={labelCol}
             wrapperCol={wrapperCol}
-            onFinish={(_values) => {
+            onFinish={(values) => {
                 if (onFinish) {
-                    /* form.getFieldsValue 可获取包含隐藏字段的值 */
-                    const rawValues = finishWithHiddenValues ? form.getFieldsValue() : _values
                     /* 调用"attach"转换输出值 */
                     const attachValue = fields.filter((field) => field.attach)
-                        .map((field) => field.attach(rawValues[field.name], field.name, rawValues))
+                        .map((field) => field.attach(values[field.name], field.name, values))
                         .reduce((result, value) => ({ ...result, ...value }), {})
                     /* 合并转换后的数据 */
-                    const values = { ...rawValues, ...attachValue }
-                    onFinish(values)
+                    onFinish({ ...values, ...attachValue })
                 }
             }}
             onValuesChange={(changedValues, values) => {
@@ -75,6 +76,7 @@ const FormBlock = (props) => {
                         .some((item) => item.hidden(values) !== hiddenStatusCaches[item.name || item.key])
                     requireUpdate && update()
                 }
+                onValuesChange && onValuesChange(changedValues, form.getFieldsValue())
             }}
         >
             <Row className="items-wrapper">
@@ -125,8 +127,8 @@ const FormBlock = (props) => {
                         /* prop: hidden */
                         if (typeof hidden === 'function') {
                             hasHiddenFunction = true
-                            // TODO: Warning: Instance created by `useForm` is not connect to any Form element. Forget to pass `form` prop?
-                            const isHidden = hidden({ ...initialValues, ...form.getFieldsValue() })
+                            const values = ref.current.mounted ? form.getFieldsValue() : {}
+                            const isHidden = hidden({ ...initialValues, ...values})
                             hiddenStatusCaches[name || key] = isHidden
                             if (isHidden) {
                                 return null
@@ -157,7 +159,7 @@ const FormBlock = (props) => {
                                     >
                                         {({ getFieldValue, getFieldsValue }) => {
                                             const values = getFieldsValue()
-                                            const node = render(getFieldValue(name), values, form)
+                                            const node = render(name ? getFieldValue(name) : undefined, values, form)
                                             if (typeof node === 'string' || typeof node === 'number') {
                                                 return (
                                                     <Form.Item name={name}>

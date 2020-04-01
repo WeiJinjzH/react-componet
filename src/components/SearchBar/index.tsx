@@ -16,7 +16,6 @@ interface SearchBarProps extends FormProps {
     onSearch?: (values?: any) => void;
     showReset?: boolean;
     getForm?: (form: FormInstance) => void;
-    finishWithHiddenValues?: boolean;
     extra?: React.ReactNode;
 }
 
@@ -124,7 +123,6 @@ export const SearchBar = ({
                 form={form}
                 layout="inline"
                 fields={integratedFields}
-                finishWithHiddenValues
                 onFinish={onSearch}
                 initialValues={initialValues}
                 {...restProps}

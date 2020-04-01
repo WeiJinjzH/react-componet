@@ -1,5 +1,5 @@
 import {
-    DatePicker, Input, InputNumber, Radio, Select, Typography,
+    DatePicker, Input, InputNumber, Radio, Select, Typography, Switch,
 } from 'antd'
 import moment from 'moment'
 
@@ -27,6 +27,7 @@ const PRESET_FORM_COMPONENT_TYPE = {
     Input,
     InputNumber,
     Select,
+    Switch,
     DatePicker,
     RangePicker: DatePicker.RangePicker,
     RangePickerWithTime: DatePicker.RangePicker,
@@ -57,6 +58,9 @@ const PRESET_PROPS_MAP = {
     DatePicker: {
         parse: (value) => value && moment(value),
         format: (momentInstance) => momentInstance && momentInstance.format('YYYY-MM-DD'),
+    },
+    Switch: {
+        valuePropName: 'checked',
     },
 }
 

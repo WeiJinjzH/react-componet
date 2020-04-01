@@ -20,7 +20,6 @@ interface SearchableTableProps extends TableProps<Store> {
     collapsible?: boolean;
     visibleFieldsCount?: number;
     initialValues?: Store;
-    finishWithHiddenValues?: boolean;
     attachSequence?: boolean;
     renderMiddleNode?: Function;
     paged?: boolean;
@@ -57,7 +56,6 @@ const SearchableTable = ({
     form: _form,
     getForm,
     onSearch: _onSearch,
-    finishWithHiddenValues,
     attachSequence,
     size,
     extra,
@@ -154,7 +152,6 @@ const SearchableTable = ({
                 initialValues={initialValues}
                 collapsible={collapsible}
                 visibleFieldsCount={visibleFieldsCount}
-                finishWithHiddenValues={finishWithHiddenValues}
                 extra={extra}
             >
                 { children }
