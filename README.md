@@ -26,9 +26,9 @@ npm run build
 ## 核心依赖
 
 - 界面构建: [react 16.12.0](https://reactjs.org/versions)
-- UI组件库: [antd 4.0.4](https://ant.design/index-cn)
+- UI组件库: [antd 4.1.1](https://ant.design/index-cn)
 - TS版本: [typescript 3.7.4](https://www.typescriptlang.org/)
-- 图表组件库: [bizcharts 3.5.6](https://bizcharts.net/index)
+- 图表组件库: [bizcharts 3.5.7](https://bizcharts.net/index)
 - 代码打包: [webpack 4.41.4](https://webpack.js.org/)
 - 项目构建优化: [happypack 5.0.1](https://www.npmjs.com/package/happypack)
 - JS代码转换: [@babel/core 7.7.7](https://babeljs.io)

@@ -89,7 +89,7 @@ class Login extends React.Component<any, LoginState> {
         return (
             <div id="particles-js" className={style.loginContainer}>
                 <div className={style.loginText}>
-                    <span className={style.baas}>Demo</span>
+                    <span className={style.title}>Demo</span>
                 </div>
                 <div className={style.loginForm}>
                     <h3 className={style.loginFormHeader}>登录</h3>

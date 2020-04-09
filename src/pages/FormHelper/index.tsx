@@ -39,10 +39,12 @@ function transferConfig(processedField, _rawField) {
     } else if (rawField.type) {
         processedField.render = undefined
     }
-    if (required && rawField.name && !processedField.rules?.some((rule) => 'required' in rule)) {
+    if (required && rawField.name && !processedField.rules?.find((rule) => rule.required)) {
         const rules = processedField.rules || []
         rules.unshift({ required: true, message: '必填' })
         processedField.rules = rules
+    } else {
+        processedField.rules = processedField.rules?.filter((rule) => !('required' in rule))
     }
 }
 
@@ -318,12 +320,13 @@ class FormHelper extends Component<any, any> {
                     }}
                     onOk={() => {
                         this.fieldConfigForm.submit()
+                        this.setState({ showFieldConfigModal: false })
                     }}
                 >
                     <FormBlock
                         onFinish={(values) => {
                             // eslint-disable-next-line no-eval
-                            const newFieldsConfig = values.fields.reduce((result, { label, value }) => Object.assign(result, { [label]: eval(value) }), this.state.currentRawConfig.field)
+                            const newFieldsConfig = values.fields.reduce((result, { label, value }) => Object.assign(result, { [label]: eval(value) }), this.state.currentRawConfig.rawField)
                             this.state.currentRawConfig.formInstance.setFieldsValue({ ...newFieldsConfig, type: newFieldsConfig.render ? 'render' : newFieldsConfig.type })
                             this.update()
                         }}
