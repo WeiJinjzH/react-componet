@@ -18,29 +18,48 @@ const FormBlock = (props) => {
         form: _form,
         children,
         layout,
+        /* 表单提交时的回调 function(values, formInstance) */
         onFinish,
+        /* 紧凑模式 */
         compact,
         className,
         onValuesChange,
+        /* 全局配置表单项span属性 */
+        span: _span,
         ...restFormProps
     } = props
-    let { labelCol, wrapperCol } = props
     let hasHiddenFunction = false
-    const hiddenStatusCaches = {}
 
     const [, _update] = useState()
     const update = _update.bind(null, {})
 
     const [form] = Form.useForm(_form)
 
-    const ref = useRef({ mounted: false })
+    const ref = useRef({ mounted: false, hiddenStatusCaches: {} })
 
+    const { hiddenStatusCaches } = ref.current
+
+    /* labelCol、wrapperCol配置表单默认 字段名及内容 栅格比例 */
+    let { labelCol, wrapperCol } = props
+    /* 非inline模式下, 为labelCol、wrapperCol赋默认值 */
+    if (layout !== 'inline' && layout !== 'vertical' && typeof labelCol === 'undefined') {
+        labelCol = { span: 8 }
+    }
+    if (layout !== 'inline' && layout !== 'vertical' && typeof wrapperCol === 'undefined') {
+        wrapperCol = { span: 16 }
+    }
+
+    /* labelCol、wrapperCol 兼容 number类型数值 */
     if (typeof labelCol === 'number') {
         labelCol = { span: labelCol }
     }
     if (typeof wrapperCol === 'number') {
         wrapperCol = { span: wrapperCol }
     }
+
+    const getAttachValues = (values) => fields.filter((field) => field.attach && !hiddenStatusCaches[field.name])
+        .map((field) => field.attach(values[field.name], field.name, values))
+        .reduce((result, value) => ({ ...result, ...value }), {})
 
     useLayoutEffect(() => {
         getForm && getForm(form)
@@ -63,11 +82,9 @@ const FormBlock = (props) => {
             onFinish={(values) => {
                 if (onFinish) {
                     /* 调用"attach"转换输出值 */
-                    const attachValue = fields.filter((field) => field.attach)
-                        .map((field) => field.attach(values[field.name], field.name, values))
-                        .reduce((result, value) => ({ ...result, ...value }), {})
+                    const attachValue = getAttachValues(values)
                     /* 合并转换后的数据 */
-                    onFinish({ ...values, ...attachValue })
+                    onFinish({ ...values, ...attachValue }, form)
                 }
             }}
             onValuesChange={(changedValues, values) => {
@@ -81,26 +98,33 @@ const FormBlock = (props) => {
         >
             <Row className="items-wrapper">
                 {
-                    fields.map((rawField) => {
-                        let field = rawField
+                    fields.map((originalField) => {
+                        let field = originalField
                         /* 预设属性 */
                         if (field.type && PRESET_PROPS_MAP[field.type]) {
-                            const { props: presetProps, ..._presetFieldProps } = PRESET_PROPS_MAP[field.type]
-                            field = { ..._presetFieldProps, ...field }
-                            field.props = { ...presetProps, ...field.props }
+                            if (typeof PRESET_PROPS_MAP[field.type] === 'function') {
+                                const { props: presetComponentProps, ..._presetFieldProps } = PRESET_PROPS_MAP[field.type](field, form)
+                                field = { ..._presetFieldProps, ...field }
+                                field.props = { ...presetComponentProps, ...field.props }
+                            } else {
+                                const { props: presetComponentProps, ..._presetFieldProps } = PRESET_PROPS_MAP[field.type]
+                                field = { ..._presetFieldProps, ...field }
+                                field.props = { ...presetComponentProps, ...field.props }
+                            }
                         }
                         const {
-                            key,
+                            key, // 仅作为key使用, 不再为name赋值
                             label,
-                            name,
+                            name, // 未使用name的字段, 不在表单实例控制内
                             attach,
                             type,
                             hidden,
                             render,
                             renderList,
                             renderListItem,
-                            props: componentProps,
-                            span,
+                            compact: formItemCompact, // 控制表单项是否表现为紧凑模式
+                            props: componentProps = {},
+                            span = _span, // 布局划分: 配置当前字段占用栅格数
                             parse,
                             format,
                             height = 0,
@@ -114,7 +138,7 @@ const FormBlock = (props) => {
                         }
                         /* prop: attach */
                         if (attach) {
-                            rawField.attach = attach
+                            originalField.attach = attach
                         }
                         if (attach && !name) {
                             window.console.error('Warning: 使用"attach"时, "name"为必填项.')
@@ -128,7 +152,7 @@ const FormBlock = (props) => {
                         if (typeof hidden === 'function') {
                             hasHiddenFunction = true
                             const values = ref.current.mounted ? form.getFieldsValue() : {}
-                            const isHidden = hidden({ ...initialValues, ...values})
+                            const isHidden = hidden({ ...initialValues, ...values })
                             hiddenStatusCaches[name || key] = isHidden
                             if (isHidden) {
                                 return null
