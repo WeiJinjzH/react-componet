@@ -30,48 +30,48 @@ class Home extends Component<any, any> {
     }
 
     componentDidMount() {
-        this.form.setFieldsValue({ startTime: '2019-11-01', endTime: '2019-11-24', aaa: [1, 2] })
-        // setTimeout(() => {
-        //     console.log(this.form)
-        //     this.form.setFieldsValue({ fields1: 111 })
-        // }, 1000)
+        // this.form.setFieldsValue({ startTime: '2019-11-01', endTime: '2019-11-24', aaa: [1, 2] })
+        setTimeout(() => {
+            console.log(this.form)
+            this.form.setFieldsValue({ field1: 111 })
+        }, 1000)
     }
 
     render() {
         return (
             <div>
-                {/* <FormBlock
+                <FormBlock
                     initialValues={{
-                        fields2: { a: 555 }, fields3: 777, fields5: [1, 2, 3],
+                        field2: { a: 555 }, field3: 777, field5: [1, 2, 3],
                     }}
                     columnCount={2}
                     labelCol={5 || { span: 4 }} // 支持number类型
                     wrapperCol={{ span: 19 }}
-                    getForm={(_form) => { this.form1 = _form }}
+                    getForm={(_form) => { this.form = _form }}
                     onFinish={(values) => { console.log(values) }}
                     fields={[
                         {
                             label: '字段1',
-                            name: 'fields1',
+                            name: 'field1',
                             type: 'Input',
                             // rules: [{ required: true }],
-                            hidden: (values) => values.fields1 === '777',
+                            hidden: (values) => values.field1 === '777',
                         },
                         {
                             label: '字段2',
-                            name: ['fields2', 'a'],
+                            name: ['field2', 'a'],
                             type: 'Input',
-                            props: { onInput: (value) => { this.form1.setFieldsValue({ fields1: value.target.value }) } },
+                            props: { onInput: (value) => { this.form.setFieldsValue({ field1: value.target.value }) } },
                         },
                         {
                             label: '字段3',
-                            name: 'fields3',
+                            name: 'field3',
                             render: (value) => value,
-                            hidden: (values) => values.fields4 === '2019-01',
+                            hidden: (values) => values.field4 === '2019-01',
                         },
                         {
                             label: '字段4',
-                            name: 'fields4',
+                            name: 'field4',
                             // type: 'MonthPicker',
                             parse: (value) => (value ? moment(value, 'YYYY-MM') : null),
                             format: (momentInstance, dateStr) => dateStr,
@@ -80,13 +80,13 @@ class Home extends Component<any, any> {
                             render: (value, values, _form) => (
                                 <DatePicker.MonthPicker
                                     value={value}
-                                    onChange={(m, dateStr) => { _form.setFieldsValue({ fields3: dateStr, fields4: dateStr }) }}
+                                    onChange={(m, dateStr) => { _form.setFieldsValue({ field3: dateStr, field4: dateStr }) }}
                                 />
                             ),
                         },
                         {
                             label: '字段5',
-                            name: 'fields5',
+                            name: 'field5',
                             // renderList: (itemNodes, { fields, add, remove }) => (
                             //     <div>
                             //         {itemNodes}
@@ -102,7 +102,7 @@ class Home extends Component<any, any> {
                         },
                         {
                             label: '字段6',
-                            name: 'fields6',
+                            name: 'field6',
                             type: 'RadioGroup',
                             props: {
                                 options: [
@@ -113,7 +113,7 @@ class Home extends Component<any, any> {
                         },
                         {
                             label: '字段7',
-                            name: 'fields7',
+                            name: 'field7',
                             parse: (value) => value,
                             format: (event) => { console.log(event.currentTarget.checked); return event.currentTarget.checked },
                             valuePropName: 'checked',
@@ -123,11 +123,11 @@ class Home extends Component<any, any> {
                     ]}
                 >
                     <Button htmlType="submit">submit</Button>
-                </FormBlock> */}
+                </FormBlock>
                 {/* <FormProvider onFinish={(values) => { console.log(values) }} getForm={(func) => { this.form = func }} onFinishFailed={(errorInfo) => { console.log(errorInfo) }}>
                     <FormBlock
                         name="1"
-                        initialValues={{ fields2: { a: 555 }, fields3: 777 }}
+                        initialValues={{ field2: { a: 555 }, field3: 777 }}
                         columnCount={2}
                         labelCol={5 || { span: 4 }} // 支持number类型
                         wrapperCol={{ span: 19 }}
@@ -135,40 +135,40 @@ class Home extends Component<any, any> {
                         fields={[
                             {
                                 label: '字段1',
-                                name: 'fields1',
+                                name: 'field1',
                                 type: 'Input',
                                 rules: [{ required: true }],
-                                hidden: (values) => values.fields1 === '777',
+                                hidden: (values) => values.field1 === '777',
                                 // shouldUpdate: true,
                             },
                             {
-                                label: '字段2', name: ['fields2', 'a'], type: 'Input', props: { onInput: (value) => { this.form1.setFieldsValue({ fields1: value.target.value }) } },
+                                label: '字段2', name: ['field2', 'a'], type: 'Input', props: { onInput: (value) => { this.form1.setFieldsValue({ field1: value.target.value }) } },
                             },
                             {
                                 label: '字段3',
-                                name: 'fields3',
+                                name: 'field3',
                                 render: (value) => <Button onClick={() => { this.hidden = !this.hidden; this.forceUpdate() }}>{value}</Button>,
                             },
                             {
                                 label: '字段6',
-                                name: 'fields6',
-                                render: (value, values, _form) => <DatePicker.MonthPicker onChange={(m, dateStr) => { _form.setFieldsValue({ fields4: dateStr }) }} />,
+                                name: 'field6',
+                                render: (value, values, _form) => <DatePicker.MonthPicker onChange={(m, dateStr) => { _form.setFieldsValue({ field4: dateStr }) }} />,
                             },
                         ]}
                     />
                     <div>Some Element</div>
                     <FormBlock
-                        initialValues={{ fields4: '', fields5: 777 }}
+                        initialValues={{ field4: '', field5: 777 }}
                         fields={[
-                            { label: '字段4', name: 'fields4', type: 'Text' },
+                            { label: '字段4', name: 'field4', type: 'Text' },
                             {
-                                label: '字段5', name: 'fields5', render: (value) => value,
+                                label: '字段5', name: 'field5', render: (value) => value,
                             },
                         ]}
                         // getForm={(_form) => { this.form2 = _form }}
                     />
                 </FormProvider> */}
-                <SearchableTable
+                {/* <SearchableTable
                     searchURL="/table"
                     collapsible
                     attachSequence
@@ -176,17 +176,17 @@ class Home extends Component<any, any> {
                     getForm={(_form) => { this.form = _form }}
                     visibleFieldsCount={6}
                     initialValues={{
-                        fields1: 11, fields5: '2019-11-22',
+                        field1: 11, field5: '2019-11-22',
                     }}
                     searchFileds={[
                         {
                             label: '字段1',
-                            name: 'fields1',
+                            name: 'field1',
                             type: 'Input',
                         },
                         {
                             label: '字段2',
-                            name: 'fields2',
+                            name: 'field2',
                             type: 'InputNumber',
                             props: {
                                 style: { width: '100%' },
@@ -200,18 +200,18 @@ class Home extends Component<any, any> {
                             label: '字段3',
                             name: 'Time',
                             type: 'RangePicker',
-                            hidden: (values) => values.fields1 === '111',
+                            hidden: (values) => values.field1 === '111',
                         },
                         {
                             label: '字段4',
-                            name: 'fields4',
+                            name: 'field4',
                             parse: (value) => value && moment(value),
                             format: (momentInstance) => momentInstance && momentInstance.format('YYYY-MM-DD'),
                             render: () => <DatePicker />,
                         },
                         {
                             label: '字段5',
-                            name: 'fields5',
+                            name: 'field5',
                             attach: (value, key) => ({
                                 [key + 777]: `${value} 嘎嘎嘎`,
                             }),
@@ -219,7 +219,7 @@ class Home extends Component<any, any> {
                         },
                         {
                             label: '字段6',
-                            name: 'fields6',
+                            name: 'field6',
                             type: 'Select',
                             props: {
                                 options: [{ label: '111', value: 0 }],
@@ -242,7 +242,7 @@ class Home extends Component<any, any> {
                         { title: 'address', dataIndex: 'address' },
                         { title: 'createTime', dataIndex: 'createTime' },
                     ]}
-                />
+                /> */}
                 {/* <div style={{ backgroundColor: '#fff', padding: 24, marginBottom: 24 }}>
                     <button onClick={() => { this.setState({ href: 'http://localhost:7099/static/assets/logo.png' }) }}>change href</button>
                     <button onClick={() => { this.setState({ visible: true }) }}>change modal</button>
@@ -258,7 +258,7 @@ class Home extends Component<any, any> {
                     fields={[
                         {
                             label: '字段1',
-                            name: 'fields1',
+                            name: 'field1',
                             hidden: this.state.hidden,
                             node: <InputNumber />,
                         },
@@ -267,7 +267,7 @@ class Home extends Component<any, any> {
                         },
                         {
                             label: '字段2',
-                            name: 'fields2',
+                            name: 'field2',
                             shouldUpdate: true,
                             node: (
                                 <Select onChange={() => { this.setState({ hidden: false }) }}>
@@ -286,10 +286,10 @@ class Home extends Component<any, any> {
                         },
                         {
                             label: '字段3',
-                            name: 'fields3',
+                            name: 'field3',
                             shouldUpdate: true,
                             node: ({ value, setValues }) => (
-                                <Button onClick={() => { setValues({ fields1: 666 }) }}>
+                                <Button onClick={() => { setValues({ field1: 666 }) }}>
                                     { value || 'button'}
                                 </Button>
                             ),

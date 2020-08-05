@@ -28,56 +28,55 @@ class App extends React.Component {
                                     return <Redirect to="/login" />
                                 }
                                 return (
-                                    <MainLayout {...props}>
-                                        {
-                                            (nodeMap, loadingMenus) => (
-                                                <Switch>
-                                                    {
-                                                        routes.map((route) => (
-                                                            <Route
-                                                                key={route.path}
-                                                                path={route.path}
-                                                                exact={route.exact}
-                                                                strict
-                                                                render={(routeProps) => {
-                                                                    if (loadingMenus) {
-                                                                        /* 菜单数据获取中 */
-                                                                        return (
-                                                                            <Spin
-                                                                                size="large"
-                                                                                style={{ width: '100%', padding: 100 }}
-                                                                                tip="获取菜单数据中..."
-                                                                            />
-                                                                        )
-                                                                    }
-                                                                    const Comp = route.component
-                                                                    if (!route.needCheckPermission) {
-                                                                        return <Comp {...routeProps} />
-                                                                    }
-                                                                    if (!nodeMap) {
-                                                                        return (
-                                                                            <div style={{ textAlign: 'center', padding: 100 }}>
-                                                                                菜单数据获取异常
-                                                                            </div>
-                                                                        )
-                                                                    }
-                                                                    /* 菜单是否需要校验权限 */
-                                                                    if (
-                                                                        route.needCheckPermission
-                                                                        && !nodeMap[route.path]
-                                                                    ) {
-                                                                        return <Redirect to="/403" />
-                                                                    }
+                                    <MainLayout
+                                        {...props}
+                                        render={(nodeMap, loadingMenus) => (
+                                            <Switch>
+                                                {
+                                                    routes.map((route) => (
+                                                        <Route
+                                                            key={route.path}
+                                                            path={route.path}
+                                                            exact={route.exact}
+                                                            strict
+                                                            render={(routeProps) => {
+                                                                if (loadingMenus) {
+                                                                /* 菜单数据获取中 */
+                                                                    return (
+                                                                        <Spin
+                                                                            size="large"
+                                                                            style={{ width: '100%', padding: 100 }}
+                                                                            tip="获取菜单数据中..."
+                                                                        />
+                                                                    )
+                                                                }
+                                                                const Comp = route.component
+                                                                if (!route.needCheckPermission) {
                                                                     return <Comp {...routeProps} />
-                                                                }}
-                                                            />
-                                                        ))
-                                                    }
-                                                    <Redirect to="/404" />
-                                                </Switch>
-                                            )
-                                        }
-                                    </MainLayout>
+                                                                }
+                                                                if (!nodeMap) {
+                                                                    return (
+                                                                        <div style={{ textAlign: 'center', padding: 100 }}>
+                                                                            菜单数据获取异常
+                                                                        </div>
+                                                                    )
+                                                                }
+                                                                /* 菜单是否需要校验权限 */
+                                                                if (
+                                                                    route.needCheckPermission
+                                                                && !nodeMap[route.path]
+                                                                ) {
+                                                                    return <Redirect to="/403" />
+                                                                }
+                                                                return <Comp {...routeProps} />
+                                                            }}
+                                                        />
+                                                    ))
+                                                }
+                                                <Redirect to="/404" />
+                                            </Switch>
+                                        )}
+                                    />
                                 )
                             }}
                         />

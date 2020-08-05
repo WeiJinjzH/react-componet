@@ -6,7 +6,7 @@ const proxies = require('./proxy-config')
 const mockerServer = require('./mocker-server')
 
 const devPort = process.env.port || 8090
-const mockPort = process.env.mockport || devPort + 1
+const mockPort = process.env.mockport || Number(devPort) + 1
 const enableMock = process.env.mock
 
 if (enableMock) {

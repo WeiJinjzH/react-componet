@@ -8,36 +8,40 @@ import './index.less'
 
 const FormBlock = (props) => {
     const {
+        form: _form,
         /* 回调获取表单实例 FormInstance */
         getForm,
-        /* 布局划分: 纵向数列数量 */
-        columnCount,
         /* 字段配置 */
         fields = [],
-        initialValues,
-        form: _form,
-        children,
-        layout,
-        /* 表单提交时的回调 function(values, formInstance) */
-        onFinish,
         /* 紧凑模式 */
         compact,
-        className,
-        onValuesChange,
+        /* 布局划分: 纵向数列数量 */
+        columnCount,
+        /* 表单提交时的回调 function(values, formInstance) */
+        onFinish,
+        /* 初始值 */
+        initialValues,
         /* 全局配置表单项span属性 */
         span: _span,
+        className,
+        layout,
+        children,
+        onSubmit,
+        onFinishFailed,
+        minWidth: _minWidth,
+        maxWidth: _maxWidth,
+        width: _width,
+        colon: _colon,
+        onValuesChange,
         ...restFormProps
     } = props
-    let hasHiddenFunction = false
-
-    const [, _update] = useState()
-    const update = _update.bind(null, {})
 
     const [form] = Form.useForm(_form)
 
-    const ref = useRef({ mounted: false, hiddenStatusCaches: {} })
+    let hasHiddenFunction = false // TODO: onValuesChange方法性能优化使用, 待定
 
-    const { hiddenStatusCaches } = ref.current
+    const [, _update] = useState()
+    const update = _update.bind(null, {})
 
     /* labelCol、wrapperCol配置表单默认 字段名及内容 栅格比例 */
     let { labelCol, wrapperCol } = props
@@ -57,14 +61,17 @@ const FormBlock = (props) => {
         wrapperCol = { span: wrapperCol }
     }
 
+    const ref = useRef({ hiddenStatusCaches: {} })
+
+    const { hiddenStatusCaches } = ref.current
+
     const getAttachValues = (values) => fields.filter((field) => field.attach && !hiddenStatusCaches[field.name])
         .map((field) => field.attach(values[field.name], field.name, values))
         .reduce((result, value) => ({ ...result, ...value }), {})
 
     useLayoutEffect(() => {
         getForm && getForm(form)
-        ref.current.mounted = true
-    }, [getForm, form])
+    }, [form, getForm])
 
     return (
         <Form
@@ -113,29 +120,66 @@ const FormBlock = (props) => {
                             }
                         }
                         const {
-                            key, // 仅作为key使用, 不再为name赋值
                             label,
+                            key, // 仅作为key使用, 不再为name赋值
                             name, // 未使用name的字段, 不在表单实例控制内
-                            attach,
-                            type,
-                            hidden,
                             render,
-                            renderList,
-                            renderListItem,
-                            compact: formItemCompact, // 控制表单项是否表现为紧凑模式
-                            props: componentProps = {},
                             span = _span, // 布局划分: 配置当前字段占用栅格数
+                            minWidth = _minWidth,
+                            maxWidth = _maxWidth,
+                            width = _width,
+                            compact: formItemCompact, // 控制表单项是否表现为紧凑模式
+                            props: componentProps = {}, // 组件属性
+                            height = 0, // 仅 type: WhiteSpace 时有效, 控制间隔高度
+                            lineBreak, // 换行, 在表单项结尾处插入换行元素
+                            attach, // 在表单提交触发, 通过当前字段, 转换成新的数据字段附加在 onFinish 回调的数据内
+                            type, // 可选值: WhiteSpace、 PRESET_FORM_COMPONENT_TYPE 内的预设组件
+                            extra: _extra,
+                            help: _help,
+                            validateStatus: _validateStatus,
+                            colon = _colon,
+                            before: _before, // 于表单项组件前插入内容
+                            after: _after, // 于表单项组件后插入内容
+
+                            /*
+                                hidden: 控制字段是否隐藏;
+                                如表单联动, 动态控制是否隐藏时使用函数方式回调布尔值:  hidden: (values) => true
+                                如在组件挂载前时就确定字段是否显隐且不可变时, 可以用直接用布尔值:  hidden: true
+                            */
+                            hidden,
+
+                            /*
+                                parse: 将表单字段值转换成内部组件需要的数据类型
+                                例: parse: (value) => value && moment(value)
+                                format: 将内部组件所控制的数据转换成表单字段所需的数据类型
+                                例: format: (momentInstance) => momentInstance && momentInstance.format('YYYY-MM-DD')
+                            */
                             parse,
                             format,
-                            height = 0,
+
+                            forceRender, // 强制渲染
+
+                            /* 用于自定义渲染数组字段 */
+                            renderList,
+                            renderListItem,
+
+                            /* labelCol、wrapperCol配置表单项 字段名及内容 栅格比例 */
+                            labelCol: _labelCol,
+                            wrapperCol: _wrapperCol,
+
+                            initialValue, // 不可用, 使用Form.initialValues 代替
                             ...restFieldProps
                         } = field
-                        if (typeof restFieldProps.labelCol === 'number') {
-                            restFieldProps.labelCol = { span: restFieldProps.labelCol }
+
+                        let fieldLabelCol = _labelCol
+                        let fieldWrapperCol = _wrapperCol
+                        if (typeof fieldLabelCol === 'number') {
+                            fieldLabelCol = { span: fieldLabelCol }
                         }
-                        if (typeof restFieldProps.wrapperCol === 'number') {
-                            restFieldProps.wrapperCol = { span: restFieldProps.wrapperCol }
+                        if (typeof fieldWrapperCol === 'number') {
+                            fieldWrapperCol = { span: fieldWrapperCol }
                         }
+
                         /* prop: attach */
                         if (attach) {
                             originalField.attach = attach
@@ -148,27 +192,50 @@ const FormBlock = (props) => {
                                 </Typography.Text>
                             )
                         }
+
                         /* prop: hidden */
+                        let isHidden = hidden
                         if (typeof hidden === 'function') {
                             hasHiddenFunction = true
-                            const values = ref.current.mounted ? form.getFieldsValue() : {}
-                            const isHidden = hidden({ ...initialValues, ...values })
+                            const values = form.getFieldsValue()
+                            isHidden = hidden({ ...initialValues, ...values })
                             hiddenStatusCaches[name || key] = isHidden
-                            if (isHidden) {
-                                return null
-                            }
-                        } else if (hidden) {
-                            return null
                         }
+                        if (isHidden) {
+                            return name
+                                ? (
+                                    <Form.Item
+                                        key={key || name}
+                                        name={name}
+                                        labelCol={fieldLabelCol ?? labelCol}
+                                        wrapperCol={fieldWrapperCol ?? wrapperCol}
+                                    >
+                                        <span key={key || name} style={{ display: 'none' }} />
+                                    </Form.Item>
+                                ) : null
+                        }
+
+                        /* props.type: WhiteSpace */
+                        if (type === 'WhiteSpace') {
+                            return <div key={key} style={{ height, width: '100%', clear: 'both' }} />
+                        }
+
+                        /* layout === "inline" 且 columnCount 有值时, 需要额外填充满表单项宽度 */
+                        const requiredFillWidth = layout === 'inline' && columnCount
+
                         /* prop: span, layout, columnCount */
                         const colSpan = span || (layout === 'inline' ? undefined : (~~(24 / columnCount) || 24))
                         if (render) {
                             if (type) {
                                 window.console.error('Warning: 使用"render"时, "type"将不生效.')
                                 return (
-                                    <Form.Item label={label}>
+                                    <Form.Item
+                                        label={label}
+                                        labelCol={fieldLabelCol ?? labelCol}
+                                        wrapperCol={fieldWrapperCol ?? wrapperCol}
+                                    >
                                         <Typography.Text className="ant-form-text" type="danger">
-                                        使用&quot;render&quot;时, &quot;type&quot;将不生效.
+                                            使用&quot;render&quot;时, &quot;type&quot;将不生效.
                                         </Typography.Text>
                                     </Form.Item>
                                 )
@@ -180,6 +247,8 @@ const FormBlock = (props) => {
                                         {...restFieldProps}
                                         label={label}
                                         name={undefined}
+                                        labelCol={fieldLabelCol ?? labelCol}
+                                        wrapperCol={fieldWrapperCol ?? wrapperCol}
                                     >
                                         {({ getFieldValue, getFieldsValue }) => {
                                             const values = getFieldsValue()
@@ -226,13 +295,31 @@ const FormBlock = (props) => {
                                                     )
                                                 }
                                                 return (
-                                                    <Form.Item name={name} {...restFieldProps}>
+                                                    <Form.Item
+                                                        name={name}
+                                                        {...restFieldProps}
+                                                        labelCol={fieldLabelCol ?? labelCol}
+                                                        wrapperCol={fieldWrapperCol ?? wrapperCol}
+                                                        className={classNames({
+                                                            'ant-form-item--compact': formItemCompact,
+                                                            'ant-form-item--fill-width': requiredFillWidth,
+                                                        })}
+                                                    >
                                                         <CompWrapper />
                                                     </Form.Item>
                                                 )
                                             }
                                             return (
-                                                <Form.Item name={name} {...restFieldProps}>
+                                                <Form.Item
+                                                    name={name}
+                                                    {...restFieldProps}
+                                                    labelCol={fieldLabelCol ?? labelCol}
+                                                    wrapperCol={fieldWrapperCol ?? wrapperCol}
+                                                    className={classNames({
+                                                        'ant-form-item--compact': formItemCompact,
+                                                        'ant-form-item--fill-width': requiredFillWidth,
+                                                    })}
+                                                >
                                                     {node}
                                                 </Form.Item>
                                             )
@@ -249,6 +336,8 @@ const FormBlock = (props) => {
                                             shouldUpdate={(prevValues, nextValues) => prevValues[name] !== nextValues[name]}
                                             name={name}
                                             {...restFieldProps}
+                                            labelCol={fieldLabelCol ?? labelCol}
+                                            wrapperCol={fieldWrapperCol ?? wrapperCol}
                                         >
                                             {
                                                 (_fields, { add, remove }) => {
@@ -333,7 +422,13 @@ const FormBlock = (props) => {
                             }
                             return (
                                 <Col key={key || name} span={colSpan}>
-                                    <Form.Item label={label} name={name} {...restFieldProps}>
+                                    <Form.Item
+                                        label={label}
+                                        name={name}
+                                        {...restFieldProps}
+                                        labelCol={fieldLabelCol ?? labelCol}
+                                        wrapperCol={fieldWrapperCol ?? wrapperCol}
+                                    >
                                         <CompWrapper />
                                     </Form.Item>
                                 </Col>
@@ -341,7 +436,13 @@ const FormBlock = (props) => {
                         }
                         return (
                             <Col key={key || name} span={colSpan}>
-                                <Form.Item label={label} name={name} {...restFieldProps}>
+                                <Form.Item
+                                    label={label}
+                                    name={name}
+                                    {...restFieldProps}
+                                    labelCol={fieldLabelCol ?? labelCol}
+                                    wrapperCol={fieldWrapperCol ?? wrapperCol}
+                                >
                                     <Comp {...componentProps} />
                                 </Form.Item>
                             </Col>

@@ -80,19 +80,7 @@ const getOpenKey = (map = {}, key, openKeys = []) => {
     return openKeys
 }
 
-interface MainLayoutProps {
-    history: any;
-    children: (nodeMap: any, loadingMenus: boolean) => React.ReactElement<any>;
-}
-
-interface MainLayoutState {
-    openKeys: string[];
-    collapsed: boolean;
-    menuLeft: any;
-    [key: string]: any;
-}
-
-class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
+class MainLayout extends React.Component<any, any> {
     navMap: any;
 
     nodeMap: {};
@@ -345,7 +333,7 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
             loadingMenus,
         } = this.state
         const showHeader = true // TODO:
-        const { history, children } = this.props
+        const { history, render } = this.props
         return (
             <MainLayoutContext.Provider
                 value={{
@@ -452,7 +440,7 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
                         }
                         <ConfigProvider getPopupContainer={() => document.getElementById('main-content') || document.body}>
                             <Content id="main-content" style={{ paddingTop: showHeader ? 50 : 0 }}>
-                                {children(this.nodeMap, loadingMenus)}
+                                {render(this.nodeMap, loadingMenus)}
                             </Content>
                         </ConfigProvider>
                         {
