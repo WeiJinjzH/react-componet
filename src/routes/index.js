@@ -10,6 +10,22 @@ function handleChunkError(error, cb) {
 }
 
 const pageRoutes = [
+    /* 表单测试页面 */
+    {
+        name: '表单测试页面',
+        path: '/form-block',
+        exact: true,
+        needCheckPermission: false,
+        component: asyncDecorator((nextState, cb) => {
+            import(/* webpackChunkName: "form-block" */ '../pages/FormBlockTest')
+                .then(({ default: Component }) => {
+                    cb(null, Component)
+                })
+                .catch((error) => {
+                    handleChunkError(error, cb)
+                })
+        }),
+    },
     /* 首页 */
     {
         name: '首页',

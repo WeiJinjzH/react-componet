@@ -2,7 +2,10 @@
     .ant-form-text {
         word-break: break-all;
         white-space: pre-wrap;
+        line-height: 1.8;
+        margin-top: 8px;
     }
+
     .ant-typography-edit-content {
         line-height: 19px;
         padding-top: 10px;
@@ -10,25 +13,63 @@
         left: -5px;
         margin-top: -7px;
         margin-bottom: 6px;
+
         .ant-input {
             margin-bottom: 0;
             padding: 6px 11px 4px 4px;
             min-height: 31px;
         }
     }
-    &--compact>.items-wrapper>.ant-col {
-        margin-bottom: 4px !important;
+
+    &--compact>.items-wrapper {
+        .ant-col {
+            margin-bottom: 0 !important;
+        }
+
+        .ant-form-item {
+            margin-bottom: 4px !important;
+        }
+
+        .ant-form-explain-holder {
+            display: none;
+        }
     }
-    &--compact>.items-wrapper>.ant-col>.ant-row {
-        margin-bottom: 0 !important;
+
+    &--line-break {
+        flex: 1 0 100%;
+    }
+
+    .ant-form-item--fill-width {
+        width: 100%;
+        display: flex;
+    }
+
+    .ant-form-item--compact {
+        margin-bottom: 0;
     }
 }
 
 .form-block.ant-form-inline {
-    .ant-form-item-with-help {
-        margin-bottom: 0;
+    .ant-col .ant-form-item-label {
+        flex: 0 0 auto;
     }
-    .items-wrapper>.ant-col{
+    
+    .ant-col .ant-form-item-control-wrapper {
+        flex: 1 0;
+    }
+
+    .items-wrapper>.ant-col>.ant-form-item {
         margin-bottom: 24px;
+        &--compact {
+            margin-bottom: 0;
+        }
+    }
+
+    .ant-form-item-with-help {
+        margin-bottom: 5px !important;
+    }
+
+    .ant-form-item {
+        display: flex;
     }
 }

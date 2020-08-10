@@ -6,6 +6,16 @@ import classNames from 'classnames'
 import { PRESET_FORM_COMPONENT_TYPE, PRESET_PROPS_MAP } from './preset.js'
 import './index.less'
 
+const ObservedFormItem = ({
+    children,
+    getUpdater,
+}) => {
+    const [, _update] = useState()
+    const update = _update.bind(null, {})
+    getUpdater(update)
+    return children()
+}
+
 const FormBlock = (props) => {
     const {
         form: _form,
@@ -23,22 +33,22 @@ const FormBlock = (props) => {
         initialValues,
         /* 全局配置表单项span属性 */
         span: _span,
+        /* 表单提交时, 是否返回 hidden 为 true 时隐藏的字段值 */
+        finishWithHiddenValues = false,
         className,
         layout,
         children,
         onSubmit,
-        onFinishFailed,
         minWidth: _minWidth,
         maxWidth: _maxWidth,
         width: _width,
-        colon: _colon,
         onValuesChange,
         ...restFormProps
     } = props
 
     const [form] = Form.useForm(_form)
 
-    let hasHiddenFunction = false // TODO: onValuesChange方法性能优化使用, 待定
+    let hasHiddenFunction = false
 
     const [, _update] = useState()
     const update = _update.bind(null, {})
@@ -61,7 +71,7 @@ const FormBlock = (props) => {
         wrapperCol = { span: wrapperCol }
     }
 
-    const ref = useRef({ hiddenStatusCaches: {} })
+    const ref = useRef({ hiddenStatusCaches: {}, updaterMap: {} })
 
     const { hiddenStatusCaches } = ref.current
 
@@ -82,12 +92,20 @@ const FormBlock = (props) => {
             })}
             form={form}
             layout={layout}
+            scrollToFirstError
             initialValues={initialValues}
             {...restFormProps}
             labelCol={labelCol}
             wrapperCol={wrapperCol}
             onFinish={(values) => {
                 if (onFinish) {
+                    if (!finishWithHiddenValues) {
+                        Object.keys(values).forEach((key) => {
+                            if (hiddenStatusCaches[key]) {
+                                delete values[key]
+                            }
+                        })
+                    }
                     /* 调用"attach"转换输出值 */
                     const attachValue = getAttachValues(values)
                     /* 合并转换后的数据 */
@@ -97,10 +115,13 @@ const FormBlock = (props) => {
             onValuesChange={(changedValues, values) => {
                 if (hasHiddenFunction) {
                     const requireUpdate = fields.filter((item) => typeof item.hidden === 'function')
-                        .some((item) => item.hidden(values) !== hiddenStatusCaches[item.name || item.key])
+                        .some((item) => !!item.hidden(values) !== hiddenStatusCaches[item.key || item.name])
                     requireUpdate && update()
                 }
-                onValuesChange && onValuesChange(changedValues, form.getFieldsValue())
+                Object.keys(ref.current.updaterMap).forEach((key) => {
+                    ref.current.updaterMap[key]()
+                })
+                onValuesChange && onValuesChange(changedValues, values)
             }}
         >
             <Row className="items-wrapper">
@@ -137,7 +158,6 @@ const FormBlock = (props) => {
                             extra: _extra,
                             help: _help,
                             validateStatus: _validateStatus,
-                            colon = _colon,
                             before: _before, // 于表单项组件前插入内容
                             after: _after, // 于表单项组件后插入内容
 
@@ -166,10 +186,12 @@ const FormBlock = (props) => {
                             /* labelCol、wrapperCol配置表单项 字段名及内容 栅格比例 */
                             labelCol: _labelCol,
                             wrapperCol: _wrapperCol,
-
                             initialValue, // 不可用, 使用Form.initialValues 代替
                             ...restFieldProps
                         } = field
+
+                        let help = _help
+                        let validateStatus = _validateStatus
 
                         let fieldLabelCol = _labelCol
                         let fieldWrapperCol = _wrapperCol
@@ -179,18 +201,19 @@ const FormBlock = (props) => {
                         if (typeof fieldWrapperCol === 'number') {
                             fieldWrapperCol = { span: fieldWrapperCol }
                         }
-
+                        if (initialValue) {
+                            window.console.error(`
+                                Warning: 使用Form属性initialValues替代Form.Item属性initialValue
+                            `)
+                        }
                         /* prop: attach */
                         if (attach) {
                             originalField.attach = attach
                         }
                         if (attach && !name) {
                             window.console.error('Warning: 使用"attach"时, "name"为必填项.')
-                            return (
-                                <Typography.Text className="ant-form-text" type="danger">
-                                    使用&quot;attach&quot;时, &quot;name&quot;为必填项.
-                                </Typography.Text>
-                            )
+                            validateStatus = 'error'
+                            help = '使用"attach"时, "name"为必填项.'
                         }
 
                         /* prop: hidden */
@@ -198,8 +221,8 @@ const FormBlock = (props) => {
                         if (typeof hidden === 'function') {
                             hasHiddenFunction = true
                             const values = form.getFieldsValue()
-                            isHidden = hidden({ ...initialValues, ...values })
-                            hiddenStatusCaches[name || key] = isHidden
+                            isHidden = !!hidden({ ...initialValues, ...values })
+                            hiddenStatusCaches[key || name] = isHidden
                         }
                         if (isHidden) {
                             return name
@@ -207,8 +230,12 @@ const FormBlock = (props) => {
                                     <Form.Item
                                         key={key || name}
                                         name={name}
+                                        {...restFieldProps}
+                                        hidden
+                                        rules={undefined}
                                         labelCol={fieldLabelCol ?? labelCol}
                                         wrapperCol={fieldWrapperCol ?? wrapperCol}
+                                        noStyle
                                     >
                                         <span key={key || name} style={{ display: 'none' }} />
                                     </Form.Item>
@@ -224,16 +251,42 @@ const FormBlock = (props) => {
                         const requiredFillWidth = layout === 'inline' && columnCount
 
                         /* prop: span, layout, columnCount */
-                        const colSpan = span || (layout === 'inline' ? undefined : (~~(24 / columnCount) || 24))
+                        let colSpan
+                        if (requiredFillWidth) {
+                            colSpan = span ?? ~~(24 / columnCount)
+                        } else {
+                            colSpan = span ?? (layout === 'inline' ? undefined : (~~(24 / columnCount) || 24))
+                        }
+
+                        /** 拓展FormItem属性支持 */
+                        const enhanceFormItemPorps = () => {
+                            /* 表单所有字段值 */
+                            const values = { ...initialValues, ...form.getFieldsValue() }
+                            /* 表单项当前字段值 */
+                            const value = name ? form.getFieldValue(name) : undefined
+                            /* 拓展extra属性支持函数调用 */
+                            let extra = _extra
+                            if (typeof extra === 'function') {
+                                extra = extra(value, values, form)
+                            }
+                            let before = _before
+                            if (typeof before === 'function') {
+                                before = before(value, values, form)
+                            }
+                            let after = _after
+                            if (typeof after === 'function') {
+                                after = after(value, values, form)
+                            }
+                            return {
+                                values, value, extra, before, after,
+                            }
+                        }
+
                         if (render) {
                             if (type) {
                                 window.console.error('Warning: 使用"render"时, "type"将不生效.')
                                 return (
-                                    <Form.Item
-                                        label={label}
-                                        labelCol={fieldLabelCol ?? labelCol}
-                                        wrapperCol={fieldWrapperCol ?? wrapperCol}
-                                    >
+                                    <Form.Item label={label}>
                                         <Typography.Text className="ant-form-text" type="danger">
                                             使用&quot;render&quot;时, &quot;type&quot;将不生效.
                                         </Typography.Text>
@@ -241,159 +294,240 @@ const FormBlock = (props) => {
                                 )
                             }
                             return (
-                                <Col key={key || name} span={colSpan}>
-                                    <Form.Item
-                                        shouldUpdate={(prevValues, nextValues) => prevValues[name] !== nextValues[name]}
-                                        {...restFieldProps}
-                                        label={label}
-                                        name={undefined}
-                                        labelCol={fieldLabelCol ?? labelCol}
-                                        wrapperCol={fieldWrapperCol ?? wrapperCol}
-                                    >
-                                        {({ getFieldValue, getFieldsValue }) => {
-                                            const values = getFieldsValue()
-                                            const node = render(name ? getFieldValue(name) : undefined, values, form)
-                                            if (typeof node === 'string' || typeof node === 'number') {
-                                                return (
-                                                    <Form.Item name={name}>
-                                                        <span className="ant-form-text">{node}</span>
-                                                    </Form.Item>
-                                                )
-                                            }
-                                            if (parse || format) {
-                                                if (!name) {
-                                                    window.console.error('Warning: 使用"parse"或"format"时, "name"为必填项.')
-                                                    return (
-                                                        <Typography.Text className="ant-form-text" type="danger">
-                                                            使用&quot;parse&quot;或&quot;format&quot;时, &quot;name&quot;为必填项.
-                                                        </Typography.Text>
-                                                    )
+                                <React.Fragment key={key || name}>
+                                    <Col span={colSpan} style={{ minWidth, maxWidth, width }}>
+                                        <ObservedFormItem
+                                            getUpdater={(updater) => {
+                                                if (typeof _before === 'function') {
+                                                    ref.current.updaterMap[key || name] = updater
                                                 }
-                                                const CompWrapper = function CompWrapper(_props) {
-                                                    const Comp = node.type
-                                                    const { validateTrigger, valuePropName } = restFieldProps
-                                                    const valueKey = valuePropName || 'value'
-                                                    const triggerKey = validateTrigger || 'onChange'
+                                                if (typeof _after === 'function') {
+                                                    ref.current.updaterMap[key || name] = updater
+                                                }
+                                                if (typeof _extra === 'function') {
+                                                    ref.current.updaterMap[key || name] = updater
+                                                }
+                                            }}
+                                        >
+                                            {
+                                                () => {
+                                                    const {
+                                                        value, values, extra, before, after,
+                                                    } = enhanceFormItemPorps()
                                                     return (
-                                                        <Comp
-                                                            {...node.props}
-                                                            {...componentProps}
-                                                            {...{
-                                                                [triggerKey]: (...args) => {
-                                                                    if (format) {
-                                                                        _props[triggerKey](format(...args))
-                                                                    } else {
-                                                                        _props[triggerKey](...args)
+                                                        <Form.Item
+                                                            shouldUpdate={(prevValues, nextValues) => prevValues[name] !== nextValues[name]}
+                                                            label={label}
+                                                            name={undefined}
+                                                            extra={extra}
+                                                            help={help}
+                                                            validateStatus={validateStatus}
+                                                            labelCol={fieldLabelCol ?? labelCol}
+                                                            wrapperCol={fieldWrapperCol ?? wrapperCol}
+                                                            className={classNames({
+                                                                'ant-form-item--compact': formItemCompact,
+                                                                'ant-form-item--fill-width': requiredFillWidth,
+                                                            })}
+                                                        >
+                                                            {() => {
+                                                                const node = render(value, values, form)
+                                                                if (node === null
+                                                                    || typeof node === 'string'
+                                                                    || typeof node === 'number'
+                                                                    || typeof node === 'undefined'
+                                                                    || typeof node === 'boolean'
+                                                                    || Array.isArray(node)) {
+                                                                    return (
+                                                                        <>
+                                                                            {before}
+                                                                            <Form.Item
+                                                                                name={name}
+                                                                                {...restFieldProps}
+                                                                                noStyle
+                                                                            >
+                                                                                <span>{node}</span>
+                                                                            </Form.Item>
+                                                                            {after}
+                                                                        </>
+                                                                    )
+                                                                }
+                                                                if (parse || format) {
+                                                                    if (!name) {
+                                                                        window.console.error('Warning: 使用"parse"或"format"时, "name"为必填项.')
+                                                                        return (
+                                                                            <Typography.Text className="ant-form-text" type="danger">
+                                                                                使用&quot;parse&quot;或&quot;format&quot;时, &quot;name&quot;为必填项.
+                                                                            </Typography.Text>
+                                                                        )
                                                                     }
-                                                                    node.props
-                                                                    && node.props[triggerKey]
-                                                                    && node.props[triggerKey](...args)
-                                                                },
-                                                                [valueKey]: parse ? parse(_props[valueKey]) : _props[valueKey],
+                                                                    const CompWrapper = function CompWrapper(_props) {
+                                                                        const Comp = node.type
+                                                                        const { validateTrigger, valuePropName } = restFieldProps
+                                                                        const valueKey = valuePropName || 'value'
+                                                                        const triggerKey = validateTrigger || 'onChange'
+                                                                        return (
+                                                                            <Comp
+                                                                                {...node.props}
+                                                                                {...componentProps}
+                                                                                {...{
+                                                                                    [triggerKey]: (...args) => {
+                                                                                        if (format) {
+                                                                                            _props[triggerKey](format(...args))
+                                                                                        } else {
+                                                                                            _props[triggerKey](...args)
+                                                                                        }
+                                                                                        node.props
+                                                                                        && node.props[triggerKey]
+                                                                                        && node.props[triggerKey](...args)
+                                                                                    },
+                                                                                    [valueKey]: parse ? parse(_props[valueKey]) : _props[valueKey],
+                                                                                }}
+                                                                            />
+                                                                        )
+                                                                    }
+                                                                    return (
+                                                                        <>
+                                                                            {before}
+                                                                            <Form.Item
+                                                                                name={name}
+                                                                                {...restFieldProps}
+                                                                                noStyle
+                                                                            >
+                                                                                <CompWrapper />
+                                                                            </Form.Item>
+                                                                            {after}
+                                                                        </>
+                                                                    )
+                                                                }
+                                                                return (
+                                                                    <>
+                                                                        {before}
+                                                                        <Form.Item
+                                                                            name={name}
+                                                                            {...restFieldProps}
+                                                                            noStyle
+                                                                        >
+                                                                            {node}
+                                                                        </Form.Item>
+                                                                        {after}
+                                                                    </>
+                                                                )
                                                             }}
-                                                        />
+                                                        </Form.Item>
                                                     )
                                                 }
-                                                return (
-                                                    <Form.Item
-                                                        name={name}
-                                                        {...restFieldProps}
-                                                        labelCol={fieldLabelCol ?? labelCol}
-                                                        wrapperCol={fieldWrapperCol ?? wrapperCol}
-                                                        className={classNames({
-                                                            'ant-form-item--compact': formItemCompact,
-                                                            'ant-form-item--fill-width': requiredFillWidth,
-                                                        })}
-                                                    >
-                                                        <CompWrapper />
-                                                    </Form.Item>
-                                                )
                                             }
-                                            return (
-                                                <Form.Item
-                                                    name={name}
-                                                    {...restFieldProps}
-                                                    labelCol={fieldLabelCol ?? labelCol}
-                                                    wrapperCol={fieldWrapperCol ?? wrapperCol}
-                                                    className={classNames({
-                                                        'ant-form-item--compact': formItemCompact,
-                                                        'ant-form-item--fill-width': requiredFillWidth,
-                                                    })}
-                                                >
-                                                    {node}
-                                                </Form.Item>
-                                            )
-                                        }}
-                                    </Form.Item>
-                                </Col>
+                                        </ObservedFormItem>
+                                    </Col>
+                                    {!!lineBreak && <div className="form-block--line-break" />}
+                                </React.Fragment>
                             )
                         }
                         if (renderList || renderListItem) {
                             return (
-                                <Col key={key || name} span={colSpan}>
-                                    <Form.Item label={label}>
-                                        <Form.List
-                                            shouldUpdate={(prevValues, nextValues) => prevValues[name] !== nextValues[name]}
-                                            name={name}
-                                            {...restFieldProps}
-                                            labelCol={fieldLabelCol ?? labelCol}
-                                            wrapperCol={fieldWrapperCol ?? wrapperCol}
+                                <React.Fragment key={key || name}>
+                                    <Col span={colSpan} style={{ minWidth, maxWidth, width }}>
+                                        <ObservedFormItem
+                                            getUpdater={(updater) => {
+                                                if (typeof _before === 'function') {
+                                                    ref.current.updaterMap[key || name] = updater
+                                                }
+                                                if (typeof _after === 'function') {
+                                                    ref.current.updaterMap[key || name] = updater
+                                                }
+                                                if (typeof _extra === 'function') {
+                                                    ref.current.updaterMap[key || name] = updater
+                                                }
+                                            }}
                                         >
                                             {
-                                                (_fields, { add, remove }) => {
-                                                    const itemNodes = []
-                                                    if (renderListItem) {
-                                                        _fields.forEach((_field, index) => {
-                                                            let usedFormItemWrapper = false
-                                                            const formItemWrapper = (_node) => {
-                                                                usedFormItemWrapper = true
-                                                                return (
-                                                                    <Form.Item key={_field.key} {..._field}>
-                                                                        { _node }
-                                                                    </Form.Item>
-                                                                )
-                                                            }
-                                                            let node = renderListItem(_field, index, {
-                                                                formItemWrapper,
-                                                                add,
-                                                                remove,
-                                                                value: form.getFieldValue(name),
-                                                                values: form.getFieldsValue(),
-                                                                form,
-                                                            })
-                                                            if (!usedFormItemWrapper) {
-                                                                node = (
-                                                                    <Form.Item key={_field.key} {..._field}>
-                                                                        { node }
-                                                                    </Form.Item>
-                                                                )
-                                                            }
-                                                            itemNodes.push(node)
-                                                        })
+                                                () => {
+                                                    /* 表单所有字段值 */
+                                                    const values = { ...initialValues, ...form.getFieldsValue() }
+                                                    /* 表单项当前字段值 */
+                                                    const value = name ? form.getFieldValue(name) : undefined
+                                                    /* 拓展extra属性支持函数调用 */
+                                                    let extra = _extra
+                                                    if (typeof extra === 'function') {
+                                                        extra = extra(value, values, form)
                                                     }
-                                                    if (renderList) {
-                                                        return renderList(
-                                                            itemNodes.length > 0 ? itemNodes : _fields,
-                                                            {
-                                                                add,
-                                                                remove,
-                                                                value: form.getFieldValue(name),
-                                                                values: form.getFieldsValue(),
-                                                                form,
-                                                            },
-                                                        )
-                                                    }
-                                                    return <>{itemNodes}</>
+                                                    return (
+                                                        <Form.Item
+                                                            // shouldUpdate={(prevValues, nextValues) => prevValues[name] !== nextValues[name]}
+                                                            label={label}
+                                                            name={undefined}
+                                                            extra={extra}
+                                                            labelCol={fieldLabelCol ?? labelCol}
+                                                            wrapperCol={fieldWrapperCol ?? wrapperCol}
+                                                            className={classNames({
+                                                                'ant-form-item--compact': formItemCompact,
+                                                                'ant-form-item--fill-width': requiredFillWidth,
+                                                            })}
+                                                        >
+                                                            <Form.List
+                                                                shouldUpdate={(prevValues, nextValues) => prevValues[name] !== nextValues[name]}
+                                                                name={name}
+                                                                {...restFieldProps}
+                                                                labelCol={fieldLabelCol ?? labelCol}
+                                                                wrapperCol={fieldWrapperCol ?? wrapperCol}
+                                                            >
+                                                                {
+                                                                    (_fields, { add, remove }) => {
+                                                                        const itemNodes = []
+                                                                        if (renderListItem) {
+                                                                            _fields.forEach((_field, index) => {
+                                                                                let usedFormItemWrapper = false
+                                                                                const formItemWrapper = (_node) => {
+                                                                                    usedFormItemWrapper = true
+                                                                                    return (
+                                                                                        <Form.Item key={_field.key} {..._field}>
+                                                                                            { _node }
+                                                                                        </Form.Item>
+                                                                                    )
+                                                                                }
+                                                                                let node = renderListItem(_field, index, {
+                                                                                    formItemWrapper,
+                                                                                    add,
+                                                                                    remove,
+                                                                                    value: form.getFieldValue(name),
+                                                                                    values: form.getFieldsValue(),
+                                                                                    form,
+                                                                                })
+                                                                                if (!usedFormItemWrapper) {
+                                                                                    node = (
+                                                                                        <Form.Item key={_field.key} {..._field}>
+                                                                                            { node }
+                                                                                        </Form.Item>
+                                                                                    )
+                                                                                }
+                                                                                itemNodes.push(node)
+                                                                            })
+                                                                        }
+                                                                        if (renderList) {
+                                                                            return renderList(
+                                                                                itemNodes.length > 0 ? itemNodes : _fields,
+                                                                                {
+                                                                                    add,
+                                                                                    remove,
+                                                                                    value: form.getFieldValue(name),
+                                                                                    values: form.getFieldsValue(),
+                                                                                    form,
+                                                                                },
+                                                                            )
+                                                                        }
+                                                                        return <>{itemNodes}</>
+                                                                    }
+                                                                }
+                                                            </Form.List>
+                                                        </Form.Item>
+                                                    )
                                                 }
                                             }
-                                        </Form.List>
-                                    </Form.Item>
-                                </Col>
+                                        </ObservedFormItem>
+                                    </Col>
+                                    {!!lineBreak && <div className="form-block--line-break" />}
+                                </React.Fragment>
                             )
-                        }
-                        /* props.type: WhiteSpace */
-                        if (type === 'WhiteSpace') {
-                            return <div key={key || name} style={{ height, width: '100%', clear: 'both' }} />
                         }
                         const Comp = PRESET_FORM_COMPONENT_TYPE[type] || (() => (
                             <Typography.Text
@@ -421,31 +555,88 @@ const FormBlock = (props) => {
                                 )
                             }
                             return (
-                                <Col key={key || name} span={colSpan}>
-                                    <Form.Item
-                                        label={label}
-                                        name={name}
-                                        {...restFieldProps}
-                                        labelCol={fieldLabelCol ?? labelCol}
-                                        wrapperCol={fieldWrapperCol ?? wrapperCol}
-                                    >
-                                        <CompWrapper />
-                                    </Form.Item>
-                                </Col>
+                                <React.Fragment key={key || name}>
+                                    <Col span={colSpan} style={{ minWidth, maxWidth, width }}>
+                                        <ObservedFormItem
+                                            getUpdater={(updater) => {
+                                                if (typeof _before === 'function') {
+                                                    ref.current.updaterMap[key || name] = updater
+                                                }
+                                                if (typeof _after === 'function') {
+                                                    ref.current.updaterMap[key || name] = updater
+                                                }
+                                                if (typeof _extra === 'function') {
+                                                    ref.current.updaterMap[key || name] = updater
+                                                }
+                                            }}
+                                        >
+                                            {
+                                                () => {
+                                                    const { extra } = enhanceFormItemPorps()
+                                                    return (
+                                                        <Form.Item
+                                                            label={label}
+                                                            name={name}
+                                                            {...restFieldProps}
+                                                            extra={extra}
+                                                            labelCol={fieldLabelCol ?? labelCol}
+                                                            wrapperCol={fieldWrapperCol ?? wrapperCol}
+                                                        >
+                                                            <CompWrapper />
+                                                        </Form.Item>
+                                                    )
+                                                }
+                                            }
+                                        </ObservedFormItem>
+                                    </Col>
+                                    {!!lineBreak && <div className="form-block--line-break" />}
+                                </React.Fragment>
                             )
                         }
                         return (
-                            <Col key={key || name} span={colSpan}>
-                                <Form.Item
-                                    label={label}
-                                    name={name}
-                                    {...restFieldProps}
-                                    labelCol={fieldLabelCol ?? labelCol}
-                                    wrapperCol={fieldWrapperCol ?? wrapperCol}
+                            <React.Fragment key={key || name}>
+                                <Col
+                                    span={colSpan}
+                                    style={{ minWidth, maxWidth, width }}
+                                    className={classNames({
+                                        'ant-form-item--compact': formItemCompact,
+                                        'ant-form-item--fill-width': requiredFillWidth,
+                                    })}
                                 >
-                                    <Comp {...componentProps} />
-                                </Form.Item>
-                            </Col>
+                                    <ObservedFormItem
+                                        getUpdater={(updater) => {
+                                            if (typeof _before === 'function') {
+                                                ref.current.updaterMap[key || name] = updater
+                                            }
+                                            if (typeof _after === 'function') {
+                                                ref.current.updaterMap[key || name] = updater
+                                            }
+                                            if (typeof _extra === 'function') {
+                                                ref.current.updaterMap[key || name] = updater
+                                            }
+                                        }}
+                                    >
+                                        {
+                                            () => {
+                                                const { extra } = enhanceFormItemPorps()
+                                                return (
+                                                    <Form.Item
+                                                        label={label}
+                                                        name={name}
+                                                        {...restFieldProps}
+                                                        extra={extra}
+                                                        labelCol={fieldLabelCol ?? labelCol}
+                                                        wrapperCol={fieldWrapperCol ?? wrapperCol}
+                                                    >
+                                                        <Comp {...componentProps} />
+                                                    </Form.Item>
+                                                )
+                                            }
+                                        }
+                                    </ObservedFormItem>
+                                </Col>
+                                {!!lineBreak && <div className="form-block--line-break" />}
+                            </React.Fragment>
                         )
                     })
                 }
