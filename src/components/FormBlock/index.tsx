@@ -1,10 +1,12 @@
 import {
     Col, Form, Row, Typography,
 } from 'antd'
-import React, { useLayoutEffect, useState, useRef, useMemo, useEffect } from 'react'
 import classNames from 'classnames'
-import { PRESET_FORM_COMPONENT_TYPE, PRESET_PROPS_MAP } from './preset.js'
+import React, {
+    useEffect, useLayoutEffect, useRef, useState,
+} from 'react'
 import './index.less'
+import { PRESET_FORM_COMPONENT_TYPE, PRESET_PROPS_MAP } from './preset.js'
 
 /** 更新单个表单项 */
 const ObservedFormItem = ({
@@ -17,6 +19,19 @@ const ObservedFormItem = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     return children()
+}
+
+const getValue = (values, namePath) => {
+    if (values === undefined || values === null) {
+        return values
+    }
+    if (Array.isArray(namePath)) {
+        if (namePath.length > 0) {
+            return getValue(values[namePath[0]], namePath.slice(1))
+        }
+        return values
+    }
+    return values[namePath]
 }
 
 const FormBlock = (props) => {
@@ -79,7 +94,7 @@ const FormBlock = (props) => {
 
     const getAttachValues = (values, filterNames = []) => {
         let attachValues = fields.filter((field) => field.attach && !hiddenStatusCaches[field.name])
-            .map((field) => field.attach(values[field.name], field.name, values))
+            .map((field) => field.attach(getValue(values, field.name), field.name, values))
             .reduce((result, value) => ({ ...result, ...value }), {})
         if (filterNames.length) {
             const filterMap = {}

@@ -33,7 +33,18 @@ export default class FormBlockTest extends Component {
                         label: '字段3', name: 'field3', type: 'Input', rules: [{ required: true }],
                     },
                     { label: '字段4', name: 'field4', type: 'RangePicker' },
-                    { label: '字段5', name: 'field5', type: 'Input' },
+                    {
+                        label: '字段5',
+                        name: ['field5', 'aaa.bb'],
+                        type: 'Input',
+                        attach: (value, name, fieldsValues) => {
+                            console.log('attach: ', value, name)
+                            // delete fieldsValues[name]
+                            return ({
+                                [`double${name[1]}`]: value * 2 || 0,
+                            })
+                        },
+                    },
                     { label: '字段6', name: 'field6', type: 'Input' },
                     { label: '字段7', name: 'field7', type: 'Input' },
                     { label: '字段8', name: 'field8', type: 'Input' },
@@ -73,7 +84,6 @@ export default class FormBlockTest extends Component {
             >
                 <Button htmlType="submit">提交</Button>
                 <Button onClick={() => {
-                    console.log(this.form.getAttachValue('startfield4'))
                     this.form.validateFields().then((values) => {
                         console.log(values)
                     }).catch((error) => {
