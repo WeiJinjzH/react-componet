@@ -1,7 +1,7 @@
 import {
     Col, Form, Row, Typography,
 } from 'antd'
-import React, { useLayoutEffect, useState, useRef } from 'react'
+import React, { useLayoutEffect, useState, useRef, useMemo, useEffect } from 'react'
 import classNames from 'classnames'
 import { PRESET_FORM_COMPONENT_TYPE, PRESET_PROPS_MAP } from './preset.js'
 import './index.less'
@@ -12,8 +12,10 @@ const ObservedFormItem = ({
     getUpdater,
 }) => {
     const [, _update] = useState()
-    const update = _update.bind(null, {})
-    getUpdater(update)
+    useEffect(() => {
+        getUpdater(() => { _update({}) })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
     return children()
 }
 
