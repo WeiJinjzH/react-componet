@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import FormBlock from 'src/components/FormBlock'
 import { Button, Input } from 'antd'
+import { DeleteOutlined } from '@ant-design/icons'
 
 export default class FormBlockTest extends Component {
     render() {
@@ -15,15 +16,23 @@ export default class FormBlockTest extends Component {
                     {
                         label: '字段1',
                         name: 'field1',
-                        type: 'Input',
+                        type: 'InputNumber',
                         rules: [{ required: true }],
+                        attach: (value, name, fieldsValues) => {
+                            delete fieldsValues[name]
+                            return ({
+                                [`double${name}`]: value * 2 || 0,
+                            })
+                        },
                         hidden: () => this.form?.getFieldValue('field2'),
                     },
                     {
                         label: '字段2', name: 'field2', type: 'Input', extra: 123,
                     },
-                    { label: '字段3', name: 'field3', type: 'Input' },
-                    { label: '字段4', name: 'field4', type: 'DatePicker' },
+                    {
+                        label: '字段3', name: 'field3', type: 'Input', rules: [{ required: true }],
+                    },
+                    { label: '字段4', name: 'field4', type: 'RangePicker' },
                     { label: '字段5', name: 'field5', type: 'Input' },
                     { label: '字段6', name: 'field6', type: 'Input' },
                     { label: '字段7', name: 'field7', type: 'Input' },
@@ -44,9 +53,36 @@ export default class FormBlockTest extends Component {
                     },
                     { label: '字段12', name: 'field12', render: () => 'field12' },
                     { label: '字段13', name: 'field13', render: () => 'field13' },
+                    {
+                        label: '字段14',
+                        name: 'field14',
+                        renderList: (itemNodes, { add, remove }) => (
+                            <div>
+                                {itemNodes}
+                                <Button onClick={() => add()} type="primary">Add</Button>
+                            </div>
+                        ),
+                        renderListItem: (field, index, { formItemWrapper, add, remove }) => (
+                            <Input
+                                allowClear
+                                addonAfter={<DeleteOutlined onClick={() => { remove(field.name) }} />}
+                            />
+                        ),
+                    },
                 ]}
             >
                 <Button htmlType="submit">提交</Button>
+                <Button onClick={() => {
+                    console.log(this.form.getAttachValue('startfield4'))
+                    this.form.validateFields().then((values) => {
+                        console.log(values)
+                    }).catch((error) => {
+                        console.log(error)
+                    })
+                }}
+                >
+                    提交
+                </Button>
             </FormBlock>
         )
     }

@@ -6,6 +6,7 @@ import classNames from 'classnames'
 import { PRESET_FORM_COMPONENT_TYPE, PRESET_PROPS_MAP } from './preset.js'
 import './index.less'
 
+/** 更新单个表单项 */
 const ObservedFormItem = ({
     children,
     getUpdater,
@@ -47,7 +48,10 @@ const FormBlock = (props) => {
     } = props
 
     const [form] = Form.useForm(_form)
+    const ref = useRef({ hiddenStatusCaches: {}, updaterMap: {} })
+    const { hiddenStatusCaches, updaterMap } = ref.current
 
+    /** 是否存在函数类型的hidden属性 */
     let hasHiddenFunction = false
 
     const [, _update] = useState()
@@ -71,17 +75,57 @@ const FormBlock = (props) => {
         wrapperCol = { span: wrapperCol }
     }
 
-    const ref = useRef({ hiddenStatusCaches: {}, updaterMap: {} })
+    const getAttachValues = (values, filterNames = []) => {
+        let attachValues = fields.filter((field) => field.attach && !hiddenStatusCaches[field.name])
+            .map((field) => field.attach(values[field.name], field.name, values))
+            .reduce((result, value) => ({ ...result, ...value }), {})
+        if (filterNames.length) {
+            const filterMap = {}
+            filterNames.forEach((fieldName) => {
+                filterMap[fieldName] = attachValues[fieldName]
+            })
+            attachValues = filterMap
+        }
+        return attachValues
+    }
 
-    const { hiddenStatusCaches } = ref.current
+    const formRef = useRef({
+        proxyForm: new Proxy(form, {
+            get: (target, name) => {
+                if (name === 'origin') { return form }
+                if (name === 'validateFields') {
+                    return (...args) => target[name](...args).then((values) => {
+                        const attachValues = getAttachValues(values)
+                        return Promise.resolve({ ...values, ...attachValues })
+                    }).catch((errorInfo) => {
+                        const attachValues = getAttachValues(errorInfo.values)
+                        errorInfo.values = { ...errorInfo.values, ...attachValues }
+                        return Promise.reject(errorInfo)
+                    })
+                }
+                if (name === 'getAttachValues') {
+                    return (...args) => {
+                        const values = target.getFieldsValue()
+                        return getAttachValues(values, args[0])
+                    }
+                }
+                if (name === 'getAttachValue') {
+                    return (fieldName) => {
+                        const values = target.getFieldsValue()
+                        return getAttachValues(values)[fieldName]
+                    }
+                }
+                return target[name]
+            },
+        }),
+    })
 
-    const getAttachValues = (values) => fields.filter((field) => field.attach && !hiddenStatusCaches[field.name])
-        .map((field) => field.attach(values[field.name], field.name, values))
-        .reduce((result, value) => ({ ...result, ...value }), {})
+    const { proxyForm } = formRef.current
 
     useLayoutEffect(() => {
-        getForm && getForm(form)
-    }, [form, getForm])
+        getForm && getForm(proxyForm)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <Form
@@ -118,8 +162,8 @@ const FormBlock = (props) => {
                         .some((item) => !!item.hidden(values) !== hiddenStatusCaches[item.key || item.name])
                     requireUpdate && update()
                 }
-                Object.keys(ref.current.updaterMap).forEach((key) => {
-                    ref.current.updaterMap[key]()
+                Object.keys(updaterMap).forEach((key) => {
+                    updaterMap[key]()
                 })
                 onValuesChange && onValuesChange(changedValues, values)
             }}
@@ -282,33 +326,24 @@ const FormBlock = (props) => {
                             }
                         }
 
-                        if (render) {
-                            if (type) {
-                                window.console.error('Warning: 使用"render"时, "type"将不生效.')
-                                return (
-                                    <Form.Item label={label}>
-                                        <Typography.Text className="ant-form-text" type="danger">
-                                            使用&quot;render&quot;时, &quot;type&quot;将不生效.
-                                        </Typography.Text>
-                                    </Form.Item>
-                                )
+                        const getUpdater = (updater) => {
+                            if (typeof _before === 'function') {
+                                updaterMap[key || name] = updater
+                            } else if (typeof _after === 'function') {
+                                updaterMap[key || name] = updater
+                            } else if (typeof _extra === 'function') {
+                                updaterMap[key || name] = updater
                             }
+                        }
+
+                        if (render && type) {
+                            window.console.error('[FormBlock]Warning: 使用"render"时, "type"将不生效.')
+                        }
+                        if (render) {
                             return (
                                 <React.Fragment key={key || name}>
                                     <Col span={colSpan} style={{ minWidth, maxWidth, width }}>
-                                        <ObservedFormItem
-                                            getUpdater={(updater) => {
-                                                if (typeof _before === 'function') {
-                                                    ref.current.updaterMap[key || name] = updater
-                                                }
-                                                if (typeof _after === 'function') {
-                                                    ref.current.updaterMap[key || name] = updater
-                                                }
-                                                if (typeof _extra === 'function') {
-                                                    ref.current.updaterMap[key || name] = updater
-                                                }
-                                            }}
-                                        >
+                                        <ObservedFormItem getUpdater={getUpdater}>
                                             {
                                                 () => {
                                                     const {
@@ -427,19 +462,7 @@ const FormBlock = (props) => {
                             return (
                                 <React.Fragment key={key || name}>
                                     <Col span={colSpan} style={{ minWidth, maxWidth, width }}>
-                                        <ObservedFormItem
-                                            getUpdater={(updater) => {
-                                                if (typeof _before === 'function') {
-                                                    ref.current.updaterMap[key || name] = updater
-                                                }
-                                                if (typeof _after === 'function') {
-                                                    ref.current.updaterMap[key || name] = updater
-                                                }
-                                                if (typeof _extra === 'function') {
-                                                    ref.current.updaterMap[key || name] = updater
-                                                }
-                                            }}
-                                        >
+                                        <ObservedFormItem getUpdater={getUpdater}>
                                             {
                                                 () => {
                                                     /* 表单所有字段值 */
@@ -472,7 +495,7 @@ const FormBlock = (props) => {
                                                                 wrapperCol={fieldWrapperCol ?? wrapperCol}
                                                             >
                                                                 {
-                                                                    (_fields, { add, remove }) => {
+                                                                    (_fields, { add, remove, move }) => {
                                                                         const itemNodes = []
                                                                         if (renderListItem) {
                                                                             _fields.forEach((_field, index) => {
@@ -489,6 +512,7 @@ const FormBlock = (props) => {
                                                                                     formItemWrapper,
                                                                                     add,
                                                                                     remove,
+                                                                                    move,
                                                                                     value: form.getFieldValue(name),
                                                                                     values: form.getFieldsValue(),
                                                                                     form,
@@ -509,6 +533,7 @@ const FormBlock = (props) => {
                                                                                 {
                                                                                     add,
                                                                                     remove,
+                                                                                    move,
                                                                                     value: form.getFieldValue(name),
                                                                                     values: form.getFieldsValue(),
                                                                                     form,
@@ -529,14 +554,16 @@ const FormBlock = (props) => {
                                 </React.Fragment>
                             )
                         }
-                        const Comp = PRESET_FORM_COMPONENT_TYPE[type] || (() => (
-                            <Typography.Text
-                                className="ant-form-text"
-                                type="danger"
-                            >
-                                {`不支持的组件类型: ${type}`}
-                            </Typography.Text>
-                        ))
+                        const Comp = PRESET_FORM_COMPONENT_TYPE[type] || (function WarningText() {
+                            return (
+                                <Typography.Text
+                                    className="ant-form-text"
+                                    type="danger"
+                                >
+                                    {`不支持的组件类型: ${type}`}
+                                </Typography.Text>
+                            )
+                        })
                         if (parse || format) {
                             const CompWrapper = function CompWrapper(_props) {
                                 const { validateTrigger, valuePropName } = restFieldProps
@@ -557,19 +584,7 @@ const FormBlock = (props) => {
                             return (
                                 <React.Fragment key={key || name}>
                                     <Col span={colSpan} style={{ minWidth, maxWidth, width }}>
-                                        <ObservedFormItem
-                                            getUpdater={(updater) => {
-                                                if (typeof _before === 'function') {
-                                                    ref.current.updaterMap[key || name] = updater
-                                                }
-                                                if (typeof _after === 'function') {
-                                                    ref.current.updaterMap[key || name] = updater
-                                                }
-                                                if (typeof _extra === 'function') {
-                                                    ref.current.updaterMap[key || name] = updater
-                                                }
-                                            }}
-                                        >
+                                        <ObservedFormItem getUpdater={getUpdater}>
                                             {
                                                 () => {
                                                     const { extra } = enhanceFormItemPorps()
@@ -603,19 +618,7 @@ const FormBlock = (props) => {
                                         'ant-form-item--fill-width': requiredFillWidth,
                                     })}
                                 >
-                                    <ObservedFormItem
-                                        getUpdater={(updater) => {
-                                            if (typeof _before === 'function') {
-                                                ref.current.updaterMap[key || name] = updater
-                                            }
-                                            if (typeof _after === 'function') {
-                                                ref.current.updaterMap[key || name] = updater
-                                            }
-                                            if (typeof _extra === 'function') {
-                                                ref.current.updaterMap[key || name] = updater
-                                            }
-                                        }}
-                                    >
+                                    <ObservedFormItem getUpdater={getUpdater}>
                                         {
                                             () => {
                                                 const { extra } = enhanceFormItemPorps()
