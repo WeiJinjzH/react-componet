@@ -34,7 +34,7 @@
         "react": {
             "createClass": "createReactClass",
             "pragma": "React",
-            "version": "16.9.0"
+            "version": "16.13.1"
         },
         "propWrapperFunctions": [
             "forbidExtraProps"

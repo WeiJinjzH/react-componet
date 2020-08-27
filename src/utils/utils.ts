@@ -94,129 +94,19 @@ const common = {
         url = url.slice(0, url.length - 1)
         return url
     },
-    // 添加序号
-    addRowIndex(res) {
-        const { data } = res
-        if (data.pageNum && Array.isArray(data.list)) {
-            data.list.forEach((item, i) => {
-                item.rowIndex = data.pageSize * (data.pageNum - 1) + i + 1
-            })
-        } else if (Array.isArray(data)) {
-            data.forEach((item, i) => {
-                item.rowIndex = i + 1
-            })
-        }
-        return res
-    },
-    convertCurrency(money) {
-        // 汉字的数字
-        const cnNums = new Array('零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖')
-        // 基本单位
-        const cnIntRadice = new Array('', '拾', '佰', '仟')
-        // 对应整数部分扩展单位
-        const cnIntUnits = new Array('', '万', '亿', '兆')
-        // 对应小数部分单位
-        const cnDecUnits = new Array('角', '分', '毫', '厘')
-        // 整数金额时后面跟的字符
-        const cnInteger = '整'
-        // 整型完以后的单位
-        const cnIntLast = '元'
-        // 最大处理的数字
-        const maxNum = 999999999999999.9999
-        // 金额整数部分
-        let integerNum
-        // 金额小数部分
-        let decimalNum
-        // 输出的中文金额字符串
-        let chineseStr = ''
-        // 分离金额后用的数组，预定义
-        let parts
-        if (money === '') { return '' }
-        money = parseFloat(money)
-        if (money >= maxNum) {
-            // 超出最大处理数字
-            return ''
-        }
-        if (money === 0) {
-            chineseStr = cnNums[0] + cnIntLast + cnInteger
-            return chineseStr
-        }
-        // 转换为字符串
-        money = money.toString()
-        if (money.indexOf('.') == -1) {
-            integerNum = money
-            decimalNum = ''
-        } else {
-            parts = money.split('.')
-            integerNum = parts[0]
-            decimalNum = parts[1].substr(0, 4)
-        }
-        // 获取整型部分转换
-        if (parseInt(integerNum, 10) > 0) {
-            let zeroCount = 0
-            const IntLen = integerNum.length
-            for (var i = 0; i < IntLen; i++) {
-                var n = integerNum.substr(i, 1)
-                const p = IntLen - i - 1
-                const q = p / 4
-                const m = p % 4
-                if (n === '0') {
-                    zeroCount++
-                } else {
-                    if (zeroCount > 0) {
-                        chineseStr += cnNums[0]
-                    }
-                    // 归零
-                    zeroCount = 0
-                    chineseStr += cnNums[parseInt(n)] + cnIntRadice[m]
-                }
-                if (m === 0 && zeroCount < 4) {
-                    chineseStr += cnIntUnits[q]
-                }
-            }
-            chineseStr += cnIntLast
-        }
-        // 小数部分
-        if (decimalNum !== '') {
-            const decLen = decimalNum.length
-            for (var i = 0; i < decLen; i++) {
-                var n = decimalNum.substr(i, 1)
-                if (n !== '0') {
-                    chineseStr += cnNums[Number(n)] + cnDecUnits[i]
-                }
-            }
-        }
-        if (chineseStr === '') {
-            chineseStr += cnNums[0] + cnIntLast + cnInteger
-        } else if (decimalNum === '') {
-            chineseStr += cnInteger
-        }
-        return chineseStr
-    },
-    formatMoney(number: number|string, places: number, symbol?: string, thousand?: string, decimal?: string) {
+    formatMoney(number, places, symbol, thousand, decimal) {
         number = number || 0
-        places = !isNaN(places = Math.abs(places))
-            ? places
-            : 2
-        symbol = symbol !== undefined
-            ? symbol
-            : '' // 前缀符号如 ￥ $
+        places = !isNaN(places = Math.abs(places)) ? places : 2
+        symbol = symbol !== undefined ? symbol : '' // 前缀符号如 ￥ $
         thousand = thousand || ','
         decimal = decimal || '.'
-        const negative = number < 0
-            ? '-'
-            : ''
-        const i = `${parseInt(number = Math.abs(+number || 0).toFixed(places), 10)}`
-        var j = (j = i.length) > 3
-            ? j % 3
-            : 0
-        return symbol + negative + (j
-            ? i.substr(0, j) + thousand
-            : '') + i
+        var negative = number < 0 ? '-' : ''
+        number = NP.round(Math.abs(+number || 0), places)
+        var i = `${parseInt(number, 10)}`
+        var j = (j = i.length) > 3 ? j % 3 : 0
+        return symbol + negative + (j ? i.substr(0, j) + thousand : '') + i
             .substr(j)
-            .replace(/(\d{3})(?=\d)/g, `$1${thousand}`) + (places
-            ? decimal + Math.abs(Number(number) - Number(i)).toFixed(places).slice(2)
-            : '')
+            .replace(/(\d{3})(?=\d)/g, `$1${thousand}`) + (places ? decimal + Math.abs(number - Number(i)).toFixed(places).slice(2) : '')
     },
     /* 节流函数 */
     throttle(action, delay: number) {

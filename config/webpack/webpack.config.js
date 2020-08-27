@@ -206,8 +206,8 @@ const config = {
         }),
         new webpack.ProvidePlugin({
             React: 'react',
-            createReactClass: 'create-react-class',
             utils: ['src/utils', 'default'],
+            NP: 'number-precision',
         }),
         new MiniCssExtractPlugin({
             filename: isProduction ? 'static/css/[name].[chunkhash:8].css' : 'static/css/[name].css',
