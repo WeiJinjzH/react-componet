@@ -25,6 +25,9 @@ const Text = (props) => {
 
 const PRESET_FORM_COMPONENT_TYPE = {
     Input,
+    InputPassword: Input.Password,
+    InputSearch: Input.Search,
+    TextArea: Input.TextArea,
     InputNumber,
     Select,
     Switch,
