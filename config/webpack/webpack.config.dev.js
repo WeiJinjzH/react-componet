@@ -1,6 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
-const OpenBrowserPlugin = require('open-browser-webpack-plugin')
+const OpenBrowser = require('react-dev-utils/openBrowser')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlPlugin = require('html-webpack-plugin')
 
@@ -38,7 +38,11 @@ module.exports = {
             hash: false,
         }),
         new webpack.HotModuleReplacementPlugin(),
-        new OpenBrowserPlugin({ url: `http://localhost:${devPort}` }),
+        () => {
+            if (OpenBrowser(`http://localhost:${devPort}`)) {
+                global.console.log(`已打开浏览器标签: http://localhost:${devPort}\n请等待项目编译完成。`)
+            }
+        },
     ],
     devtool: 'source-map',
 }

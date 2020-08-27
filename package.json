@@ -103,6 +103,7 @@
         "open-browser-webpack-plugin": "0.0.5",
         "postcss-less": "^3.0.2",
         "postcss-loader": "^3.0.0",
+        "react-dev-utils": "^10.2.1",
         "react-hot-loader": "^4.12.21",
         "source-map-loader": "^0.2.4",
         "style-loader": "^1.2.1",
