@@ -339,7 +339,7 @@ const FormBlock = (props) => {
                                 after = after(value, values, form)
                             }
                             return {
-                                values, value, extra, before, after,
+                                extra, before, after,
                             }
                         }
 
@@ -363,14 +363,13 @@ const FormBlock = (props) => {
                                         <ObservedFormItem getUpdater={getUpdater}>
                                             {
                                                 () => {
-                                                    const {
-                                                        value, values, extra, before, after,
-                                                    } = enhanceFormItemPorps()
+                                                    const { extra, before, after } = enhanceFormItemPorps()
                                                     return (
                                                         <Form.Item
                                                             shouldUpdate={(prevValues, nextValues) => prevValues[name] !== nextValues[name]}
                                                             label={label}
                                                             name={undefined}
+                                                            {...restFieldProps}
                                                             extra={extra}
                                                             help={help}
                                                             validateStatus={validateStatus}
@@ -382,6 +381,10 @@ const FormBlock = (props) => {
                                                             })}
                                                         >
                                                             {() => {
+                                                                /* 表单所有字段值 */
+                                                                const values = { ...initialValues, ...form.getFieldsValue() }
+                                                                /* 表单项当前字段值 */
+                                                                const value = name ? form.getFieldValue(name) : undefined
                                                                 const node = render(value, values, form)
                                                                 if (node === null
                                                                     || typeof node === 'string'
@@ -496,6 +499,7 @@ const FormBlock = (props) => {
                                                             // shouldUpdate={(prevValues, nextValues) => prevValues[name] !== nextValues[name]}
                                                             label={label}
                                                             name={undefined}
+                                                            {...restFieldProps}
                                                             extra={extra}
                                                             labelCol={fieldLabelCol ?? labelCol}
                                                             wrapperCol={fieldWrapperCol ?? wrapperCol}
