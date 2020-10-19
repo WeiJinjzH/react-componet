@@ -247,6 +247,9 @@ const FormBlock = (props) => {
                             /* labelCol、wrapperCol配置表单项 字段名及内容 栅格比例 */
                             labelCol: _labelCol,
                             wrapperCol: _wrapperCol,
+
+                            colProps,
+
                             initialValue, // 不可用, 使用Form.initialValues 代替
                             ...restFieldProps
                         } = field
@@ -359,7 +362,13 @@ const FormBlock = (props) => {
                         if (render) {
                             return (
                                 <React.Fragment key={key || name}>
-                                    <Col span={colSpan} style={{ minWidth, maxWidth, width }}>
+                                    <Col
+                                        span={colSpan}
+                                        {...colProps}
+                                        style={{
+                                            minWidth, maxWidth, width, ...colProps?.style,
+                                        }}
+                                    >
                                         <ObservedFormItem getUpdater={getUpdater}>
                                             {
                                                 () => {
@@ -481,7 +490,13 @@ const FormBlock = (props) => {
                         if (renderList || renderListItem) {
                             return (
                                 <React.Fragment key={key || name}>
-                                    <Col span={colSpan} style={{ minWidth, maxWidth, width }}>
+                                    <Col
+                                        span={colSpan}
+                                        {...colProps}
+                                        style={{
+                                            minWidth, maxWidth, width, ...colProps?.style,
+                                        }}
+                                    >
                                         <ObservedFormItem getUpdater={getUpdater}>
                                             {
                                                 () => {
@@ -604,7 +619,13 @@ const FormBlock = (props) => {
                             }
                             return (
                                 <React.Fragment key={key || name}>
-                                    <Col span={colSpan} style={{ minWidth, maxWidth, width }}>
+                                    <Col
+                                        span={colSpan}
+                                        {...colProps}
+                                        style={{
+                                            minWidth, maxWidth, width, ...colProps?.style,
+                                        }}
+                                    >
                                         <ObservedFormItem getUpdater={getUpdater}>
                                             {
                                                 () => {
@@ -633,10 +654,14 @@ const FormBlock = (props) => {
                             <React.Fragment key={key || name}>
                                 <Col
                                     span={colSpan}
-                                    style={{ minWidth, maxWidth, width }}
+                                    {...colProps}
+                                    style={{
+                                        minWidth, maxWidth, width, ...colProps?.style,
+                                    }}
                                     className={classNames({
                                         'ant-form-item--compact': formItemCompact,
                                         'ant-form-item--fill-width': requiredFillWidth,
+                                        [colProps?.className]: !!colProps?.className,
                                     })}
                                 >
                                     <ObservedFormItem getUpdater={getUpdater}>

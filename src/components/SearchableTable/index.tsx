@@ -43,7 +43,6 @@ const getDataSourceFromPaths = (_data, paths) => {
     return _data
 }
 
-
 const SearchableTable = ({
     searchFileds,
     searchURL,
