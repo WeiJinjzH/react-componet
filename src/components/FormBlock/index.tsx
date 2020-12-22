@@ -13,7 +13,7 @@ const ObservedFormItem = ({
     children,
     getUpdater,
 }) => {
-    const [, _update] = useState()
+    const [, _update] = useState({})
     useEffect(() => {
         getUpdater(() => { _update({}) })
     // eslint-disable-next-line react-hooks/exhaustive-deps
