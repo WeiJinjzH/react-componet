@@ -10,21 +10,8 @@ const config = {
                 loaders: ['babel-loader', 'awesome-typescript-loader'],
             },
             {
-                test: /\.css$/,
-                use: [
-                    'style-loader',
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            sourceMap: true,
-                            importLoaders: 1,
-                        },
-                    },
-                    'postcss-loader',
-                ],
-            },
-            {
                 test: /\.less$/,
+                exclude: /node_modules/,
                 use: [
                     'style-loader',
                     {
@@ -42,19 +29,22 @@ const config = {
                             importLoaders: 1,
                         },
                     },
-                    'postcss-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            config: {
+                                path: './config/postcss.config.js',
+                            },
+                        },
+                    },
                 ],
-            },
-            {
-                test: /\.(gif|jpg|png|svg|woff|eot|ttf|pdf)\??.*$/,
-                loader: 'url-loader?limit=1000',
             },
         ],
     },
     plugins: [
         new webpack.ProvidePlugin({
             React: 'react',
-            utils: ['src/assets/utils/utils.js', 'default'],
+            utils: ['src/utils/utils.ts', 'default'],
             NP: 'number-precision',
         }),
     ],

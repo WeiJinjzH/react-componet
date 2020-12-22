@@ -36,6 +36,8 @@ const PRESET_FORM_COMPONENT_TYPE = {
     RangePickerWithTime: DatePicker.RangePicker,
     RadioGroup: Radio.Group,
     Text,
+    Money: Text,
+    Percent: Text,
 }
 
 const PRESET_PROPS_MAP = {
@@ -57,6 +59,36 @@ const PRESET_PROPS_MAP = {
                 [`end${name}`]: values && values[1] && values[1].format('YYYY-MM-DD HH:mm:ss'),
             })
         },
+    },
+    Money: (field) => {
+        const { precision = 2, prefix = '¥', trim = false } = field?.props || {}
+        return ({
+            parse: (value) => {
+                if (Number.isNaN(Number(value))) {
+                    return '-'
+                }
+                const moneyString = utils.formatMoney(value, precision, prefix)
+                if (trim && moneyString.indexOf('.')) {
+                    return moneyString.replace(/\.?0+$/g, '')
+                }
+                return moneyString
+            },
+        })
+    },
+    Percent: (field) => {
+        const { precision = 2, trim = false } = field?.props || {}
+        return ({
+            parse: (value) => {
+                if (Number.isNaN(Number(value))) {
+                    return '-'
+                }
+                const percent = Number(value * 100).toFixed(precision)
+                if (trim) {
+                    return `${+Number(percent)}%`
+                }
+                return `${percent}%`
+            },
+        })
     },
     DatePicker: {
         parse: (value) => value && moment(value),

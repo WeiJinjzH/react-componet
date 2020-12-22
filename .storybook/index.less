@@ -1,32 +1,28 @@
-@import "./assets/theme/index.less";
+@import "../src/assets/theme/index.less";
 
-html {
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
+body {
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
 }
 
 html,
-#app,
-body {
-    /* height: 100%; */
-    min-width: 1280px;
+body,
+#app {
+    height: 100%;
+    min-width: 1200px;
 }
 
-body {
-    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif !important;
+.render-form--readonly {
+    .ant-form-item {
+        margin-bottom: 0;
+    }
+
+    .ant-form-explain-holder {
+        display: none;
+    }
 }
 
-.color-success {
-    color: #5FCF6A;
-}
-
-.color-failing {
-    color: #EE4E4E;
-}
-
-.color-pending {
-    color: #dbd939;
+.ant-form-item--readonly {
+    margin-bottom: 0;
 }
 
 /* 表格操作列, text-button左对齐 */
@@ -37,265 +33,4 @@ body {
 
 .ant-table-row td .text-button:last-child {
     margin-right: 0;
-}
-
-/* 编号关联 */
-.number-associated {
-    color: #1890ff;
-}
-
-.number-unassociated {
-    color: #3c9012;
-}
-
-/* 表格 公共样式 */
-.te-table {
-    /* filter: drop-shadow(0px 2px 16px rgba(0, 0, 0, 0.1)); */
-
-    .ant-table-title {
-        background-color: #fff;
-    }
-
-    .ant-table-title+.ant-table-content {
-        border-radius: 0;
-
-        .ant-table-fixed {
-            border-radius: 0;
-        }
-
-        .ant-table-row-cell-break-word {
-            border-top-left-radius: 0;
-        }
-
-        .ant-table-row-cell-last {
-            border-top-right-radius: 0;
-        }
-    }
-
-    .ant-table-thead>tr>th {
-        background-color: #F4F6F8;
-        border-bottom: none;
-        color: #666666;
-    }
-
-    .ant-table-tbody>tr>td {
-        border-bottom: 1px solid #F0F4F9;
-        color: #666666;
-    }
-
-    .ant-table-content {
-        border-radius: 6px;
-        overflow: hidden;
-    }
-
-    .ant-table-tbody {
-        background: #FFFFFF;
-    }
-
-    .ant-table-content>div:last-child .ant-table-tbody {
-        border-radius: 0 0 6px 6px;
-        overflow: hidden;
-    }
-
-    .ant-table-content>div:last-child .ant-table-tbody>tr:last-child>td:first-child {
-        border-bottom-left-radius: 6px;
-    }
-
-    .ant-table-content>div:last-child .ant-table-tbody>tr:last-child>td:last-child {
-        border-bottom-right-radius: 6px;
-    }
-
-    .ant-table-footer {
-        background: #F4F6F8;
-        color: #666666;
-    }
-
-    .ant-btn-link {
-        padding: 0;
-    }
-
-    .ant-btn+.ant-btn {
-        margin-left: 8px;
-    }
-
-
-    & .ant-table-small {
-        .ant-table-body {
-            margin: 0;
-        }
-
-        &.ant-table-empty .ant-table-placeholder {
-            border-right: none;
-            border-left: none;
-        }
-
-        &>.ant-table-content>.ant-table-body>table>.ant-table-thead>tr>th {
-            background-color: #F4F6F8;
-            border-bottom: 1px solid #F0F4F9;
-        }
-
-        .ant-table-content>div:last-child .ant-table-thead>tr>th:last-child {
-            border-right: none;
-        }
-
-        .ant-table-content>div:last-child .ant-table-tbody>tr>td:last-child {
-            border-right: none;
-        }
-    }
-
-    .ant-table-scroll {
-        .ant-table-body {
-            background: #fff;
-        }
-
-        .ant-table-fixed .ant-table-tbody>tr:last-child>td:first-child {
-            border-bottom-left-radius: 0;
-        }
-
-        .ant-table-fixed .ant-table-tbody>tr:last-child>td:last-child {
-            border-bottom-right-radius: 0;
-        }
-    }
-
-    .ant-table-scroll>div:last-child {
-        .ant-table-body {
-            background: none;
-        }
-
-        .ant-table-fixed .ant-table-tbody>tr:last-child>td:first-child {
-            border-bottom-left-radius: 6px;
-        }
-
-        .ant-table-fixed .ant-table-tbody>tr:last-child>td:last-child {
-            border-bottom-right-radius: 6px;
-        }
-    }
-
-    .ant-table-fixed-right {
-        .ant-table-fixed {
-            background: none;
-        }
-
-        .ant-table-fixed .ant-table-tbody>tr:last-child>td:first-child {
-            border-bottom-left-radius: 0 !important;
-        }
-
-        .ant-table-fixed .ant-table-tbody>tr:last-child>td:last-child {
-            border-bottom-right-radius: 6px !important;
-        }
-    }
-}
-
-/* 内嵌表格 公共样式 */
-.te-table-inline {
-    .ant-table-thead>tr>th {
-        background-color: #F4F6F8 !important;
-        border-bottom: none;
-        color: #666666;
-    }
-
-    .ant-table-tbody>tr>td {
-        border-bottom: 1px solid #F0F4F9;
-        color: #666666;
-    }
-
-    .ant-table-tbody>tr:last-child>td {
-        border-bottom: none;
-    }
-
-    .ant-table-tbody {
-        background: #FFFFFF;
-    }
-
-    .ant-table-content>div:last-child .ant-table-tbody {
-        border-radius: 0 0 6px 6px;
-        overflow: hidden;
-    }
-
-    .ant-table-content>div:last-child .ant-table-tbody>tr:last-child>td:first-child {
-        border-bottom-left-radius: 6px;
-    }
-
-    .ant-table-content>div:last-child .ant-table-tbody>tr:last-child>td:last-child {
-        border-bottom-right-radius: 6px;
-    }
-
-    .ant-table-footer {
-        background: #F4F6F8;
-        color: #666666;
-    }
-
-    & .ant-table-empty .ant-table-placeholder {
-        border-right: 1px solid #dddddd;
-        border-left: 1px solid #dddddd;
-    }
-
-    /*& .ant-table-thead > tr > th:last-child,
-        & .ant-table-tbody > tr > td:last-child {
-            border-right: 1px solid #dddddd;
-        }*/
-    & .ant-table-header>table,
-    & .ant-table-body>table,
-    & .ant-table-fixed-left table,
-    & .ant-table-fixed-right table {
-        border-radius: 6px;
-        border: 1px solid #dddddd;
-    }
-
-    & .ant-table-empty table {
-        border-radius: 6px 6px 0 0;
-    }
-
-    .ant-btn-link {
-        padding: 0;
-    }
-
-    .ant-btn+.ant-btn {
-        margin-left: 8px;
-    }
-
-    & .ant-table-small {
-        .ant-table-body {
-            margin: 0;
-        }
-
-        &.ant-table-empty .ant-table-placeholder {
-            border-right: none;
-            border-left: none;
-        }
-
-        &>.ant-table-content>.ant-table-body>table>.ant-table-thead>tr>th {
-            background-color: #F4F6F8 !important;
-            border-bottom: 1px solid #F0F4F9;
-        }
-
-        .ant-table-content>div:last-child .ant-table-thead>tr>th:last-child {
-            border-right: none;
-        }
-
-        .ant-table-content>div:last-child .ant-table-tbody>tr>td:last-child {
-            border-right: none;
-        }
-
-        &.ant-table-bordered .ant-table-content {
-            border-radius: 6px;
-        }
-    }
-}
-
-/* Modal下的SearchableTable内边距及阴影调整 */
-.ant-modal-body {
-    .searchable-table {
-        padding: 0;
-        box-shadow: none;
-    }
-}
-
-.ant-breadcrumb>span:last-child a {
-    font-weight: bold;
-}
-
-/* patch:表格使用fixed模式时, 水平空间足够时底部依旧出现滚动条的问题 */
-.ant-table-body {
-    overflow-x: auto !important;
 }
