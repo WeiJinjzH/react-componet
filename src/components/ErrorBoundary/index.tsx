@@ -1,41 +1,49 @@
 import React from 'react'
+import { Alert } from 'antd'
 
-// const fundebug = require('fundebug-javascript')
-// require('fundebug-revideo')
-
-// fundebug.init({
-//     apikey: 'e133bf0841efbbfa0f26585bdfda36c8f4bd0af27b4db771ace81d10e0bbf015',
-//     silentHttp: true,
-// })
-
-interface ErrorBoundaryProps {
-    children: React.ReactChild;
-}
-
-interface ErrorBoundaryState {
-    hasError: boolean;
-}
-
-class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-    constructor(props: ErrorBoundaryProps) {
+class ErrorBoundary extends React.Component<any, any> {
+    constructor(props) {
         super(props)
         this.state = {
-            hasError: false,
+            error: undefined,
+            errorInfo: undefined,
         }
     }
 
-    componentDidCatch(error, info) {
-        this.setState({ hasError: true })
-        // fundebug.notifyError(error, {
-        //     metaData: {
-        //         info,
-        //     },
-        // })
+    componentDidCatch(error, errorInfo) {
+        if (error?.name === 'ChunkLoadError' && window.sessionStorage.getItem('prevChunkError') !== error.request) {
+            window.sessionStorage.setItem('prevChunkError', error.request)
+            window.location.reload(true)
+        } else {
+            this.setState({ error, errorInfo })
+        }
     }
 
     render() {
-        if (this.state.hasError) {
-            return <div style={{ textAlign: 'center' }}>组件出错。</div>
+        if (this.state.errorInfo) {
+            return (
+                <div style={{ textAlign: 'center' }}>
+                    <Alert
+                        message=""
+                        type="error"
+                        description={(
+                            <div
+                                style={{
+                                    maxHeight: '50vh',
+                                    overflow: 'auto',
+                                    whiteSpace: 'pre-line',
+                                    textAlign: 'left',
+                                }}
+                            >
+                                <h1>组件出错</h1>
+                                {this.state.error && this.state.error.toString()}
+                                <br />
+                                {this.state.errorInfo.componentStack}
+                            </div>
+                        )}
+                    />
+                </div>
+            )
         }
         return this.props.children
     }

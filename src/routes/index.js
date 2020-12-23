@@ -1,13 +1,4 @@
-import asyncDecorator from 'src/components/AsyncWrapper/decorator'
-
-function handleChunkError(error, cb) {
-    if (window.sessionStorage.getItem('prevChunkError') !== error.request) {
-        window.sessionStorage.setItem('prevChunkError', error.request)
-        window.location.reload(true)
-    } else {
-        cb(null, () => <div style={{ textAlign: 'center', marginTop: 100 }}>页面资源加载出错, 请检查网络状态。</div>)
-    }
-}
+import React from 'react'
 
 const pageRoutes = [
     /* 表单测试页面 */
@@ -16,15 +7,10 @@ const pageRoutes = [
         path: '/form-block',
         exact: true,
         needCheckPermission: false,
-        component: asyncDecorator((nextState, cb) => {
-            import(/* webpackChunkName: "form-block" */ '../pages/FormBlockTest')
-                .then(({ default: Component }) => {
-                    cb(null, Component)
-                })
-                .catch((error) => {
-                    handleChunkError(error, cb)
-                })
-        }),
+        component: React.lazy(() => import(
+            /* webpackChunkName: "form-block" */
+            '../pages/FormBlockTest'
+        )),
     },
     /* 首页 */
     {
@@ -32,45 +18,30 @@ const pageRoutes = [
         path: '/',
         exact: true,
         needCheckPermission: false,
-        component: asyncDecorator((nextState, cb) => {
-            import(/* webpackChunkName: "home" */ '../pages/Home')
-                .then(({ default: Component }) => {
-                    cb(null, Component)
-                })
-                .catch((error) => {
-                    handleChunkError(error, cb)
-                })
-        }),
+        component: React.lazy(() => import(
+            /* webpackChunkName: "home" */
+            '../pages/Home'
+        )),
     },
     /* 无权限访问 */
     {
         name: '无权限访问',
         path: '/403',
         exact: true,
-        component: asyncDecorator((nextState, cb) => {
-            import(/* webpackChunkName: "403" */ '../pages/Error/403')
-                .then(({ default: Component }) => {
-                    cb(null, Component)
-                })
-                .catch((error) => {
-                    handleChunkError(error, cb)
-                })
-        }),
+        component: React.lazy(() => import(
+            /* webpackChunkName: "403" */
+            '../pages/Error/403'
+        )),
     },
     /* 页面不存在 */
     {
         name: '页面不存在',
         path: '/404',
         exact: false,
-        component: asyncDecorator((nextState, cb) => {
-            import(/* webpackChunkName: "404" */ '../pages/Error/404')
-                .then(({ default: Component }) => {
-                    cb(null, Component)
-                })
-                .catch((error) => {
-                    handleChunkError(error, cb)
-                })
-        }),
+        component: React.lazy(() => import(
+            /* webpackChunkName: "404" */
+            '../pages/Error/404'
+        )),
     },
 ]
 

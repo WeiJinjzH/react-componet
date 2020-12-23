@@ -1,39 +1,28 @@
-
 import React from 'react'
 import { Spin } from 'antd'
 import ErrorBoundary from 'src/components/ErrorBoundary'
 
-type getComponentCallback = (param: any, Comp: React.ComponentClass) => void
+export default class AsyncWrapper extends React.Component<any, any> {
+    destroyed: boolean
 
-interface AsyncWrapperProps {
-    routeItem: {
-        getComponent: ({}, callback: getComponentCallback) => void;
-    };
-}
-
-interface AsyncWrapperState {
-    Comp?: React.ComponentClass;
-    loading: boolean;
-}
-
-class AsyncWrapper extends React.Component<AsyncWrapperProps, AsyncWrapperState> {
-    destroyed = false
-
-    constructor(props: AsyncWrapperProps) {
+    constructor(props) {
         super(props)
         this.state = {
             Comp: null,
-            loading: true,
+            loading: false,
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         const { routeItem } = this.props
         if (routeItem.getComponent) {
-            routeItem.getComponent({}, (param, Comp) => {
+            setTimeout(() => {
                 if (!this.destroyed) {
-                    this.setState({ Comp })
+                    this.setState({ loading: true })
                 }
+            }, 100)
+            routeItem.getComponent({}, (param, Comp) => {
+                this.setState({ Comp })
             })
         }
     }
@@ -45,11 +34,7 @@ class AsyncWrapper extends React.Component<AsyncWrapperProps, AsyncWrapperState>
     render() {
         const { Comp } = this.state
         if (Comp) {
-            return (
-                <ErrorBoundary>
-                    <Comp {...this.props} />
-                </ErrorBoundary>
-            )
+            return (<ErrorBoundary><Comp {...this.props} /></ErrorBoundary>)
         }
         return (
             <div
@@ -63,5 +48,3 @@ class AsyncWrapper extends React.Component<AsyncWrapperProps, AsyncWrapperState>
         )
     }
 }
-
-export default AsyncWrapper

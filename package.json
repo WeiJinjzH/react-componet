@@ -29,7 +29,6 @@
     "bizcharts": "^4.0.16",
     "braft-editor": "^2.3.9",
     "core-js": "^3.8.1",
-    "create-react-class": "^15.7.0",
     "css3transform": "^1.2.3",
     "fundebug-javascript": "^2.4.2",
     "fundebug-revideo": "^0.6.1",
