@@ -1,3 +1,4 @@
+import { DeleteOutlined } from '@ant-design/icons'
 import { Button, Input } from 'antd'
 import React from 'react'
 import FormBlock from '../src/components/FormBlock'
@@ -29,6 +30,26 @@ export const Basic = () => (
             },
             { label: '字段2', name: 'field2', type: 'Input' },
             { label: '字段3', name: 'field3', type: 'DatePicker' },
+            {
+                label: '字段5',
+                name: 'field5',
+                renderList: function renderList(itemNodes, { add }) {
+                    return (
+                        <div>
+                            {itemNodes}
+                            <Button onClick={() => add(itemNodes.length + 1)} type="primary">Add</Button>
+                        </div>
+                    )
+                },
+                renderListItem: function renderListItem(field, index, { remove }) {
+                    return (
+                        <Input
+                            allowClear
+                            addonAfter={<DeleteOutlined onClick={() => { remove(field.name) }} />}
+                        />
+                    )
+                },
+            },
         ]}
     >
         <Button htmlType="submit" type="primary">Submit</Button>
@@ -39,14 +60,32 @@ export const CustomRender = () => {
     const [result, setResult] = React.useState()
     return (
         <FormBlock
+            initialValues={{ field0: 123 }}
             onFinish={(values) => {
                 window.console.log('onFinish', values)
                 setResult(values)
             }}
-            placeholder={false}
+            // placeholder={false}
             labelCol={4}
             wrapperCol={8}
             fields={[
+                {
+                    label: '直接受控组件',
+                    name: 'field0',
+                    parse: (value) => {
+                        if (value === undefined || value === '') {
+                            return undefined
+                        }
+                        const moneyString = utils.formatMoney(value, 2, '¥')
+                        if (moneyString.indexOf('.')) {
+                            return moneyString.replace(/\.?0+$/g, '')
+                        }
+                        return moneyString
+                    },
+                    format: (e) => e.target.value.replace(/\D|^\./g, ''),
+                    // render: function DirectControlled() { return <Input /> },
+                    type: 'Input',
+                },
                 {
                     label: '直接受控组件',
                     name: 'field1',
@@ -65,13 +104,19 @@ export const CustomRender = () => {
                             'field2-B': values?.[1],
                         })
                     },
-                    trigger: null, /* important */
                     render: function IndirectControlled([value1, value2] = [], values, form) {
                         return (
-                            <div>
-                                <Input value={value1} onChange={(e) => { form.setFieldsValue({ field2: [e.target.value, value2] }) }} />
-                                <Input value={value2} onChange={(e) => { form.setFieldsValue({ field2: [value1, e.target.value] }) }} />
-                            </div>
+                            <>
+                                <Input
+                                    value={value1}
+                                    onChange={(e) => { form.setFieldsValue({ field2: [e.target.value, value2] }) }}
+                                    style={{ marginBottom: 8 }}
+                                />
+                                <Input
+                                    value={value2}
+                                    onChange={(e) => { form.setFieldsValue({ field2: [value1, e.target.value] }) }}
+                                />
+                            </>
                         )
                     },
                     lineBreak: true,
@@ -95,7 +140,7 @@ export const CustomRender = () => {
 export const ReadonlyUsage = () => (
     <FormBlock
         layout="inline"
-        columnCount={1}
+        span={24}
         compact /* 紧凑模式, 移除字段行间距, 多用于只读表单 */
         getForm={(form) => {
             form.setFieldsValue({
@@ -111,3 +156,39 @@ export const ReadonlyUsage = () => (
         ]}
     />
 )
+
+export const RenderList = () => {
+    const [result, setResult] = React.useState()
+    return (
+        <FormBlock
+            onFinish={(values) => { window.console.log(values) }}
+            initialValues={{ field1: [1, 2] }}
+            labelCol={4}
+            wrapperCol={8}
+            fields={[
+                {
+                    label: '字段1',
+                    name: 'field1',
+                    renderList: function renderList(itemNodes, { add }) {
+                        return (
+                            <div>
+                                {itemNodes}
+                                <Button onClick={() => add(itemNodes.length + 1)} type="primary">Add</Button>
+                            </div>
+                        )
+                    },
+                    renderListItem: function renderListItem(field, index, { remove }) {
+                        return (
+                            <Input
+                                allowClear
+                                addonAfter={<DeleteOutlined onClick={() => { remove(field.name) }} />}
+                            />
+                        )
+                    },
+                },
+            ]}
+        >
+            <Button htmlType="submit" type="primary">Submit</Button>
+        </FormBlock>
+    )
+}

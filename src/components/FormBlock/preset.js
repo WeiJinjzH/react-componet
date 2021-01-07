@@ -42,6 +42,9 @@ const PRESET_FORM_COMPONENT_TYPE = {
 
 const PRESET_PROPS_MAP = {
     RangePicker: {
+        props: {
+            placeholder: ['开始日期', '结束日期'],
+        },
         attach: (values, name, fieldsValues) => {
             delete fieldsValues[name]
             return ({

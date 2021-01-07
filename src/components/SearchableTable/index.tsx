@@ -5,6 +5,7 @@ import { FormInstance } from 'antd/lib/form'
 import { TableProps } from 'antd/lib/table/Table'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { http } from 'src/utils'
+import { IProxyFormInstance } from '../FormBlock'
 import SearchBar from '../SearchBar'
 
 interface Store {
@@ -26,7 +27,7 @@ interface SearchableTableProps extends TableProps<Store> {
     dataPaths?: string[];
     refreshCounter?: number;
     extra?: React.ReactNode;
-    getForm?: (FormInstance) => void;
+    getForm?: (form: IProxyFormInstance) => void;
     onSearch?: (any) => void;
 }
 
@@ -69,7 +70,7 @@ const SearchableTable = ({
     const [params, setParams] = useState({})
     const [pageInfo, setPageInfo] = useState({ pageNum: 1, pageSize: 10 })
     const [total, setTotal] = useState(0)
-    const [form] = Form.useForm(_form)
+    const [form] = Form.useForm(_form) as [IProxyFormInstance]
     const [loading, setLoading] = useState(false)
 
     const columns = [..._columns]
@@ -121,7 +122,7 @@ const SearchableTable = ({
 
     useEffect(() => {
         getData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [refreshCounter])
 
     const onSearch = (values) => {
@@ -149,11 +150,11 @@ const SearchableTable = ({
                 onSearch={onSearch}
                 showReset
                 initialValues={initialValues}
-                collapsible={collapsible}
-                visibleFieldsCount={visibleFieldsCount}
+                // collapsible={collapsible}
+                // visibleFieldsCount={visibleFieldsCount}
                 extra={extra}
             >
-                { children }
+                {children}
             </SearchBar>
             {renderMiddleNode && renderMiddleNode()}
             <Table

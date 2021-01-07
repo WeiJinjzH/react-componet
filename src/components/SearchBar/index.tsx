@@ -1,135 +1,175 @@
-import { CaretDownFilled, CaretUpFilled } from '@ant-design/icons'
-import { Button, Form } from 'antd'
-import { FormInstance } from 'antd/lib/form'
-import { FormProps } from 'rc-field-form/lib/Form'
-import React, { useLayoutEffect, useMemo, useState } from 'react'
-import FormBlock from '../FormBlock'
+import { DoubleRightOutlined } from '@ant-design/icons'
+import { Button } from 'antd'
+import classNames from 'classnames'
+import React, { useMemo, useRef, useState } from 'react'
+import FormBlock, { FormBlockProps, IProxyFormInstance } from '../FormBlock'
 import './index.less'
 
-const DEFAULT_VISIBLE_FIELDS_COUNT = 4
+interface fieldsProps<T> extends Array<T> {
+    isFiltered?: boolean;
+}
 
-interface SearchBarProps extends FormProps {
-    form?: FormInstance;
-    fields: any[];
-    collapsible?: boolean;
-    visibleFieldsCount?: number;
+interface SearchBarProps extends FormBlockProps {
+    form?: IProxyFormInstance;
+    mainFields?: { isFiltered: boolean, [key:string]: any }[];
+    minWidth?: number;
+    placeholder?: boolean | string | string[] | ((params: any, form: IProxyFormInstance) => string | string[]);
+    fields: fieldsProps<any>;
     onSearch?: (values?: any) => void;
     showReset?: boolean;
-    getForm?: (form: FormInstance) => void;
+    getForm?: (form: IProxyFormInstance) => void;
+    style?: object;
     extra?: React.ReactNode;
 }
 
 export const SearchBar = ({
-    form: _form,
     fields = [],
     onSearch,
-    showReset,
+    showReset = true,
     children,
-    collapsible: _collapsible,
-    visibleFieldsCount: _visibleFieldsCount = DEFAULT_VISIBLE_FIELDS_COUNT,
+    minWidth,
     style,
     extra,
     getForm,
-    initialValues,
+    placeholder = false,
+    mainFields = [],
     ...restProps
-}: SearchBarProps) => {
-    const [form] = Form.useForm(_form)
-    const [clientWidth, setClientWidth] = useState(() => window.document.body.clientWidth)
+}: SearchBarProps): JSX.Element => {
     const [collapse, setCollapse] = useState(true)
 
-    useLayoutEffect(() => {
-        getForm && getForm(form)
-    }, [getForm, form])
+    const ref = useRef({
+        form: undefined,
+    })
 
-    useLayoutEffect(() => {
-        const resizeListener = () => {
-            setClientWidth(window.document.body.clientWidth)
-        }
-        window.addEventListener('resize', resizeListener)
-        return () => {
-            window.removeEventListener('resize', resizeListener)
-        }
-    }, [])
-
-    let visibleFieldsCount = _visibleFieldsCount
-    let collapsible = _collapsible
-    if (_collapsible && typeof _visibleFieldsCount === 'object') {
-        Object.keys(visibleFieldsCount).sort((a, b) => Number(a) - Number(b)).forEach((key) => {
-            if (Number.isNaN(Number(key))) {
-                window.console.error('visibleFieldsCount类型为Object时, 其成员属性必须为数字。')
+    /**
+     * mainField中 type = 'InputSearch'的字段做特殊处理, 给予属性及点击事件赋值
+     */
+    mainFields.forEach((mainField) => {
+        if (mainField?.type === 'InputSearch') {
+            mainField.props = mainField.props || {}
+            mainField.props.onSearch = (value, e) => {
+                if (e && e.target && e.type === 'click' && !value) {
+                    ref.current.form.resetFields([mainField.name])
+                }
+                ref.current.form.submit()
             }
-            if (clientWidth > Number(key)) {
-                collapsible = !!_visibleFieldsCount[key]
-                visibleFieldsCount = _visibleFieldsCount[key] || Number.MAX_SAFE_INTEGER
-            }
-        })
-        visibleFieldsCount = typeof visibleFieldsCount === 'number' ? visibleFieldsCount : DEFAULT_VISIBLE_FIELDS_COUNT
-    }
-
-    /* 可收缩 & 未展开 & fieldsLength <= visibleFieldsCount */
-    if (collapsible && collapse && fields.length <= visibleFieldsCount) {
-        collapsible = false
-    }
+            mainField.props.enterButton = mainField.props.enterButton ?? true
+            mainField.props.allowClear = mainField.props.allowClear ?? true
+            mainField.props.placeholder = mainField.props.placeholder ?? (mainField.label ? `请输入${mainField.label}` : '')
+            delete mainField.label
+        }
+    })
 
     const integratedFields = useMemo(() => {
-        const operateFields = [
+        if (fields.isFiltered) {
+            fields.isFiltered = false
+            fields.forEach((field) => {
+                field.hidden = field.originalHidden
+            })
+        }
+        if (mainFields.length && collapse) {
+            fields.isFiltered = true
+            fields.forEach((field) => {
+                field.originalHidden = field.hidden
+                field.hidden = true
+            })
+        }
+        return [
+            ...mainFields,
             {
-                key: '__operate-items',
-                style: { marginRight: 8 },
+                key: '$advancedButton',
+                hidden: mainFields.length === 0 || fields.length === 0,
+                colProps: { className: 'advanced-search-button' },
+                render: function AdvancedButton() {
+                    return (
+                        <Button
+                            type="primary"
+                            onClick={() => {
+                                setCollapse(!collapse)
+                            }}
+                        >
+                            高级搜索
+                            <DoubleRightOutlined rotate={collapse ? 90 : -90} />
+                        </Button>
+                    )
+                },
+                lineBreak: !extra,
+            },
+            {
+                key: '$extra',
+                hidden: !extra,
+                render: function Extra() {
+                    let extraContent = extra
+                    if (typeof extra === 'function') {
+                        extraContent = extra()
+                    }
+                    return <div style={{ display: 'inline-flex', justifyContent: 'center' }}>{extraContent}</div>
+                },
+                colProps: { className: 'search-bar-extra' },
+                lineBreak: true,
+            },
+            ...fields,
+            {
+                key: '$operateItems',
+                colProps: { className: 'search-bar-operate' },
+                hidden: (mainFields.length && collapse) || fields.length === 0,
                 render: function OperateItems() {
                     return (
                         <>
-                            <Button htmlType="submit" type="primary"> 查询 </Button>
                             {
                                 showReset ? (
                                     <Button
                                         htmlType="reset"
+                                        type={mainFields.length === 0 ? 'default' : 'link'}
                                         onClick={() => {
-                                            form.resetFields()
-                                            form.submit()
+                                            ref.current.form.resetFields()
+                                            ref.current.form.submit()
                                         }}
                                     >
-                                        重置
+                                        {mainFields.length === 0 ? '重置' : '重置条件'}
                                     </Button>
                                 ) : null
                             }
-                            { extra }
-                            {
-                                collapsible ? (
-                                    <Button type="link" onClick={() => { setCollapse(!collapse) }}>
-                                        {collapse ? '展开' : '收起'}
-                                        {collapse ? <CaretDownFilled /> : <CaretUpFilled />}
-                                    </Button>
-                                ) : null
-                            }
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                            >
+                                查询
+                            </Button>
                         </>
                     )
                 },
             },
         ]
-        return [
-            ...fields.slice(0, (collapsible && collapse) ? visibleFieldsCount : Number.MAX_SAFE_INTEGER),
-            ...operateFields,
-        ]
-    }, [fields, collapsible, collapse, visibleFieldsCount, showReset, extra, form])
+    }, [fields, mainFields, collapse, extra, showReset])
 
-    if (fields.length === 0) {
+    if (fields.length === 0 && mainFields.length === 0 && !extra && !children) {
         return null
     }
 
     return (
-        <div className="search-bar" style={style}>
+        <div
+            className={classNames({
+                'search-bar': true,
+                'search-bar-advanced': mainFields.length > 0,
+            })}
+            style={style}
+        >
             <FormBlock
-                form={form}
+                getForm={(_form) => {
+                    ref.current.form = _form
+                    getForm?.(_form)
+                }}
                 layout="inline"
+                minWidth={minWidth}
                 fields={integratedFields}
                 onFinish={onSearch}
-                initialValues={initialValues}
+                placeholder={placeholder}
                 {...restProps}
             />
             {
                 children ? (
-                    <div className="search-bar-children" style={{ paddingBottom: 24 }}>
+                    <div className="search-bar-children">
                         { children }
                     </div>
                 ) : null

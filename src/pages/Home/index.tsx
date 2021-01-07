@@ -1,16 +1,11 @@
+import { DeleteOutlined } from '@ant-design/icons'
 import {
-    Button, Select, InputNumber, Table, Form, Input, Descriptions, Statistic, DatePicker, Avatar, Divider,
+    Button, DatePicker, Input,
 } from 'antd'
-import React, { Component } from 'react'
-import SearchBar from 'src/components/SearchBar'
-import { http } from 'utils'
-import PreviewImageModal from 'src/components/PreviewImageModal'
-import SearchableTable from 'src/components/SearchableTable'
-import FormBlock from 'src/components/FormBlock'
 import { FormInstance } from 'antd/lib/form'
 import moment from 'moment'
-import { DeleteOutlined } from '@ant-design/icons'
-import style from './index.less'
+import React, { Component } from 'react'
+import FormBlock from 'src/components/FormBlock'
 
 class Home extends Component<any, any> {
     form: FormInstance;
@@ -24,7 +19,7 @@ class Home extends Component<any, any> {
     constructor(props) {
         super(props)
         this.state = {
-            href: 'https://volibearcat.top/static/background.jpg', // http://images.mofcom.gov.cn/sczxs/201806/20180622090409090.pdf
+            // href: 'https://volibearcat.top/static/background.jpg', // http://images.mofcom.gov.cn/sczxs/201806/20180622090409090.pdf
         }
         this.hidden = false
     }
@@ -44,7 +39,6 @@ class Home extends Component<any, any> {
                     initialValues={{
                         field2: { a: 555 }, field3: 777, field5: [1, 2, 3],
                     }}
-                    columnCount={2}
                     labelCol={5 || { span: 4 }} // 支持number类型
                     wrapperCol={{ span: 19 }}
                     getForm={(_form) => { this.form = _form }}
@@ -87,12 +81,12 @@ class Home extends Component<any, any> {
                         {
                             label: '字段5',
                             name: 'field5',
-                            // renderList: (itemNodes, { fields, add, remove }) => (
-                            //     <div>
-                            //         {itemNodes}
-                            //         <Button onClick={add} type="primary">Add</Button>
-                            //     </div>
-                            // ),
+                            renderList: (itemNodes, { fields, add, remove }) => (
+                                <div>
+                                    {itemNodes}
+                                    <Button onClick={() => add()} type="primary">Add</Button>
+                                </div>
+                            ),
                             renderListItem: (field, index, { formItemWrapper, add, remove }) => (
                                 <Input
                                     allowClear
@@ -128,7 +122,6 @@ class Home extends Component<any, any> {
                     <FormBlock
                         name="1"
                         initialValues={{ field2: { a: 555 }, field3: 777 }}
-                        columnCount={2}
                         labelCol={5 || { span: 4 }} // 支持number类型
                         wrapperCol={{ span: 19 }}
                         getForm={(_form) => { this.form1 = _form }}
