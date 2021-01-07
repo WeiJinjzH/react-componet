@@ -64,7 +64,7 @@ class PreviewImageModal extends Component<PreviewImageModalProps, PreviewImageMo
                     backgroundPosition: '0 0, 8px 8px',
                 }}
                 onCancel={() => {
-                    onCancel && onCancel()
+                    onCancel?.()
                     this.setState({ visible: false })
                 }}
                 afterClose={this.props.onDestroy}

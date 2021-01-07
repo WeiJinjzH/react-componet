@@ -149,7 +149,7 @@ const FormBlock = (props: FormBlockProps) => {
     const { proxyForm } = formRef.current
 
     useLayoutEffect(() => {
-        getForm && getForm(proxyForm)
+        getForm?.(proxyForm)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -186,12 +186,14 @@ const FormBlock = (props: FormBlockProps) => {
                 if (hasHiddenFunction) {
                     const requireUpdate = fields.filter((item) => typeof item.hidden === 'function')
                         .some((item) => !!item.hidden(values) !== hiddenStatusCaches[item.key || item.name])
-                    requireUpdate && update()
+                    if (requireUpdate) {
+                        update()
+                    }
                 }
                 Object.keys(updaterMap).forEach((key) => {
                     updaterMap[key]()
                 })
-                onValuesChange && onValuesChange(changedValues, values)
+                onValuesChange?.(changedValues, values)
             }}
         >
             <Row className="items-wrapper">

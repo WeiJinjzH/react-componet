@@ -1,5 +1,4 @@
 import { Col, Form, Typography } from 'antd'
-import { FormInstance } from 'antd/lib/form'
 import classNames from 'classnames'
 import React, { useEffect, useState } from 'react'
 import { FormBlockProps, IProxyFormInstance } from './index.js'

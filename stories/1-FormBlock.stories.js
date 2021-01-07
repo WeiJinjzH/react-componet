@@ -71,23 +71,6 @@ export const CustomRender = () => {
             fields={[
                 {
                     label: '直接受控组件',
-                    name: 'field0',
-                    parse: (value) => {
-                        if (value === undefined || value === '') {
-                            return undefined
-                        }
-                        const moneyString = utils.formatMoney(value, 2, '¥')
-                        if (moneyString.indexOf('.')) {
-                            return moneyString.replace(/\.?0+$/g, '')
-                        }
-                        return moneyString
-                    },
-                    format: (e) => e.target.value.replace(/\D|^\./g, ''),
-                    // render: function DirectControlled() { return <Input /> },
-                    type: 'Input',
-                },
-                {
-                    label: '直接受控组件',
                     name: 'field1',
                     attach: (values, name, fieldsValues) => ({
                         doubleField1: fieldsValues[name] + fieldsValues[name],
@@ -157,38 +140,35 @@ export const ReadonlyUsage = () => (
     />
 )
 
-export const RenderList = () => {
-    const [result, setResult] = React.useState()
-    return (
-        <FormBlock
-            onFinish={(values) => { window.console.log(values) }}
-            initialValues={{ field1: [1, 2] }}
-            labelCol={4}
-            wrapperCol={8}
-            fields={[
-                {
-                    label: '字段1',
-                    name: 'field1',
-                    renderList: function renderList(itemNodes, { add }) {
-                        return (
-                            <div>
-                                {itemNodes}
-                                <Button onClick={() => add(itemNodes.length + 1)} type="primary">Add</Button>
-                            </div>
-                        )
-                    },
-                    renderListItem: function renderListItem(field, index, { remove }) {
-                        return (
-                            <Input
-                                allowClear
-                                addonAfter={<DeleteOutlined onClick={() => { remove(field.name) }} />}
-                            />
-                        )
-                    },
+export const RenderList = () => (
+    <FormBlock
+        onFinish={(values) => { window.console.log(values) }}
+        initialValues={{ field1: [1, 2] }}
+        labelCol={4}
+        wrapperCol={8}
+        fields={[
+            {
+                label: '字段1',
+                name: 'field1',
+                renderList: function renderList(itemNodes, { add }) {
+                    return (
+                        <div>
+                            {itemNodes}
+                            <Button onClick={() => add(itemNodes.length + 1)} type="primary">Add</Button>
+                        </div>
+                    )
                 },
-            ]}
-        >
-            <Button htmlType="submit" type="primary">Submit</Button>
-        </FormBlock>
-    )
-}
+                renderListItem: function renderListItem(field, index, { remove }) {
+                    return (
+                        <Input
+                            allowClear
+                            addonAfter={<DeleteOutlined onClick={() => { remove(field.name) }} />}
+                        />
+                    )
+                },
+            },
+        ]}
+    >
+        <Button htmlType="submit" type="primary">Submit</Button>
+    </FormBlock>
+)

@@ -35,7 +35,7 @@ class PreviewPDFModal extends Component<PreviewPDFModalProps, PreviewPDFModalSta
                 width={1000}
                 bodyStyle={{ width: '100%', height: '80vh' }}
                 onCancel={() => {
-                    onCancel && onCancel()
+                    onCancel?.()
                     this.setState({ visible: false })
                 }}
                 afterClose={this.props.onDestroy}

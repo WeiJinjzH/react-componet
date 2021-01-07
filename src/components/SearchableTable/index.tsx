@@ -5,8 +5,8 @@ import { FormInstance } from 'antd/lib/form'
 import { TableProps } from 'antd/lib/table/Table'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { http } from 'src/utils'
+import SearchBar from 'src/components/SearchBar'
 import { IProxyFormInstance } from '../FormBlock'
-import SearchBar from '../SearchBar'
 
 interface Store {
     [name: string]: any
@@ -117,7 +117,7 @@ const SearchableTable = ({
     }
 
     useLayoutEffect(() => {
-        getForm && getForm(form)
+        getForm?.(form)
     }, [getForm, form])
 
     useEffect(() => {
@@ -127,7 +127,7 @@ const SearchableTable = ({
 
     const onSearch = (values) => {
         setParams(values)
-        _onSearch && _onSearch({ ...values, ...pageInfo })
+        _onSearch?.({ ...values, ...pageInfo })
         getData({ ...values, ...pageInfo })
     }
 
