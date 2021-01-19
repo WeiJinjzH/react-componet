@@ -1,7 +1,7 @@
 import { Button } from 'antd'
 import Mock from 'mockjs'
 import React from 'react'
-import SearchBar from '../src/components/SearchBar'
+import SearchBar from 'src/components/SearchBar'
 
 export default {
     title: 'SearchBar',

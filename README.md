@@ -26,13 +26,13 @@ npm run build
 ## 核心依赖
 
 - 界面构建: [react 17.0.1](https://reactjs.org/versions)
-- UI组件库: [antd 4.9.4](https://ant.design/index-cn)
+- UI组件库: [antd 4.10.1](https://ant.design/index-cn)
 - TS版本: [typescript 4.1.3](https://www.typescriptlang.org/)
-- 图表组件库: [bizcharts 4.0.16](https://bizcharts.net/index)
+- 图表组件库: [bizcharts 4.0.17](https://bizcharts.net/index)
 - 代码打包: [webpack 4.44.1](https://webpack.js.org/)
 - 项目构建优化: [happypack 5.0.1](https://www.npmjs.com/package/happypack)
 - JS代码转换: [@babel/core 7.12.10](https://babeljs.io)
-- 代码风格约束: [eslint 6.8.0](https://eslint.org)
+- 代码风格约束: [eslint 7.17.0](https://eslint.org)
 - HTTP请求框架: [whatwg-fetch 3.5.0](https://www.npmjs.com/package/whatwg-fetch)
 - 时间格式化: [moment 2.29.1](http://momentjs.cn)
 - 热模块替换: [react-hot-loader 4.13.0](https://www.npmjs.com/package/react-hot-loader)

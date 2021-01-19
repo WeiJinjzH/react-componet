@@ -6,21 +6,19 @@ const custom = require('./webpack.config.js')
 module.exports = {
     stories: ['../stories/**/*.stories.@(js|mdx)'],
     addons: [
-        '@storybook/addon-actions',
         '@storybook/addon-docs',
-        '@storybook/addon-links',
-        '@storybook/addon-storysource',
-        '@storybook/addon-knobs/register',
+        '@storybook/addon-controls',
+        '@storybook/addon-essentials',
     ],
     webpackFinal: (config) => {
         return {
             ...config,
             module: {
-              ...config.module,
-              rules: [
-                ...config.module.rules,
-                ...custom.module.rules,
-              ]
+                ...config.module,
+                rules: [
+                    ...config.module.rules,
+                    ...custom.module.rules,
+                ]
             },
             plugins: [...config.plugins, ...custom.plugins],
             resolve: {

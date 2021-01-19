@@ -12,7 +12,6 @@ interface fieldsProps<T> extends Array<T> {
 interface SearchBarProps extends FormBlockProps {
     form?: IProxyFormInstance;
     mainFields?: { isFiltered: boolean, [key:string]: any }[];
-    minWidth?: number;
     placeholder?: boolean | string | string[] | ((params: any, form: IProxyFormInstance) => string | string[]);
     fields: fieldsProps<any>;
     onSearch?: (values?: any) => void;
@@ -27,7 +26,6 @@ export const SearchBar = ({
     onSearch,
     showReset = true,
     children,
-    minWidth,
     style,
     extra,
     getForm,
@@ -39,7 +37,10 @@ export const SearchBar = ({
 
     const ref = useRef({
         form: undefined,
+        originalHiddenMap: new Map(),
     })
+
+    const { originalHiddenMap } = ref.current
 
     /**
      * mainField中 type = 'InputSearch'的字段做特殊处理, 给予属性及点击事件赋值
@@ -64,13 +65,13 @@ export const SearchBar = ({
         if (fields.isFiltered) {
             fields.isFiltered = false
             fields.forEach((field) => {
-                field.hidden = field.originalHidden
+                field.hidden = originalHiddenMap.get(field.key ?? field.name)
             })
         }
         if (mainFields.length && collapse) {
             fields.isFiltered = true
             fields.forEach((field) => {
-                field.originalHidden = field.hidden
+                originalHiddenMap.set(field.key ?? field.name, field.hidden)
                 field.hidden = true
             })
         }
@@ -161,7 +162,6 @@ export const SearchBar = ({
                     getForm?.(_form)
                 }}
                 layout="inline"
-                minWidth={minWidth}
                 fields={integratedFields}
                 onFinish={onSearch}
                 placeholder={placeholder}
