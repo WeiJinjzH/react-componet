@@ -251,11 +251,7 @@ const FormItem = (props: IFormItem) => {
                         return (
                             <>
                                 {before}
-                                <Form.Item
-                                    name={name}
-                                    {...restFieldProps}
-                                    noStyle
-                                >
+                                <Form.Item name={name} noStyle>
                                     {node}
                                 </Form.Item>
                                 {after}
@@ -304,7 +300,7 @@ const FormItem = (props: IFormItem) => {
                                             usedFormItemWrapper = true
                                             return (
                                                 <Form.Item key={_field.key} {..._field}>
-                                                    { _node}
+                                                    {_node}
                                                 </Form.Item>
                                             )
                                         }
@@ -320,7 +316,7 @@ const FormItem = (props: IFormItem) => {
                                         if (!usedFormItemWrapper) {
                                             node = (
                                                 <Form.Item key={_field.key} {..._field}>
-                                                    { node}
+                                                    {node}
                                                 </Form.Item>
                                             )
                                         }
@@ -380,20 +376,19 @@ const FormItem = (props: IFormItem) => {
         FormItemComponent = function PresetFormItemComponent() {
             const { extra, before, after } = enhanceFormItemPorps()
             return (
-                <>
+                <Form.Item
+                    label={label}
+                    labelCol={labelCol}
+                    wrapperCol={wrapperCol}
+                    {...restFieldProps}
+                    extra={extra}
+                >
                     {before}
-                    <Form.Item
-                        label={label}
-                        name={name}
-                        {...restFieldProps}
-                        extra={extra}
-                        labelCol={labelCol}
-                        wrapperCol={wrapperCol}
-                    >
+                    <Form.Item name={name} noStyle {...restFieldProps}>
                         <PresetComponent {...componentProps} />
                     </Form.Item>
                     {after}
-                </>
+                </Form.Item>
             )
         }
     }
