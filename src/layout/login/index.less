@@ -1,0 +1,187 @@
+.login {
+    position: relative;
+    background: #398bef url(../../assets/images/login-bg.png);
+    background-size: 100% 100%;
+    width: 100%;
+    height: 100vh;
+    overflow: auto;
+    overflow-x: overlay;
+
+    .login-card {
+        position: absolute;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: flex-end;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 1406px;
+        max-height: 780px;
+        width: 96%;
+        height: 96%;
+        background: #fff linear-gradient(135deg; #5dc3fa 10%, #1350f1 70%);
+        background-size: 100% 100%;
+        border-radius: 20px;
+        overflow: hidden;
+
+        &::before {
+            content: '';
+            position: absolute;
+            display: block;
+            top: 24px;
+            left: 24px;
+            width: 180px;
+            height: 60px;
+            background: url(../../assets/images/logo/logo.png);
+            background-size: contain;
+            background-repeat: no-repeat;
+            filter: brightness(999);
+        }
+    }
+
+    .login-decoration {
+        flex: 0 1 100%;
+
+        img {
+            width: 100%;
+            height: 100%;
+            -webkit-user-drag: none;
+        }
+    }
+
+    .login-form-box {
+        position: relative;
+        flex: 0 0 736px;
+        padding: 40px 56px 24px 56px;
+        background-color: #fff;
+        overflow: auto;
+        overflow: overlay;
+
+        &>h3,
+        &>form {
+            position: relative;
+            z-index: 2;
+        }
+
+        &::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            right: 536px;
+            display: block;
+            width: 200px;
+            height: 100px;
+            background-color: #66ccff50;
+            clip-path: polygon(0% 0%, 100% 0%, 90% 11%, 80% 20.5%, 70% 28.5%, 60% 35%, 50% 40%, 40% 43.5%, 30% 45.5%, 20% 46%, 10% 45%, 0% 42.5%);
+            z-index: 1;
+        }
+
+        &::after {
+            content: '';
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            display: block;
+            width: 150px;
+            height: 150px;
+            background-color: #66ccff50;
+            clip-path: polygon(100% 28%, 100% 100%, 0% 100%, 5% 97%, 10% 91%, 20% 79%, 30% 66%, 40% 56%, 50% 47%, 60% 40%, 70% 34%, 80% 29%, 90% 24.5%, 100% 21%);
+            z-index: 1;
+        }
+    }
+
+    .login-form-title {
+        text-align: center;
+        color: #4688ff;
+        font-size: 30px;
+        margin: 80px 0 100px;
+
+        &::after {
+            content: '';
+            display: block;
+            width: 64px;
+            height: 6px;
+            background: rgba(0, 118, 254, 0.2);
+            margin: -8px auto 16px;
+        }
+    }
+
+    .captcha-box {
+        display: flex;
+        align-items: center;
+        height: 40px;
+    }
+
+    .captcha-input {
+        flex: 1;
+    }
+
+    .captcha {
+        position: relative;
+        display: block;
+        width: 90px;
+        height: 32px;
+        margin-left: 8px;
+        flex: 0 0 100px;
+        cursor: pointer;
+        user-select: none;
+
+        img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: #eee;
+        }
+    }
+
+    .redo-button-box {
+        width: 90px;
+        height: 32px;
+        line-height: 32px;
+        margin-left: 8px;
+        font-size: 28px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &>i {
+            transform: rotateZ(-45deg);
+            transition: all 0.4s;
+        }
+
+        &:hover {
+            color: #3b90ee;
+
+            &>i {
+                transform: rotateZ(45deg);
+            }
+        }
+    }
+
+    .none-account {
+        display: flex;
+        margin-top: 40px;
+        margin-left: -130px;
+        padding-right: 50px;
+    }
+
+    .none-line {
+        margin: 20px 0;
+        width: 127px;
+        height: 1px;
+        background: rgba(198, 199, 201, 1);
+    }
+
+    .sms-box {
+        display: flex;
+    }
+
+    .sms-input {
+        flex: 1;
+    }
+
+    .sms-button {
+        margin-left: 8px;
+        flex: 0 0 100px;
+    }
+}

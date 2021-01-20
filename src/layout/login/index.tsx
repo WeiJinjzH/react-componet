@@ -1,170 +1,186 @@
 import {
-    Button, Col, Form, Input, Modal, Row,
+    Button, message, Modal, notification,
 } from 'antd'
-import 'particles.js'
-import React from 'react'
+import React, { Component } from 'react'
+import svg1 from 'src/assets/images/login-decoration.svg'
+import FormBlock from 'src/components/FormBlock'
 import { http } from 'src/utils'
-import style from './login.less'
+import style from './index.less'
 
-interface LoginState {
-    isLoading: boolean;
-    identifyKey: string;
-    codeSrc: string;
-}
+class Login extends Component<any, any> {
+    timer: number
 
-class Login extends React.Component<any, LoginState> {
-    constructor(props) {
+    constructor(props: any) {
         super(props)
         this.state = {
-            isLoading: false,
-            codeSrc: '',
-            identifyKey: '',
+            loading: false,
+            coolingTime: 0,
         }
         this.handleSubmit = this.handleSubmit.bind(this)
-        this.refreshValidCode = this.refreshValidCode.bind(this)
+        this.getUserInfo = this.getUserInfo.bind(this)
+        this.sendSMSCode = this.sendSMSCode.bind(this)
     }
 
-    componentDidMount() {
-        this.refreshValidCode()
-        window.particlesJS.load('particles-js', '/static/build/config/particles.json')
+    componentWillUnmount() {
+        window.clearInterval(this.timer)
     }
 
-    handleSubmit(values) {
-        const { isLoading, identifyKey } = this.state
-        const { history, form } = this.props
-        if (isLoading) {
-            return
-        }
-        this.setState({ isLoading: true })
-        values.identifyKey = identifyKey
-        http.put('/manage/user/login', values).then((res) => {
-            this.setState({ isLoading: false })
+    getUserInfo(form) {
+        http.get('/web-user/get-user-info').then((res) => {
+            this.setState({ loading: false })
             if (res.code === 0) {
-                const { data } = res
-                localStorage.user = JSON.stringify(data) || ''
+                const fromURL = utils.getUrlParam('from', this.props.location?.search)
+                const loginName = utils.getUrlParam('name', this.props.location?.search)
+                localStorage.user = JSON.stringify(res.data) || ''
                 sessionStorage.removeItem('menuData')
-                history.push(res.data.showUrl || '/')
-            } else if (res.code === -6) {
-                this.setState({ isLoading: false })
-                form.setFieldsValue({ inputCode: '' })
-                Modal.warning({
-                    title: '您还没有申请认证，请先认证',
-                    content: res.msg,
-                })
+                if (res.data?.loginName === loginName) {
+                    window.location.replace(fromURL)
+                } else {
+                    this.props.history.push(res.data.showUrl || '/')
+                }
             } else {
-                this.refreshValidCode()
-                this.setState({ isLoading: false })
-                form.setFieldsValue({ inputCode: '' })
                 Modal.warning({
-                    title: '登陆失败',
+                    title: '登录失败',
                     content: res.msg,
                 })
+                form.setFieldsValue({ phoneCode: undefined })
             }
-        }).catch(() => {
-            this.setState({ isLoading: false })
+        }).catch((err) => {
+            this.setState({ loading: false })
+            throw err
         })
     }
 
-    refreshValidCode() {
-        http.get(`/manage/identify/generator?time=${new Date().getTime()}`).then((res) => {
+    sendSMSCode(params) {
+        http.get('/web-user/send-login-phone-code', params).then((res) => {
             if (res.code === 0) {
-                let { dataCode: codeSrc } = res.data
-                if (!codeSrc.includes('.png')) {
-                    codeSrc = `data:image/png;base64,${codeSrc}`
-                }
-                this.setState({ codeSrc, identifyKey: res.data.identifyKey })
+                this.setState({ coolingTime: 60 })
+                message.success(res.data)
+                this.timer = window.setInterval(() => {
+                    this.setState({ coolingTime: this.state.coolingTime - 1 }, () => {
+                        if (this.state.coolingTime <= 0) {
+                            window.clearInterval(this.timer)
+                        }
+                    })
+                }, 1000)
             } else {
-                Modal.warning({
-                    title: '获取验证码失败',
-                    content: res.msg,
+                Modal.info({
+                    title: '系统提示',
+                    content: res.data || res.msg,
                 })
             }
+        })
+    }
+
+    handleSubmit(values, form) {
+        this.setState({ loading: true })
+        const params = values
+        http.put('/web-user/login', params).then((res) => {
+            if (res.code === 0) {
+                this.getUserInfo(form)
+            } else {
+                this.setState({ loading: false })
+                Modal.warning({
+                    title: '登录失败',
+                    content: res.msg,
+                })
+                form.setFieldsValue({ phoneCode: undefined })
+            }
+        }).catch((err) => {
+            this.setState({ loading: false })
+            throw err
         })
     }
 
     render() {
-        const { codeSrc, isLoading } = this.state
-        // const { form } = this.props
-        // const { getFieldDecorator } = form
         return (
-            <div id="particles-js" className={style.loginContainer}>
-                <div className={style.loginText}>
-                    <span className={style.title}>Demo</span>
-                </div>
-                <div className={style.loginForm}>
-                    <h3 className={style.loginFormHeader}>登录</h3>
-                    <Form onFinish={this.handleSubmit}>
-                        <Form.Item
-                            name="loginName"
-                            rules={[{
-                                required: true,
-                                message: '请输入账户名',
-                            }]}
-                        >
-                            <Input
-                                // prefix={<Icon type="user" />}
-                                allowClear
-                                type="text"
-                                placeholder="账户名"
-                            />
-                        </Form.Item>
-                        <Form.Item
-                            name="password"
-                            rules={[{
-                                required: true,
-                                whitespace: false,
-                                message: '请输入密码',
-                            }]}
-                        >
-                            <Input
-                                // prefix={<Icon type="lock" />}
-                                allowClear
-                                type="password"
-                                autoComplete="new-password"
-                                placeholder="密码"
-                            />
-                        </Form.Item>
-                        <Row gutter={8}>
-                            <Col span={16}>
-                                <Form.Item
-                                    name="inputCode"
-                                    rules={[{
-                                        required: true,
-                                        message: '请输入验证码',
-                                    }]}
-                                >
-                                    <Input
-                                        // prefix={<Icon type="lock" />}
-                                        autoComplete="off"
-                                        placeholder="验证码"
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                                <div>
-                                    {
-                                        codeSrc && (
-                                            <img
-                                                className={style.captcha}
-                                                onClick={this.refreshValidCode}
-                                                onKeyDown={this.refreshValidCode}
-                                                src={codeSrc}
-                                                alt="验证码"
-                                            />
-                                        )
-                                    }
-                                </div>
-                            </Col>
-                        </Row>
-                        <Button
-                            className={style.loginBtn}
-                            type="primary"
-                            size="large"
-                            htmlType="submit"
-                        >
-                            {isLoading ? '登录中...' : '立即登录'}
-                        </Button>
-                    </Form>
+            <div className={style.login}>
+                <div className={style.loginCard}>
+                    <div className={style.loginDecoration}>
+                        <img src={svg1} alt="" />
+                    </div>
+                    <div className={style.loginFormBox}>
+                        <h3 className={style.loginFormTitle}>登录</h3>
+                        <FormBlock
+                            labelCol={7}
+                            wrapperCol={13}
+                            onFinish={this.handleSubmit}
+                            fields={[
+                                {
+                                    label: '手机号',
+                                    name: 'loginName',
+                                    type: 'DebounceValidateInput',
+                                    props: {
+                                        allowClear: true,
+                                        placeholder: '请输入手机号',
+                                    },
+                                    validateFirst: true,
+                                    rules: [
+                                        { required: true, message: '请输入手机号' },
+                                        { pattern: /^1[34578]\d{9}$/, message: '手机号码有误' },
+                                    ],
+                                },
+                                {
+                                    label: '密码',
+                                    name: 'password',
+                                    type: 'InputPassword',
+                                    rules: [{ required: true, message: '请输入密码' }],
+                                    props: {
+                                        allowClear: true,
+                                    },
+                                },
+                                {
+                                    label: '短信验证码',
+                                    name: 'phoneCode',
+                                    rules: [{ required: true, message: '必填' }],
+                                    type: 'Input',
+                                    props: {
+                                        maxLength: 4,
+                                        style: { width: 180, marginRight: 8 },
+                                    },
+                                    after: (v, values) => (
+                                        <Button
+                                            disabled={
+                                                !values.loginName || !/^1[34578]\d{9}$/.test(values.loginName) || this.state.coolingTime > 0
+                                            }
+                                            onClick={() => {
+                                                this.sendSMSCode({ phone: values.loginName })
+                                            }}
+                                        >
+                                            {
+                                                this.state.coolingTime > 0 ? `${this.state.coolingTime}秒后重试` : '发送验证码'
+                                            }
+                                        </Button>
+                                    ),
+                                },
+                                {
+                                    key: 'login-btn',
+                                    wrapperCol: { offset: 9, span: 13 },
+                                    compact: true,
+                                    render: () => (
+                                        <div>
+                                            <Button
+                                                size="large"
+                                                type="primary"
+                                                style={{ width: 184, marginTop: 16 }}
+                                                loading={this.state.loading}
+                                                htmlType="submit"
+                                            >登录
+                                            </Button>
+                                            <div>
+                                                <Button
+                                                    style={{ marginLeft: -15 }}
+                                                    type="link"
+                                                    onClick={() => this.props.history.replace('/reset-password')}
+                                                >忘记密码？
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    ),
+                                },
+                            ]}
+                        />
+                    </div>
                 </div>
             </div>
         )

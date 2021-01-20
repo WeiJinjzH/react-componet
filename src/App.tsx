@@ -35,48 +35,50 @@ class App extends React.Component {
                 return <Redirect to="/login" />
             }
             return (
-                <MainLayout {...props} render={(pathMap, loadingMenus) => (
-                    <Switch>
-                        {
-                            routes.map((route) => (
-                                <Route
-                                    key={route.path}
-                                    path={route.path}
-                                    exact={route.exact}
-                                    strict
-                                    render={(componentProps) => {
-                                        if (loadingMenus) {
-                                            /* 菜单数据获取中 */
-                                            return (
-                                                <Spin
-                                                    size="large"
-                                                    style={{ width: '100%', padding: 100 }}
-                                                    tip="获取菜单数据中..."
-                                                />
-                                            )
-                                        }
-                                        const Comp = route.component
-                                        if (!route.needCheckPermission) {
+                <MainLayout
+                    {...props}
+                    render={(pathMap, loadingMenus) => (
+                        <Switch>
+                            {
+                                routes.map((route) => (
+                                    <Route
+                                        key={route.path}
+                                        path={route.path}
+                                        exact={route.exact}
+                                        strict
+                                        render={(componentProps) => {
+                                            if (loadingMenus) {
+                                                /* 菜单数据获取中 */
+                                                return (
+                                                    <Spin
+                                                        size="large"
+                                                        style={{ width: '100%', padding: 100 }}
+                                                        tip="获取菜单数据中..."
+                                                    />
+                                                )
+                                            }
+                                            const Comp = route.component
+                                            if (!route.needCheckPermission) {
+                                                return Loading(Comp, componentProps)
+                                            }
+                                            if (!pathMap) {
+                                                return <div style={{ textAlign: 'center', padding: 100 }}>菜单数据获取异常</div>
+                                            }
+                                            /* 菜单是否需要校验权限 */
+                                            if (route.needCheckPermission && route.path === '/' && !pathMap.index) {
+                                                return <Redirect to="/403" />
+                                            } if (route.needCheckPermission && route.path !== '/' && !pathMap[route.path.slice(1)]) {
+                                                return <Redirect to="/403" />
+                                            }
                                             return Loading(Comp, componentProps)
-                                        }
-                                        if (!pathMap) {
-                                            return <div style={{ textAlign: 'center', padding: 100 }}>菜单数据获取异常</div>
-                                        }
-                                        /* 菜单是否需要校验权限 */
-                                        if (route.needCheckPermission && route.path === '/' && !pathMap.index) {
-                                            return <Redirect to="/403" />
-                                        } if (route.needCheckPermission && route.path !== '/' && !pathMap[route.path.slice(1)]) {
-                                            return <Redirect to="/403" />
-                                        }
-                                        return Loading(Comp, componentProps)
-                                    }}
-                                />
-                            ))
-                        }
-                        <Redirect to="/404" />
-                    </Switch>
-                )}>
-                </MainLayout>
+                                        }}
+                                    />
+                                ))
+                            }
+                            <Redirect to="/404" />
+                        </Switch>
+                    )}
+                />
             )
         }
         const validateMessages = {
@@ -102,6 +104,7 @@ class App extends React.Component {
             >
                 <HashRouter>
                     <Switch>
+                        <Route path="/login" render={(props) => Loading(Login, props)} />
                         <Route path="/" render={renderChildPage} />
                     </Switch>
                 </HashRouter>
