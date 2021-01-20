@@ -3,6 +3,38 @@ import {
 } from 'antd'
 import moment from 'moment'
 
+/** 带有输入防抖校验的Input组件 */
+const DebounceValidateInput = React.forwardRef((props, inputRef) => {
+    const {
+        onValidate, delay, reset, ...restProps
+    } = props
+    const ref = React.useRef({ onValidate: utils.debounce(onValidate, delay) })
+    if (!onValidate) {
+        return <Typography.Text className="ant-form-text" type="danger">不支持覆盖validateTrigger和trigger属性值</Typography.Text>
+    }
+    const Component = props.type === 'password' ? Input.Password : Input
+    return (
+        <Component
+            ref={inputRef}
+            {...restProps}
+            onChange={(e) => {
+                e.persist()
+                if (e && e.target && e.type === 'click' && !e.target.value) {
+                    reset()
+                }
+                restProps.onChange && restProps.onChange(e)
+                ref.current.onValidate(e)
+            }}
+            onKeyUp={(e, ...args) => {
+                e.persist()
+                restProps.onKeyUp && restProps.onKeyUp(e, ...args)
+                ref.current.onValidate(e)
+            }}
+        />
+    )
+})
+DebounceValidateInput.displayName = 'DebounceValidateInput'
+
 const Text = (props) => {
     const onChange = (props.editable && props.editable.onChange) || ((str) => {
         props.onChange && props.onChange(str)
@@ -38,6 +70,7 @@ const PRESET_FORM_COMPONENT_TYPE = {
     Text,
     Money: Text,
     Percent: Text,
+    DebounceValidateInput,
 }
 
 const PRESET_PROPS_MAP = {
@@ -100,6 +133,25 @@ const PRESET_PROPS_MAP = {
     Switch: {
         valuePropName: 'checked',
     },
+    DebounceValidateInput: (field, form) => ({
+        getValueFromEvent: (e) => {
+            if (!e || !e.target) { return e }
+            const { target } = e
+            return target.type === 'checkbox' ? target.checked : target.value
+        },
+        validateTrigger: 'onValidate',
+        props: {
+            delay: 400,
+            reset: () => {
+                form.setFields([{ name: field.name, value: undefined }])
+            },
+            onChange: (e) => {
+                /* 输入过程, 移除校验错误信息 */
+                form.setFields([{ name: field.name, value: e.target.value, errors: [] }])
+                field?.props?.onChange?.(e)
+            },
+        },
+    }),
 }
 
 export { PRESET_FORM_COMPONENT_TYPE, PRESET_PROPS_MAP }
