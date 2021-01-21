@@ -17,9 +17,6 @@
     ],
     "plugins": [
         [
-            "react-hot-loader/babel"
-        ],
-        [
             "@babel/plugin-proposal-async-generator-functions"
         ],
         [

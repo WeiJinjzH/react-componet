@@ -1,7 +1,7 @@
 const path = require('path')
-const webpack = require('webpack')
 const OpenBrowser = require('react-dev-utils/openBrowser')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 const HtmlPlugin = require('html-webpack-plugin')
 
 const devPort = process.env.port
@@ -10,9 +10,6 @@ const rootDir = path.join(__dirname, '..', '..')
 module.exports = {
     entry: {
         index: [
-            'react-hot-loader/patch',
-            `webpack-dev-server/client?http://0.0.0.0:${devPort}`,
-            'webpack/hot/only-dev-server',
             path.join(rootDir, 'src', 'index'),
         ],
     },
@@ -37,7 +34,7 @@ module.exports = {
             chunks: ['index', 'manifest'],
             hash: false,
         }),
-        new webpack.HotModuleReplacementPlugin(),
+        new ReactRefreshWebpackPlugin({ overlay: false }),
         () => {
             if (OpenBrowser(`http://localhost:${devPort}`)) {
                 global.console.log(`已打开浏览器标签: http://localhost:${devPort}\n请等待项目编译完成。`)

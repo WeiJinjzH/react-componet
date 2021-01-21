@@ -35,6 +35,6 @@ npm run build
 - 代码风格约束: [eslint 7.17.0](https://eslint.org)
 - HTTP请求框架: [whatwg-fetch 3.5.0](https://www.npmjs.com/package/whatwg-fetch)
 - 时间格式化: [moment 2.29.1](http://momentjs.cn)
-- 热模块替换: [react-hot-loader 4.13.0](https://www.npmjs.com/package/react-hot-loader)
+- 热模块替换: [热模块替换: [@pmmmwh/react-refresh-webpack-plugin 0.4.3](https://www.npmjs.com/package/@pmmmwh/react-refresh-webpack-plugin)
 - CSS模块化: [babel-plugin-react-css-modules 5.2.6](https://github.com/gajus/babel-plugin-react-css-modules)
 - BUG跟踪: [fundebug-javascript 2.4.2](https://www.fundebug.com/)

@@ -36,19 +36,18 @@ const config = {
         extensions: ['.js', '.json', '.jsx', '.ts', '.tsx'],
         alias: {
             src: path.join(rootDir, 'src'),
-            'react-dom': '@hot-loader/react-dom',
         },
     },
     module: {
         rules: [
             {
                 test: /\.tsx?$/,
-                loaders: ['react-hot-loader/webpack', 'babel-loader', 'webpack-module-hot-accept', 'awesome-typescript-loader'],
+                loaders: ['babel-loader', 'awesome-typescript-loader'],
                 exclude: /node_modules/,
             },
             {
                 test: /\.jsx?$/,
-                loader: ['happypack/loader?id=jsHappy', 'webpack-module-hot-accept'],
+                loader: ['happypack/loader?id=jsHappy'],
                 exclude: /node_modules/,
             },
             {
@@ -65,7 +64,13 @@ const config = {
                             hmr: !isProduction,
                         },
                     },
-                    'css-loader',
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: true,
+                            importLoaders: 1,
+                        },
+                    },
                     {
                         loader: 'postcss-loader',
                         options: {
@@ -90,7 +95,16 @@ const config = {
                             hmr: !isProduction,
                         },
                     },
-                    'css-loader?modules&importLoaders=1&localIdentName=[local]__[hash:base64:7]',
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: true,
+                            importLoaders: 1,
+                            modules: {
+                                localIdentName: '[local]__[hash:base64:7]',
+                            },
+                        },
+                    },
                     {
                         loader: 'postcss-loader',
                         options: {
@@ -118,9 +132,8 @@ const config = {
                     {
                         loader: 'css-loader',
                         options: {
-                            minimize: true,
                             sourceMap: true,
-                            javascriptEnabled: true,
+                            importLoaders: 2,
                         },
                     },
                     {
@@ -128,6 +141,7 @@ const config = {
                         options: {
                             sourceMap: true,
                             javascriptEnabled: true,
+                            importLoaders: 1,
                         },
                     },
                     {
@@ -155,14 +169,17 @@ const config = {
                         },
                     },
                     {
-                        loader: 'typings-for-css-modules-loader',
+                        loader: '@teamsupercell/typings-for-css-modules-loader',
+                    },
+                    {
+                        loader: 'css-loader',
                         options: {
-                            namedExport: true,
-                            camelCase: true,
-                            minimize: true,
-                            sourceMap: true,
-                            modules: true,
-                            localIdentName: '[local]__[hash:base64:7]',
+                            importLoaders: 2,
+                            localsConvention: 'camelCase',
+                            esModule: true,
+                            modules: {
+                                localIdentName: '[local]__[hash:base64:7]',
+                            },
                         },
                     },
                     {
@@ -170,6 +187,7 @@ const config = {
                         options: {
                             sourceMap: true,
                             javascriptEnabled: true,
+                            importLoaders: 1,
                         },
                     },
                     {

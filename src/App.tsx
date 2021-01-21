@@ -1,4 +1,3 @@
-import { hot } from 'react-hot-loader/root'
 import { ConfigProvider, Spin } from 'antd'
 import zhCN from 'antd/lib/locale-provider/zh_CN'
 import React, { Suspense } from 'react'
@@ -113,4 +112,4 @@ class App extends React.Component {
     }
 }
 
-export default hot(App)
+export default App

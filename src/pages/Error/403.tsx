@@ -13,7 +13,7 @@ const Error403 = (props) => (
                     props.history.push('/')
                 }}
             >
-            返回首页
+                返回首页
             </Button>
         )}
     />
