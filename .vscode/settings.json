@@ -12,7 +12,7 @@
         }
     ],
     "typescript.tsdk": "/node_modules/typescript/lib",
-    "javascript.implicitProjectConfig.checkJs": true,
     "eslint.alwaysShowStatus": true,
-    "less.lint.duplicateProperties": "warning"
+    "less.lint.duplicateProperties": "warning",
+    "javascript.implicitProjectConfig.checkJs": true
 }
