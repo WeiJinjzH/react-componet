@@ -75,7 +75,7 @@ class EditableCell extends React.Component {
                     {
                         () => (dataIndex ? (
                             <Form.Item
-                                shouldUpdate={(prevValues, nextValues) => prevValues[name] !== nextValues[name]}
+                                shouldUpdate={(prevValues, nextValues) => prevValues[dataIndex] !== nextValues[dataIndex]}
                                 name={dataIndex}
                                 noStyle
                                 {...fieldDecoratorOptions}
