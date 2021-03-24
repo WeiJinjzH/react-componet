@@ -1,17 +1,6 @@
 import React from 'react'
 
 const pageRoutes = [
-    /* 表单测试页面 */
-    {
-        name: '表单测试页面',
-        path: '/form-block',
-        exact: true,
-        needCheckPermission: false,
-        component: React.lazy(() => import(
-            /* webpackChunkName: "form-block" */
-            '../pages/FormBlockTest'
-        )),
-    },
     /* 首页 */
     {
         name: '首页',

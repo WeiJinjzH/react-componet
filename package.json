@@ -26,7 +26,6 @@
     "@types/react-dom": "^17.0.0",
     "antd": "^4.10.1",
     "babel-plugin-react-css-modules": "^5.2.6",
-    "bizcharts": "^4.0.17",
     "braft-editor": "^2.3.9",
     "core-js": "^3.8.2",
     "css3transform": "^1.2.3",
