@@ -1,5 +1,5 @@
 import {
-    useEffect, useState, useRef, Icon,
+    useEffect, useState, useRef,
 } from 'react'
 import { Breadcrumb, Dropdown, Menu } from 'antd'
 import { CaretDownOutlined } from '@ant-design/icons'
