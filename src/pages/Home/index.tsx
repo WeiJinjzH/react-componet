@@ -20,15 +20,15 @@ class Home extends Component<any, any> {
         super(props)
         this.state = {
             breadcrumbArr: [
-                { name: '一级菜单', path: '/' },
+                { name: '一级菜单' },
                 [
-                    { name: 'E链管理', path: '/' },
-                    { name: 'E链管理1' },
-                    { name: 'E链管理2' },
-                    { name: 'E链管理3' },
+                    { name: '二级菜单1', path: '/echain-list' },
+                    { name: '二级菜单2' },
+                    { name: '二级菜单3' },
+                    { name: '二级菜单4' },
                 ],
-                { name: 'E链列表查询', path: '/echain-list' },
-                { name: 'E链详情' },
+                { name: '三级菜单', path: '/echain-list' },
+                { name: '当前菜单' },
             ]
         }
         this.hidden = false

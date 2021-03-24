@@ -23,7 +23,29 @@ const BreadcrumbCamp = (props) => {
     }
     return (
         <div>
+            {/* antd4.0版本之后，Breadcrumb.Item可以和Dropdown一样传入overlay={menu}, 方便了很多 */}
             <Breadcrumb separator=">">
+                {
+                    breadcrumbArr.map((item, index) => {
+                        if (Array.isArray(item)) {
+                            return (
+                                <Breadcrumb.Item overlay={menu(item)} key={`name-${index}`}>
+                                    { item[0].path ? (<a href={`/#${item[0].path}`}>{item[0].name}</a>) : item[0].name}
+                                </Breadcrumb.Item>
+                            )
+                        } else {
+                            return (
+                                <Breadcrumb.Item key={item.name}>
+                                    { item.path ? (<a href={`/#${item.path}`}>{item.name}</a>) : item.name}
+                                </Breadcrumb.Item>
+                            )
+                        }
+                    })
+                }
+            </Breadcrumb>
+
+            {/* antd4.0版本之前的写法 */}
+            {/* <Breadcrumb separator=">">
                 {
                     breadcrumbArr.map((item, index) => {
                         if (Array.isArray(item)) {
@@ -45,7 +67,7 @@ const BreadcrumbCamp = (props) => {
                         }
                     })
                 }
-            </Breadcrumb>
+            </Breadcrumb> */}
         </div>
     )
 }
