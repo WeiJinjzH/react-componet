@@ -24,41 +24,19 @@ const SelectSearch = (props: IProps) => {
     }
 
     const onSearch = (value) => {
-        console.log(value)
         setSearchValue(value)
     }
-
-    const loop = (data) => data.map((item) => {
-        const index = item.animalName.indexOf(searchValue)
-        const beforeStr = item.animalName.substr(0, index)
-        const afterStr = item.animalName.substr(index + searchValue?.length)
-        const animalName = index > -1 ? (
-            <span>
-                {beforeStr}
-                <span style={{color: 'red'}}>{searchValue}</span>
-                {afterStr}
-            </span>
-        ) : (
-            <span>{item.animalName}</span>
-        )
-
-        return {
-            animalName,
-            key: item.id,
-        }
-    })
 
     return (
         <Select
             showSearch
-            style={{width: 200}}
+            style={{width: 250}}
             onChange={onChange}
             onSearch={onSearch}
             defaultValue={0}
             filterOption={(input, option) => {
-                const label = option?.children.map((span) => span.props.children).join('')
-                console.log(label)
-                if (label.toLowerCase().indexOf(input.toLowerCase()) > -1) {
+                const label = `${option?.children.props?.children[0]}${option.children.props?.children[1].props.children}${option.children.props?.children[2]}`
+                if (label.indexOf(input) > -1) {
                     return true
                 }
                 return false
@@ -67,29 +45,35 @@ const SelectSearch = (props: IProps) => {
             {
                 initialData.map((option, index) => {
                     const {animalName, customerName, customerPhone} = option
-                    const regexp = new RegExp(searchValue, 'gi')
-                    // let c = <span>{animalName}-{customerName}-{customerPhone}</span>
-                    // const i = c.props.children.join('').indexOf(searchValue)
-                    // const beforeStr = c.props.children.join('').substr(0, i)
-                    // const afterStr = c.props.children.join('').substr(i + searchValue?.length)
-                    // if (regexp) {
-                    //     c = (
-                    //     <span>
-                    //         {beforeStr}
-                    //         <span style={{ color: 'red' }}>{searchValue}</span>
-                    //         {afterStr}
-                    //     </span>
-                    //     )
-                    // }
-                    const c = `${animalName}-${customerName}-${customerPhone}`.split('').map((txt, index) => (
-                        <span
-                            key={`${txt}-${index}`}
-                            style={{ color: searchValue.indexOf(txt) > -1 ? 'red' : 'initial'}}
-                        >{txt}</span>
-                    ))
+                    // const c = `${animalName}-${customerName}-${customerPhone}`.split('').map((txt, index) => (
+                    //     <span
+                    //         key={`${txt}-${index}`}
+                    //         style={{ color: searchValue.indexOf(txt) > -1 ? 'red' : 'initial'}}
+                    //     >{txt}</span>
+                    // ))
+                    const heightLightTxt = (txt, heightTxt) => {
+                        if (heightTxt === '') {
+                            return txt
+                        }
+                        const i = txt.indexOf(searchValue)
+                        const beforeStr = txt.substr(0, i)
+                        const afterStr = txt.substr(i + searchValue?.length)
+                        return i > -1 ? (
+                            <span>
+                                {beforeStr}
+                                <span style={{color: 'red'}}>{searchValue}</span>
+                                {afterStr}
+                            </span>
+                            ) : txt
+                    }
 
                     return (
-                        <Option key={`${option.customerName}-${index}`} value={option.id} children={c}/>
+                        <Option
+                            key={`${option.customerName}-${index}`}
+                            value={option.id}
+                        >
+                            {heightLightTxt(`${animalName}-${customerName}-${customerPhone}`, searchValue)}
+                        </Option>
                     )
                 })
             }
