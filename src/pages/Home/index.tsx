@@ -6,6 +6,8 @@ import { FormInstance } from 'antd/lib/form'
 import moment from 'moment'
 import React, { Component } from 'react'
 import SelectSearch from 'src/components/SelectSearch'
+import PhotoUpload from 'src/components/PhotoUpload'
+import FilesUpload from 'src/components/FilesUpload'
 
 class Home extends Component<any, any> {
     form: FormInstance;
@@ -40,6 +42,15 @@ class Home extends Component<any, any> {
         return (
             <div>
                 <SelectSearch optionArr={this.state.optionArr} />
+                <PhotoUpload
+                    action="/upload/file-upload"
+                />
+                <FilesUpload
+                    value={this.state.docsList}
+                    onChange={(docsList) => this.setState({ docsList })}
+                    action="/upload/file-upload"
+                    format={{ name: 'name', url: 'url' }}
+                />
             </div>
         )
     }
