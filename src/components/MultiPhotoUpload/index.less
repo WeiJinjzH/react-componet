@@ -1,0 +1,58 @@
+.photo-upload {
+    display: block;
+    min-height: 100px;
+    line-height: 1;
+    .ant-upload-list-item {
+        width: 100px;
+        height: 100px;
+        margin: 0 8px 8px 0;
+        padding: 4px;
+        transition: width 0.4s;
+    }
+    .ant-upload-list-item-error {
+        border-width: 2px;
+        padding: 2px;
+    }
+    .ant-upload-list-item-info {
+        &>span {
+            height: 100%;
+        }
+    }
+    .ant-upload-list-item-progress {
+        bottom: 40px;
+    }
+    .ant-upload-list-item-uploading-text {
+        display: none;
+    }
+    .ant-upload-list-item-thumbnail{
+        &>img {
+            object-fit: cover;
+        }
+    }
+    .ant-upload-select-picture-card {
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        padding: 0;
+        margin-bottom: 0;
+        text-align: center;
+        background: none;
+        &>.ant-upload {
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+            padding: 0;
+        }
+    }
+}
+
+.photo-upload--readonly {
+    min-height: unset;
+    overflow: hidden;
+}
+
+/* 图片预览 */
+.preview-modal .ant-modal {
+    max-width: 80vw;
+}
